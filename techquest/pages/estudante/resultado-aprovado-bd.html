@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aprovado! — Tech Quest</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.47.0/tabler-icons.min.css">
+  <link rel="stylesheet" href="../../css/style.css">
+</head>
+<body>
+<div class="app-container app-container--wide">
+
+  <header class="top-bar">
+    <a href="curso-bd.html" class="top-bar__back"><i class="ti ti-x"></i></a>
+    <span class="top-bar__title" style="color:#6D28D9;">Tech Quest</span>
+    <span class="top-bar__avatar">FA</span>
+  </header>
+
+  <main class="main-content">
+
+    <div class="result-card result-card--success animate-in" style="border-radius:var(--radius-lg);">
+      <div class="result-card__icon result-card__icon--success">
+        <i class="ti ti-check"></i>
+      </div>
+      <h2 class="result-card__title">Parabéns, Felipe! 🎉</h2>
+      <p class="result-card__text">Você foi aprovado(a) na prova de Análise de Sistemas</p>
+      <div class="result-card__score">
+        <div class="result-card__score-label">SUA NOTA</div>
+        <div class="result-card__score-value" id="notaFinal">8,5 / 10</div>
+      </div>
+    </div>
+
+    <div class="card animate-in animate-in-delay-1" style="border-top:4px solid #6D28D9;">
+      <div class="flex items-center gap-md">
+        <div style="flex:1;">
+          <h4 class="font-bold" style="color:#6D28D9;">+180 XP ganhos!</h4>
+          <p class="text-sm text-muted">Progresso do Nível 7</p>
+        </div>
+        <i class="ti ti-bolt" style="font-size:24px; color:#6D28D9;"></i>
+      </div>
+      <div class="progress mt-md mb-sm">
+        <div class="progress__fill" style="width:88%; background:#6D28D9;"></div>
+      </div>
+    </div>
+
+    <div class="card animate-in animate-in-delay-2" style="border-top:4px solid var(--color-warning);">
+      <div class="flex items-center gap-md">
+        <div class="list-item__icon list-item__icon--warning" style="width:48px; height:48px;">
+          <i class="ti ti-database" style="font-size:24px;"></i>
+        </div>
+        <div>
+          <div class="text-sm text-warning font-semibold">🏅 Nova Medalha Desbloqueada!</div>
+          <div class="font-bold">DBA Iniciante</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="flex flex-col gap-sm mt-lg">
+      <a href="curso-bd.html" class="btn btn--success btn--lg btn--full">Próximo módulo <i class="ti ti-arrow-right"></i></a>
+      <a href="certificados.html" class="btn btn--ghost btn--full">Ver certificados</a>
+      <a href="curso-bd.html" class="btn btn--ghost btn--full">Voltar ao curso</a>
+    </div>
+
+  </main>
+
+</div>
+
+<script src="../../js/app.js"></script>
+<script>
+function onPageLoad() {
+  const raw = sessionStorage.getItem('tq_resultado');
+  if (raw) {
+    const r = JSON.parse(raw);
+    document.getElementById('notaFinal').textContent = r.nota.replace('.', ',') + ' / 10';
+  }
+}
+</script>
+</body>
+</html>

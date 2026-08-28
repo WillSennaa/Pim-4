@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Painel Administrativo — Tech Quest</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.47.0/tabler-icons.min.css">
+  <link rel="stylesheet" href="../../css/style.css">
+</head>
+<body>
+<div class="app-container app-container--wide">
+
+  <aside class="sidebar-nav">
+    <div class="sidebar-nav__brand"><i class="ti ti-shield-check"></i> Tech Quest Admin</div>
+    <div class="sidebar-nav__item active"><i class="ti ti-layout-dashboard"></i> Dashboard</div>
+    <a href="usuarios.html" class="sidebar-nav__item"><i class="ti ti-users"></i> Usuários</a>
+    <a href="cursos.html" class="sidebar-nav__item"><i class="ti ti-book"></i> Cursos</a>
+    <a href="aprovacoes.html" class="sidebar-nav__item"><i class="ti ti-checks"></i> Aprovações <span class="badge badge--danger" style="margin-left:auto;">4</span></a>
+    <a href="relatorios.html" class="sidebar-nav__item"><i class="ti ti-chart-pie"></i> Relatórios</a>
+    <a href="configuracoes.html" class="sidebar-nav__item"><i class="ti ti-settings"></i> Configurações</a>
+    <div style="flex:1;"></div>
+<a href="../../index.html" class="sidebar-nav__item" onclick="return confirmarSaida(event)"><i class="ti ti-logout"></i> Sair</a>
+  </aside>
+
+  <div style="flex:1; display:flex; flex-direction:column;">
+
+    <header class="top-bar">
+      <div class="top-bar__brand">
+        <i class="ti ti-shield-check" style="color:var(--color-primary);"></i>
+        <span>Admin</span>
+      </div>
+      <div class="top-bar__actions">
+        <button class="top-bar__icon-btn"><i class="ti ti-bell"></i></button>
+        <div class="top-bar__avatar" style="background:#1E293B;">CM</div>
+      </div>
+    </header>
+
+    <main class="main-content">
+
+      <h1 class="page-title animate-in">Olá, Carlos 👨‍💼</h1>
+      <p class="page-subtitle">Visão geral da plataforma Tech Quest.</p>
+
+      <!-- KPIs principais -->
+      <div class="dashboard-grid mb-lg animate-in animate-in-delay-1">
+        <div class="card" style="margin:0; border-top:3px solid var(--color-primary);">
+          <div class="flex justify-between items-center mb-sm">
+            <div class="text-xs text-muted font-semibold" style="letter-spacing:1px;">USUÁRIOS TOTAL</div>
+            <i class="ti ti-users text-primary"></i>
+          </div>
+          <div class="font-bold" style="font-size:32px;" id="kpiTotal">1.487</div>
+          <div class="text-xs text-success"><i class="ti ti-trending-up"></i> +47 esta semana</div>
+        </div>
+        <div class="card" style="margin:0; border-top:3px solid var(--color-success);">
+          <div class="flex justify-between items-center mb-sm">
+            <div class="text-xs text-muted font-semibold" style="letter-spacing:1px;">ATIVOS (30D)</div>
+            <i class="ti ti-activity text-success"></i>
+          </div>
+          <div class="font-bold" style="font-size:32px;" id="kpiAtivos">924</div>
+          <div class="text-xs text-muted">62% da base total</div>
+        </div>
+        <div class="card" style="margin:0; border-top:3px solid var(--color-warning);">
+          <div class="flex justify-between items-center mb-sm">
+            <div class="text-xs text-muted font-semibold" style="letter-spacing:1px;">CURSOS</div>
+            <i class="ti ti-book text-warning"></i>
+          </div>
+          <div class="font-bold" style="font-size:32px;" id="kpiCursos">12</div>
+          <div class="text-xs text-muted">3 em desenvolvimento</div>
+        </div>
+        <div class="card" style="margin:0; border-top:3px solid #8B5CF6;">
+          <div class="flex justify-between items-center mb-sm">
+            <div class="text-xs text-muted font-semibold" style="letter-spacing:1px;">PROVAS (30D)</div>
+            <i class="ti ti-clipboard-check" style="color:#8B5CF6;"></i>
+          </div>
+          <div class="font-bold" style="font-size:32px;" id="kpiProvas">3.421</div>
+          <div class="text-xs text-muted">78% de aprovação</div>
+        </div>
+      </div>
+
+      <!-- Gráficos / Insights -->
+      <div class="dashboard-grid dashboard-grid--2col">
+        <div class="card animate-in animate-in-delay-2" style="margin:0;">
+          <div class="card__header">
+            <h3 class="card__title">Taxa de Aprovação por Curso</h3>
+            <span class="badge badge--success">+5% vs mês anterior</span>
+          </div>
+          <div id="chartAprovacao">
+            <div class="mb-md">
+              <div class="flex justify-between text-sm mb-sm"><span>Fundamentos de C#</span><span class="text-success font-semibold">85%</span></div>
+              <div class="progress progress--success"><div class="progress__fill" style="width:85%"></div></div>
+            </div>
+            <div class="mb-md">
+              <div class="flex justify-between text-sm mb-sm"><span>POO com C#</span><span class="text-warning font-semibold">72%</span></div>
+              <div class="progress progress--warning"><div class="progress__fill" style="width:72%"></div></div>
+            </div>
+            <div class="mb-md">
+              <div class="flex justify-between text-sm mb-sm"><span>Banco de Dados</span><span class="text-success font-semibold">80%</span></div>
+              <div class="progress progress--success"><div class="progress__fill" style="width:80%"></div></div>
+            </div>
+            <div>
+              <div class="flex justify-between text-sm mb-sm"><span>Design Patterns</span><span class="text-danger font-semibold">58%</span></div>
+              <div class="progress progress--danger"><div class="progress__fill" style="width:58%"></div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card animate-in animate-in-delay-2" style="margin:0;">
+          <div class="card__header">
+            <h3 class="card__title">Últimos Cadastros</h3>
+            <a href="usuarios.html" class="text-primary text-sm font-semibold">Ver todos</a>
+          </div>
+          <div id="cadastrosList"></div>
+        </div>
+      </div>
+
+      <!-- Atalho de aprovações pendentes -->
+      <a href="aprovacoes.html" class="card animate-in animate-in-delay-3" style="margin-top:var(--space-lg); background:linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%); border:1px solid #F59E0B; text-decoration:none; display:flex; align-items:center; gap:var(--space-md);">
+        <div class="list-item__icon list-item__icon--warning" style="width:56px; height:56px; font-size:28px;">
+          <i class="ti ti-checks"></i>
+        </div>
+        <div style="flex:1;">
+          <div class="font-bold">4 solicitações aguardando aprovação</div>
+          <div class="text-sm text-secondary">2 novos cursos · 1 exclusão de curso · 1 cadastro de tutor</div>
+        </div>
+        <i class="ti ti-chevron-right" style="font-size:24px; color:var(--color-warning);"></i>
+      </a>
+
+    </main>
+<nav class="bottom-nav">
+      <a href="home.html" class="bottom-nav__item active"><i class="ti ti-layout-dashboard"></i><span>Dashboard</span></a>
+      <a href="usuarios.html" class="bottom-nav__item"><i class="ti ti-users"></i><span>Usuários</span></a>
+      <a href="cursos.html" class="bottom-nav__item"><i class="ti ti-book"></i><span>Cursos</span></a>
+      <a href="aprovacoes.html" class="bottom-nav__item"><i class="ti ti-checks"></i><span>Aprovar</span></a>
+    </nav>
+
+  </div>
+</div>
+
+<script src="../../js/app.js"></script>
+<script>
+function onPageLoad() {
+  if (!TQ.data) return;
+  const list = document.getElementById('cadastrosList');
+  list.innerHTML = TQ.data.admin_usuarios.slice(0, 5).map(u => `
+    <div class="list-item">
+      <div class="avatar avatar--sm">${u.nome.split(' ').map(n=>n[0]).join('').substring(0,2)}</div>
+      <div class="list-item__body">
+        <div class="list-item__title">${u.nome}</div>
+        <div class="list-item__subtitle">${u.tipo} · ${u.data_cadastro}</div>
+      </div>
+      <span class="badge badge--${u.status === 'Ativo' ? 'success' : 'neutral'}">${u.status}</span>
+    </div>
+  `).join('');
+}
+</script>
+</body>
+</html>

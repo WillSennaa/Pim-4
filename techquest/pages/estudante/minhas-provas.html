@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Minhas Provas — Tech Quest</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.47.0/tabler-icons.min.css">
+  <link rel="stylesheet" href="../../css/style.css">
+</head>
+<body>
+<div class="app-container app-container--wide">
+
+  <header class="top-bar">
+    <a href="historico.html" class="top-bar__back"><i class="ti ti-arrow-left"></i></a>
+    <span class="top-bar__title">Minhas Provas</span>
+    <a href="perfil.html" class="top-bar__avatar">FA</a>
+  </header>
+
+  <main class="main-content">
+
+    <h1 class="page-title animate-in">Minhas Provas</h1>
+    <p class="page-subtitle">Histórico completo de avaliações realizadas.</p>
+
+    <!-- KPIs -->
+    <div class="dashboard-grid mb-lg animate-in animate-in-delay-1">
+      <div class="card" style="margin:0; border-top:3px solid var(--color-primary);">
+        <div class="text-xs text-muted font-semibold" style="letter-spacing:1px;">TOTAL REALIZADAS</div>
+        <div class="font-bold" style="font-size:28px;">7</div>
+      </div>
+      <div class="card" style="margin:0; border-top:3px solid var(--color-success);">
+        <div class="text-xs text-muted font-semibold" style="letter-spacing:1px;">APROVADAS</div>
+        <div class="font-bold" style="font-size:28px;">5</div>
+      </div>
+      <div class="card" style="margin:0; border-top:3px solid var(--color-danger);">
+        <div class="text-xs text-muted font-semibold" style="letter-spacing:1px;">REPROVADAS</div>
+        <div class="font-bold" style="font-size:28px;">2</div>
+      </div>
+      <div class="card" style="margin:0; border-top:3px solid var(--color-warning);">
+        <div class="text-xs text-muted font-semibold" style="letter-spacing:1px;">MÉDIA GERAL</div>
+        <div class="font-bold" style="font-size:28px;">7,8</div>
+      </div>
+    </div>
+
+    <!-- Filtros -->
+    <div class="tabs tabs--pills mb-lg animate-in animate-in-delay-2">
+      <button class="tab active" onclick="filtrarProvas('todas', this)">Todas</button>
+      <button class="tab" onclick="filtrarProvas('aprovado', this)"><i class="ti ti-check"></i> Aprovadas</button>
+      <button class="tab" onclick="filtrarProvas('reprovado', this)"><i class="ti ti-x"></i> Reprovadas</button>
+    </div>
+
+    <div id="provasList" class="animate-in animate-in-delay-3"></div>
+
+  </main>
+
+  <nav class="bottom-nav">
+    <a href="home.html" class="bottom-nav__item"><i class="ti ti-home"></i><span>Home</span></a>
+    <a href="cursos.html" class="bottom-nav__item"><i class="ti ti-book-2"></i><span>Cursos</span></a>
+    <a href="conquistas.html" class="bottom-nav__item"><i class="ti ti-trophy"></i><span>Conquistas</span></a>
+    <a href="perfil.html" class="bottom-nav__item active"><i class="ti ti-user"></i><span>Perfil</span></a>
+  </nav>
+
+</div>
+
+<script src="../../js/app.js"></script>
+<script>
+const provas = [
+  { id: 1, titulo: 'Arrays e Listas em C#', curso: 'Fundamentos de C#', data: 'Há 2 horas', nota: 8.5, status: 'aprovado', tentativa: 1, acertos: '8/10', tempo: '18 min' },
+  { id: 2, titulo: 'Sintaxe Básica', curso: 'Fundamentos de C#', data: '3 dias atrás', nota: 9.0, status: 'aprovado', tentativa: 1, acertos: '9/10', tempo: '15 min' },
+  { id: 3, titulo: 'Introdução', curso: 'Fundamentos de C#', data: '1 semana atrás', nota: 10.0, status: 'aprovado', tentativa: 1, acertos: '10/10', tempo: '12 min' },
+  { id: 4, titulo: 'Modelagem ER', curso: 'Banco de Dados e Modelagem', data: '5 dias atrás', nota: 7.5, status: 'aprovado', tentativa: 2, acertos: '6/8', tempo: '22 min' },
+  { id: 5, titulo: 'Introdução a BD', curso: 'Banco de Dados e Modelagem', data: '1 semana atrás', nota: 8.0, status: 'aprovado', tentativa: 1, acertos: '8/10', tempo: '16 min' },
+  { id: 6, titulo: 'Encapsulamento', curso: 'POO com C# (Bloqueado)', data: '1 semana atrás', nota: 5.5, status: 'reprovado', tentativa: 1, acertos: '5/10', tempo: '25 min' },
+  { id: 7, titulo: 'Conceitos OO', curso: 'POO com C# (Bloqueado)', data: '2 semanas atrás', nota: 6.0, status: 'reprovado', tentativa: 1, acertos: '6/10', tempo: '20 min' }
+];
+
+let filtroAtual = 'todas';
+
+function filtrarProvas(f, btn) {
+  filtroAtual = f;
+  document.querySelectorAll('.tabs--pills .tab').forEach(t => t.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  renderProvas();
+}
+
+function renderProvas() {
+  let p = provas;
+  if (filtroAtual === 'aprovado') p = p.filter(x => x.status === 'aprovado');
+  if (filtroAtual === 'reprovado') p = p.filter(x => x.status === 'reprovado');
+
+  const list = document.getElementById('provasList');
+  if (p.length === 0) {
+    list.innerHTML = `<div class="card text-center" style="padding:var(--space-2xl);">
+      <i class="ti ti-mood-empty" style="font-size:48px; color:var(--color-text-muted);"></i>
+      <p class="text-muted mt-md">Nenhuma prova neste filtro.</p>
+    </div>`;
+    return;
+  }
+
+  list.innerHTML = p.map(x => {
+    const cor = x.status === 'aprovado' ? 'success' : 'danger';
+    return `<div class="card" style="border-left:4px solid var(--color-${cor});">
+      <div class="flex items-start gap-md">
+        <div class="list-item__icon list-item__icon--${cor}" style="width:48px; height:48px;">
+          <i class="ti ti-${x.status === 'aprovado' ? 'check' : 'x'}" style="font-size:24px;"></i>
+        </div>
+        <div style="flex:1; min-width:0;">
+          <div class="flex justify-between items-start" style="gap:var(--space-sm); flex-wrap:wrap;">
+            <div>
+              <h4 class="font-bold">${x.titulo}</h4>
+              <div class="text-sm text-secondary">${x.curso}</div>
+            </div>
+            <div class="text-right">
+              <div class="font-bold" style="font-size:24px; color:var(--color-${cor});">${x.nota.toFixed(1).replace('.', ',')}</div>
+              <span class="badge badge--${cor}">${x.status === 'aprovado' ? 'APROVADO' : 'REPROVADO'}</span>
+            </div>
+          </div>
+          <div class="flex gap-md text-xs text-muted mt-md" style="flex-wrap:wrap;">
+            <span><i class="ti ti-target"></i> ${x.acertos} acertos</span>
+            <span><i class="ti ti-clock"></i> ${x.tempo}</span>
+            <span><i class="ti ti-refresh"></i> Tentativa ${x.tentativa}</span>
+            <span><i class="ti ti-calendar"></i> ${x.data}</span>
+          </div>
+          <div class="flex gap-sm mt-md">
+            <button class="btn btn--ghost btn--sm" style="flex:1;" onclick="verRevisao(${x.id})"><i class="ti ti-eye"></i> Ver revisão</button>
+            ${x.status === 'reprovado' ? '<button class="btn btn--primary btn--sm" onclick="alert(\'🔁 Redirecionando para a prova...\');"><i class="ti ti-refresh"></i> Refazer</button>' : ''}
+          </div>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function verRevisao(id) {
+  const p = provas.find(x => x.id === id);
+  // Salva no sessionStorage e abre revisão
+  sessionStorage.setItem('tq_resultado', JSON.stringify({
+    acertos: parseInt(p.acertos.split('/')[0]),
+    total: parseInt(p.acertos.split('/')[1]),
+    nota: p.nota.toString(),
+    aprovado: p.status === 'aprovado',
+    prova: p.curso.includes('Banco') ? 'prova_bd' : 'prova_csharp'
+  }));
+  window.location.href = 'revisao-prova.html';
+}
+
+function onPageLoad() {
+  renderProvas();
+}
+</script>
+</body>
+</html>

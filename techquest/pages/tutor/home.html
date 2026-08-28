@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Painel do Tutor — Tech Quest</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.47.0/tabler-icons.min.css">
+  <link rel="stylesheet" href="../../css/style.css">
+</head>
+<body>
+<div class="app-container app-container--wide">
+
+  <!-- Sidebar (visível só no desktop) -->
+  <aside class="sidebar-nav">
+    <div class="sidebar-nav__brand">
+      <i class="ti ti-terminal-2"></i> Tech Quest
+    </div>
+    <div class="sidebar-nav__item active"><i class="ti ti-layout-dashboard"></i> Painel</div>
+    <a href="alunos.html" class="sidebar-nav__item"><i class="ti ti-users"></i> Meus Alunos</a>
+    <a href="duvidas.html" class="sidebar-nav__item"><i class="ti ti-message-circle"></i> Dúvidas <span class="badge badge--danger" style="margin-left:auto;">2</span></a>
+    <a href="cursos.html" class="sidebar-nav__item"><i class="ti ti-book"></i> Meus Cursos</a>
+    <div style="flex:1;"></div>
+<a href="../../index.html" class="sidebar-nav__item" onclick="return confirmarSaida(event)"><i class="ti ti-logout"></i> Sair</a>
+  </aside>
+
+  <div style="flex:1; display:flex; flex-direction:column;">
+
+    <!-- Top bar mobile -->
+    <header class="top-bar">
+      <div class="top-bar__brand"><span>Painel do Tutor</span></div>
+      <div class="top-bar__actions">
+        <button class="top-bar__icon-btn"><i class="ti ti-bell"></i></button>
+        <div class="top-bar__avatar" style="background:#FDA4AF; color:#9F1239;">AS</div>
+      </div>
+    </header>
+
+    <main class="main-content">
+
+      <h1 class="page-title animate-in">Olá, Ana! 👋</h1>
+      <p class="page-subtitle">Veja o panorama dos seus alunos e responda dúvidas pendentes.</p>
+
+      <!-- KPIs -->
+      <div class="dashboard-grid mb-lg animate-in animate-in-delay-1">
+        <div class="card" style="margin:0; border-top:3px solid var(--color-primary);">
+          <div class="text-xs text-muted font-semibold" style="letter-spacing:1px;">ALUNOS ATIVOS</div>
+          <div class="font-bold" style="font-size:32px;">145</div>
+          <div class="text-xs text-success"><i class="ti ti-trending-up"></i> +12 esta semana</div>
+        </div>
+        <div class="card" style="margin:0; border-top:3px solid var(--color-danger);">
+          <div class="text-xs text-muted font-semibold" style="letter-spacing:1px;">DÚVIDAS PENDENTES</div>
+          <div class="font-bold" style="font-size:32px;">8</div>
+          <div class="text-xs text-danger"><i class="ti ti-clock"></i> 2 urgentes</div>
+        </div>
+        <a href="cursos.html" class="card" style="margin:0; border-top:3px solid var(--color-success); text-decoration:none; cursor:pointer;">
+          <div class="text-xs text-muted font-semibold" style="letter-spacing:1px;">CURSOS PUBLICADOS</div>
+          <div class="font-bold" style="font-size:32px;">3</div>
+          <div class="text-xs text-muted">2 publicados, 1 rascunho</div>
+        </a>
+        <div class="card" style="margin:0; border-top:3px solid var(--color-warning);">
+          <div class="text-xs text-muted font-semibold" style="letter-spacing:1px;">AVALIAÇÃO MÉDIA</div>
+          <div class="font-bold" style="font-size:32px;">4.8 <i class="ti ti-star-filled text-warning" style="font-size:20px;"></i></div>
+          <div class="text-xs text-muted">de 247 reviews</div>
+        </div>
+      </div>
+
+      <div class="dashboard-grid dashboard-grid--2col">
+        <!-- Últimos alunos -->
+        <div class="card animate-in animate-in-delay-2" style="margin:0;">
+          <div class="card__header">
+            <h3 class="card__title">Alunos Recentes</h3>
+            <a href="alunos.html" class="text-primary text-sm font-semibold">Ver todos</a>
+          </div>
+          <div id="alunosList"></div>
+        </div>
+
+        <!-- Dúvidas pendentes -->
+        <div class="card animate-in animate-in-delay-2" style="margin:0;">
+          <div class="card__header">
+            <h3 class="card__title">Dúvidas Pendentes</h3>
+            <a href="duvidas.html" class="text-primary text-sm font-semibold">Ver todas</a>
+          </div>
+          <div id="duvidasList"></div>
+        </div>
+      </div>
+
+    </main>
+
+    <!-- Persona switcher mobile -->
+<!-- Bottom nav mobile -->
+    <nav class="bottom-nav">
+      <a href="home.html" class="bottom-nav__item active"><i class="ti ti-layout-dashboard"></i><span>Painel</span></a>
+      <a href="alunos.html" class="bottom-nav__item"><i class="ti ti-users"></i><span>Alunos</span></a>
+      <a href="duvidas.html" class="bottom-nav__item"><i class="ti ti-message-circle"></i><span>Dúvidas</span></a>
+      <a href="cursos.html" class="bottom-nav__item"><i class="ti ti-book"></i><span>Cursos</span></a>
+    </nav>
+
+  </div>
+</div>
+
+<script src="../../js/app.js"></script>
+<script>
+function onPageLoad() {
+  if (!TQ.data) return;
+
+  const alunos = TQ.data.tutor_alunos.slice(0, 5);
+  document.getElementById('alunosList').innerHTML = alunos.map(a => `
+    <div class="list-item">
+      <div class="avatar avatar--sm">${a.nome.split(' ').map(n=>n[0]).join('').substring(0,2)}</div>
+      <div class="list-item__body">
+        <div class="list-item__title">${a.nome}</div>
+        <div class="list-item__subtitle">${a.curso} · ${a.progresso}% concluído</div>
+      </div>
+      <div class="text-xs text-muted">${a.ultima_atividade}</div>
+    </div>
+  `).join('');
+
+  const duvidas = TQ.data.tutor_duvidas.filter(d => d.status === 'pendente');
+  document.getElementById('duvidasList').innerHTML = duvidas.map(d => `
+    <div class="list-item">
+      <div class="avatar avatar--sm" style="background:var(--color-warning-light); color:var(--color-warning-dark);">${d.iniciais}</div>
+      <div class="list-item__body">
+        <div class="list-item__title">${d.pergunta}</div>
+        <div class="list-item__subtitle">${d.aluno} · ${d.tempo}</div>
+      </div>
+      <span class="badge badge--danger">PENDENTE</span>
+    </div>
+  `).join('');
+}
+</script>
+</body>
+</html>

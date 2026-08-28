@@ -1,0 +1,225 @@
+{
+  "personas": {
+    "estudante": {
+      "id": "felipe_almeida",
+      "nome": "Felipe Almeida",
+      "email": "felipe.almeida@techquest.com",
+      "tipo": "estudante",
+      "telefone": "(11) 98888-7777",
+      "nascimento": "15/05/1998",
+      "cidade": "São Paulo - SP",
+      "iniciais": "FA",
+      "nivel": 7,
+      "xp": 2450,
+      "xp_proximo_nivel": 3000,
+      "progresso_nivel": 82,
+      "ofensiva_dias": 7,
+      "provas_realizadas": 12,
+      "medalhas": 5,
+      "certificados": 1,
+      "frase_motivacional": "Você está apenas a 550 XP de se tornar um Especialista!"
+    },
+    "tutor": {
+      "id": "ana_souza", "nome": "Ana Souza", "email": "ana.souza@techquest.com",
+      "tipo": "tutor", "telefone": "(11) 97777-6666", "iniciais": "AS",
+      "especialidade": "Backend e C#",
+      "alunos_ativos": 145, "duvidas_pendentes": 8, "cursos_publicados": 3
+    },
+    "admin": {
+      "id": "carlos_mendes", "nome": "Carlos Mendes", "email": "carlos.mendes@techquest.com",
+      "tipo": "admin", "iniciais": "CM", "cargo": "Gestor de Plataforma"
+    }
+  },
+  "cursos": [
+    {
+      "id": "fundamentos-csharp",
+      "titulo": "Fundamentos de C#",
+      "descricao": "Domine as bases da linguagem mais poderosa da Microsoft. Do zero ao seu primeiro software profissional com orientação a objetos e boas práticas.",
+      "categoria": "PROGRAMMING",
+      "nivel": "INICIANTE",
+      "duracao_horas": 12,
+      "alunos_inscritos": 1240,
+      "ultima_atualizacao": "Ago 2023",
+      "instrutor": "Ana Souza",
+      "instrutor_cargo": "Senior Developer & Instrutora",
+      "instrutor_iniciais": "AS",
+      "progresso_aluno": 50,
+      "cor_tema": "primary",
+      "icone": "ti-code"
+    },
+    {
+      "id": "bd-modelagem",
+      "titulo": "Banco de Dados e Modelagem de Sistemas",
+      "descricao": "Domine modelagem de dados, SQL e os fundamentos de análise de sistemas, RUP e técnicas de elicitação de requisitos.",
+      "categoria": "DATABASE",
+      "nivel": "INTERMEDIÁRIO",
+      "duracao_horas": 18,
+      "alunos_inscritos": 856,
+      "ultima_atualizacao": "Mar 2024",
+      "instrutor": "Ana Souza",
+      "instrutor_cargo": "Senior Developer & Instrutora",
+      "instrutor_iniciais": "AS",
+      "progresso_aluno": 30,
+      "cor_tema": "data",
+      "icone": "ti-database"
+    }
+  ],
+  "conquistas_recentes": [
+    { "id": "c1", "titulo": "Mestre em Arrays", "xp": 200, "tempo": "Ontem às 18:30", "icone": "ti-brackets" },
+    { "id": "c2", "titulo": "Variáveis e Tipos", "xp": 50, "tempo": "Há 2 horas", "icone": "ti-braces" },
+    { "id": "c3", "titulo": "Primeiro Passo", "xp": 100, "tempo": "22/05/2024", "icone": "ti-rocket" }
+  ],
+  "medalhas": [
+    { "id": "m1", "titulo": "Primeiro Passo", "descricao": "Complete sua primeira aula", "status": "conquistada", "data": "há 3 semanas", "icone": "ti-target-arrow" },
+    { "id": "m2", "titulo": "Mestre em Arrays", "descricao": "Domine arrays e listas", "status": "conquistada", "data": "há 2 dias", "icone": "ti-medal" },
+    { "id": "m3", "titulo": "Maratonista", "descricao": "Estude por 7 dias seguidos", "status": "conquistada", "data": "há 1 semana", "icone": "ti-flame" },
+    { "id": "m4", "titulo": "Estudante Dedicado", "descricao": "Complete 10 aulas", "status": "conquistada", "data": "há 1 semana", "icone": "ti-star" },
+    { "id": "m5", "titulo": "Pontuação Perfeita", "descricao": "Gabarite uma prova", "status": "conquistada", "data": "há 3 semanas", "icone": "ti-trophy" },
+    { "id": "m6", "titulo": "Mestre em C#", "descricao": "Conclua Fundamentos de C# com média 8", "status": "bloqueada", "icone": "ti-code" },
+    { "id": "m7", "titulo": "POO Master", "descricao": "Conclua o curso POO com C#", "status": "bloqueada", "icone": "ti-affiliate" },
+    { "id": "m8", "titulo": "Quiz Champion", "descricao": "Vença 5 quizzes consecutivos", "status": "bloqueada", "icone": "ti-help-square" },
+    { "id": "m9", "titulo": "Bibliotecário", "descricao": "Leia 10 artigos técnicos", "status": "bloqueada", "icone": "ti-book" },
+    { "id": "m10", "titulo": "Arquiteto SOLID", "descricao": "Média 10 em Design Patterns", "status": "bloqueada", "icone": "ti-building" },
+    { "id": "m11", "titulo": "DBA Iniciante", "descricao": "Conclua módulo SQL", "status": "bloqueada", "icone": "ti-database" },
+    { "id": "m12", "titulo": "Lenda da Tech Quest", "descricao": "Conclua 100% da trilha", "status": "bloqueada", "icone": "ti-crown" }
+  ],
+  "certificados": [
+    {
+      "id": "cert-001",
+      "curso_id": "fundamentos-csharp",
+      "curso_titulo": "Fundamentos de C#",
+      "status": "emitido",
+      "data_emissao": "15/05/2024",
+      "carga_horaria": 12,
+      "nota_final": 8.7,
+      "codigo_validacao": "TQ-CS-2024-001-FA",
+      "instrutor": "Ana Souza"
+    },
+    {
+      "id": "cert-002",
+      "curso_id": "bd-modelagem",
+      "curso_titulo": "Banco de Dados e Modelagem de Sistemas",
+      "status": "disponivel",
+      "carga_horaria": 18,
+      "progresso": 30,
+      "requisito": "Conclua todos os módulos com nota acima de 75%"
+    },
+    {
+      "id": "cert-003",
+      "curso_id": "poo-csharp",
+      "curso_titulo": "POO Avançada com C#",
+      "status": "bloqueado",
+      "carga_horaria": 16,
+      "requisito": "Conclua o curso de Fundamentos de C#"
+    },
+    {
+      "id": "cert-004",
+      "curso_id": "design-patterns",
+      "curso_titulo": "Design Patterns na Prática",
+      "status": "bloqueado",
+      "carga_horaria": 20,
+      "requisito": "Conclua o curso de POO Avançada"
+    }
+  ],
+  "historico": [
+    { "data": "hoje", "tempo": "há 2 horas", "tipo": "concluido", "titulo": "Concluiu material 'Arrays e Listas em C#'", "subtitulo": "Curso: Fundamentos de C# • Módulo 3" },
+    { "data": "hoje", "tempo": "há 2 horas", "tipo": "warning", "titulo": "Conquistou medalha 'Mestre em Arrays'", "subtitulo": "Nova conquista" },
+    { "data": "hoje", "tempo": "há 2 horas", "tipo": "success", "titulo": "Realizou prova 'Arrays e Listas'", "subtitulo": "Nota: 8,5" },
+    { "data": "ontem", "tempo": "19:42", "tipo": "default", "titulo": "Acessou material 'Sintaxe Básica de C#'", "subtitulo": "Curso: Fundamentos de C#" },
+    { "data": "3 dias atrás", "tempo": "14:22", "tipo": "success", "titulo": "Prova 'Sintaxe Básica'", "subtitulo": "Nota: 9,0" },
+    { "data": "1 semana atrás", "tempo": "22:10", "tipo": "danger", "titulo": "Prova 'Encapsulamento'", "subtitulo": "Nota: 5,5 (Reprovado)" }
+  ],
+  "faq": [
+    { "pergunta": "Como funciona o sistema de XP e níveis?", "resposta": "Você ganha XP ao concluir aulas, gabaritar provas e conquistar medalhas. A cada certa quantidade de XP, você sobe de nível e desbloqueia novos benefícios." },
+    { "pergunta": "Posso refazer uma prova reprovada?", "resposta": "Sim! Após ser reprovado, você pode revisar os tópicos com baixo desempenho e refazer a prova quantas vezes precisar. Sua melhor nota será mantida." },
+    { "pergunta": "Como emitir meu certificado?", "resposta": "Ao concluir todos os módulos de um curso com a nota mínima exigida, o certificado fica disponível na seção 'Certificados'. Basta clicar em 'Emitir' para gerá-lo." },
+    { "pergunta": "O certificado tem validade?", "resposta": "Sim! Cada certificado possui um código único de validação que pode ser verificado por empresas em techquest.com/validar." },
+    { "pergunta": "Como falar com meu tutor?", "resposta": "Use a aba 'Anotações' dentro de cada aula para enviar dúvidas. Você também pode abrir um chamado em 'Central de Ajuda > Fale com Suporte'." },
+    { "pergunta": "Posso baixar meus dados?", "resposta": "Sim, conforme a LGPD. Vá em 'Configurações > Privacidade > Baixar meus dados' para receber um arquivo com todas as suas informações." }
+  ],
+  "tutor_alunos": [
+    { "nome": "Felipe Almeida", "email": "felipe.almeida@techquest.com", "curso": "Fundamentos de C#", "progresso": 50, "ultima_atividade": "Há 2 horas" },
+    { "nome": "Beatriz Santos", "email": "beatriz@techquest.com", "curso": "Fundamentos de C#", "progresso": 75, "ultima_atividade": "Ontem" },
+    { "nome": "Ricardo Mendonça", "email": "ricardo@techquest.com", "curso": "POO com C#", "progresso": 30, "ultima_atividade": "Há 3 dias" },
+    { "nome": "Marina Costa", "email": "marina@techquest.com", "curso": "Banco de Dados", "progresso": 90, "ultima_atividade": "Há 1 hora" },
+    { "nome": "João Pereira", "email": "joao@techquest.com", "curso": "Banco de Dados", "progresso": 45, "ultima_atividade": "Há 5 horas" }
+  ],
+  "tutor_duvidas": [
+    { "aluno": "Felipe Almeida", "iniciais": "FA", "pergunta": "Como funciona o foreach com Listas em C#?", "curso": "Fundamentos de C#", "tempo": "Há 1 hora", "status": "pendente" },
+    { "aluno": "Marina Costa", "iniciais": "MC", "pergunta": "Diferença entre Modelo Conceitual e Lógico?", "curso": "Banco de Dados", "tempo": "Há 3 horas", "status": "pendente" },
+    { "aluno": "João Pereira", "iniciais": "JP", "pergunta": "Quando usar JOIN vs LEFT JOIN?", "curso": "Banco de Dados", "tempo": "Ontem", "status": "respondida" }
+  ],
+  "tutor_meus_cursos": [
+    { "id": "fundamentos-csharp", "titulo": "Fundamentos de C#", "alunos": 1240, "modulos": 4, "rating": 4.8, "status": "publicado", "ultima_atualizacao": "Ago 2023" },
+    { "id": "bd-modelagem", "titulo": "Banco de Dados e Modelagem", "alunos": 856, "modulos": 4, "rating": 4.9, "status": "publicado", "ultima_atualizacao": "Mar 2024" },
+    { "id": "poo-csharp", "titulo": "POO Avançada com C#", "alunos": 0, "modulos": 6, "rating": 0, "status": "rascunho", "ultima_atualizacao": "Hoje" }
+  ],
+  "solicitacoes_pendentes": [
+    { "id": "sol-1", "tipo": "criar_curso", "solicitante": "Ana Souza", "iniciais": "AS", "papel": "Tutor", "titulo": "Criar curso 'Design Patterns na Prática'", "descricao": "20h • 6 módulos • Nível Avançado", "data": "Há 2 horas", "prioridade": "media" },
+    { "id": "sol-2", "tipo": "excluir_curso", "solicitante": "Ana Souza", "iniciais": "AS", "papel": "Tutor", "titulo": "Excluir curso 'C# Básico Legado'", "descricao": "Curso desatualizado, substituído por Fundamentos de C#", "data": "Ontem", "prioridade": "baixa" },
+    { "id": "sol-3", "tipo": "novo_tutor", "solicitante": "Bruno Lima", "iniciais": "BL", "papel": "Candidato a Tutor", "titulo": "Cadastro de novo tutor", "descricao": "Especialidade: DevOps e Cloud • 8 anos de experiência", "data": "Há 1 dia", "prioridade": "alta" },
+    { "id": "sol-4", "tipo": "novo_tutor", "solicitante": "Camila Rocha", "iniciais": "CR", "papel": "Candidata a Tutor", "titulo": "Cadastro de novo tutor", "descricao": "Especialidade: UI/UX Design • 5 anos de experiência", "data": "Há 2 dias", "prioridade": "media" }
+  ],
+  "admin_cursos": [
+    { "id": "fundamentos-csharp", "titulo": "Fundamentos de C#", "tutor": "Ana Souza", "alunos": 1240, "rating": 4.8, "status": "publicado", "categoria": "Programação", "criado_em": "15/08/2023", "modulos": 4, "duracao_h": 12, "descricao": "Domine as bases da linguagem mais poderosa da Microsoft." },
+    { "id": "bd-modelagem", "titulo": "Banco de Dados e Modelagem", "tutor": "Ana Souza", "alunos": 856, "rating": 4.9, "status": "publicado", "categoria": "Database", "criado_em": "10/03/2024", "modulos": 4, "duracao_h": 18, "descricao": "Modelagem de dados, SQL e análise de sistemas." },
+    { "id": "poo-csharp", "titulo": "POO Avançada com C#", "tutor": "Ana Souza", "alunos": 0, "rating": 0, "status": "aguardando", "categoria": "Programação", "criado_em": "26/05/2024", "modulos": 6, "duracao_h": 16, "descricao": "Herança, polimorfismo, interfaces e design patterns aplicados." },
+    { "id": "design-patterns", "titulo": "Design Patterns na Prática", "tutor": "Ana Souza", "alunos": 0, "rating": 0, "status": "aguardando", "categoria": "Programação", "criado_em": "26/05/2024", "modulos": 8, "duracao_h": 20, "descricao": "GoF patterns aplicados em projetos reais de C#." },
+    { "id": "react-zero", "titulo": "React do Zero", "tutor": "Pedro Henrique", "alunos": 412, "rating": 4.6, "status": "publicado", "categoria": "Frontend", "criado_em": "05/01/2024", "modulos": 10, "duracao_h": 25, "descricao": "Componentes, hooks, contexto e roteamento no React 18+." },
+    { "id": "csharp-legado", "titulo": "C# Básico Legado", "tutor": "Ana Souza", "alunos": 89, "rating": 3.2, "status": "exclusao_solicitada", "categoria": "Programação", "criado_em": "10/06/2021", "modulos": 5, "duracao_h": 10, "descricao": "Curso introdutório desatualizado, substituído por Fundamentos de C#." },
+    { "id": "node-fundamentos", "titulo": "Node.js Fundamentos", "tutor": "Daniela Ribeiro", "alunos": 234, "rating": 4.5, "status": "publicado", "categoria": "Backend", "criado_em": "20/02/2024", "modulos": 8, "duracao_h": 22, "descricao": "Construa APIs REST robustas com Express e TypeScript." },
+    { "id": "git-essencial", "titulo": "Git e GitHub Essencial", "tutor": "Daniela Ribeiro", "alunos": 567, "rating": 4.7, "status": "publicado", "categoria": "DevOps", "criado_em": "10/02/2024", "modulos": 5, "duracao_h": 8, "descricao": "Controle de versão do básico ao avançado, com fluxos profissionais." },
+    { "id": "sql-avancado", "titulo": "SQL Avançado", "tutor": "Ana Souza", "alunos": 0, "rating": 0, "status": "rascunho", "categoria": "Database", "criado_em": "20/05/2024", "modulos": 6, "duracao_h": 14, "descricao": "Stored procedures, triggers, índices e otimização de queries." },
+    { "id": "docker-iniciante", "titulo": "Docker para Iniciantes", "tutor": "Pedro Henrique", "alunos": 0, "rating": 0, "status": "aguardando", "categoria": "DevOps", "criado_em": "24/05/2024", "modulos": 7, "duracao_h": 15, "descricao": "Containers, imagens, Docker Compose e deploy de aplicações." }
+  ],
+  "admin_relatorios": {
+    "engajamento_diario": [
+      { "dia": "Seg", "ativos": 612, "novos": 8 },
+      { "dia": "Ter", "ativos": 745, "novos": 12 },
+      { "dia": "Qua", "ativos": 698, "novos": 6 },
+      { "dia": "Qui", "ativos": 812, "novos": 14 },
+      { "dia": "Sex", "ativos": 924, "novos": 7 },
+      { "dia": "Sáb", "ativos": 543, "novos": 0 },
+      { "dia": "Dom", "ativos": 487, "novos": 0 }
+    ],
+    "top_cursos": [
+      { "nome": "Fundamentos de C#", "alunos": 1240, "aprovacao": 85 },
+      { "nome": "Banco de Dados e Modelagem", "alunos": 856, "aprovacao": 78 },
+      { "nome": "React do Zero", "alunos": 412, "aprovacao": 82 },
+      { "nome": "POO com C#", "alunos": 387, "aprovacao": 72 },
+      { "nome": "Design Patterns", "alunos": 156, "aprovacao": 58 }
+    ],
+    "distribuicao_usuarios": {
+      "estudantes": 1421, "tutores": 28, "admins": 4, "inativos": 34
+    },
+    "receita_mensal": [
+      { "mes": "Jan", "valor": 42500 },
+      { "mes": "Fev", "valor": 48200 },
+      { "mes": "Mar", "valor": 52800 },
+      { "mes": "Abr", "valor": 56100 },
+      { "mes": "Mai", "valor": 61700 }
+    ]
+  },
+  "admin_kpis": {
+    "usuarios_total": 1487, "usuarios_ativos_30d": 924, "cursos_publicados": 12,
+    "provas_realizadas_30d": 3421, "taxa_aprovacao": 78, "tempo_medio_curso_horas": 18.5,
+    "novos_cadastros_semana": 47, "certificados_emitidos": 847
+  },
+  "admin_usuarios": [
+    { "id": "u1", "nome": "Felipe Almeida", "email": "felipe.almeida@techquest.com", "tipo": "Estudante", "status": "Ativo", "data_cadastro": "15/03/2024", "ultimo_acesso": "Há 2 horas", "cursos_concluidos": 1, "xp": 2450 },
+    { "id": "u2", "nome": "Ana Souza", "email": "ana.souza@techquest.com", "tipo": "Tutor", "status": "Ativo", "data_cadastro": "10/01/2024", "ultimo_acesso": "Há 30 min", "cursos_publicados": 3, "alunos_total": 145 },
+    { "id": "u3", "nome": "Beatriz Santos", "email": "beatriz@techquest.com", "tipo": "Estudante", "status": "Ativo", "data_cadastro": "22/02/2024", "ultimo_acesso": "Ontem", "cursos_concluidos": 2, "xp": 3820 },
+    { "id": "u4", "nome": "Ricardo Mendonça", "email": "ricardo@techquest.com", "tipo": "Estudante", "status": "Inativo", "data_cadastro": "08/12/2023", "ultimo_acesso": "Há 45 dias", "cursos_concluidos": 0, "xp": 320 },
+    { "id": "u5", "nome": "Marina Costa", "email": "marina@techquest.com", "tipo": "Estudante", "status": "Ativo", "data_cadastro": "01/04/2024", "ultimo_acesso": "Há 1 hora", "cursos_concluidos": 1, "xp": 4150 },
+    { "id": "u6", "nome": "João Pereira", "email": "joao@techquest.com", "tipo": "Estudante", "status": "Ativo", "data_cadastro": "18/04/2024", "ultimo_acesso": "Há 5 horas", "cursos_concluidos": 0, "xp": 890 },
+    { "id": "u7", "nome": "Pedro Henrique", "email": "pedro.h@techquest.com", "tipo": "Tutor", "status": "Ativo", "data_cadastro": "05/01/2024", "ultimo_acesso": "Há 3 horas", "cursos_publicados": 1, "alunos_total": 412 },
+    { "id": "u8", "nome": "Lucas Oliveira", "email": "lucas.o@techquest.com", "tipo": "Estudante", "status": "Ativo", "data_cadastro": "10/04/2024", "ultimo_acesso": "Há 1 dia", "cursos_concluidos": 0, "xp": 1240 },
+    { "id": "u9", "nome": "Juliana Alves", "email": "juliana.a@techquest.com", "tipo": "Estudante", "status": "Ativo", "data_cadastro": "12/03/2024", "ultimo_acesso": "Há 4 horas", "cursos_concluidos": 2, "xp": 5680 },
+    { "id": "u10", "nome": "Rafael Cunha", "email": "rafael.c@techquest.com", "tipo": "Estudante", "status": "Suspenso", "data_cadastro": "20/02/2024", "ultimo_acesso": "Há 10 dias", "cursos_concluidos": 1, "xp": 1820, "motivo_suspensao": "Violação dos termos de uso" },
+    { "id": "u11", "nome": "Camila Rocha", "email": "camila.r@techquest.com", "tipo": "Estudante", "status": "Ativo", "data_cadastro": "25/04/2024", "ultimo_acesso": "Há 2 dias", "cursos_concluidos": 0, "xp": 450 },
+    { "id": "u12", "nome": "Bruno Lima", "email": "bruno.l@techquest.com", "tipo": "Estudante", "status": "Ativo", "data_cadastro": "30/03/2024", "ultimo_acesso": "Há 6 horas", "cursos_concluidos": 0, "xp": 2100 },
+    { "id": "u13", "nome": "Carlos Mendes", "email": "carlos.mendes@techquest.com", "tipo": "Admin", "status": "Ativo", "data_cadastro": "01/01/2024", "ultimo_acesso": "Agora", "acessos_30d": 142 },
+    { "id": "u14", "nome": "Daniela Ribeiro", "email": "daniela.r@techquest.com", "tipo": "Tutor", "status": "Ativo", "data_cadastro": "15/01/2024", "ultimo_acesso": "Há 1 hora", "cursos_publicados": 2, "alunos_total": 287 },
+    { "id": "u15", "nome": "Fernando Sá", "email": "fernando.sa@techquest.com", "tipo": "Estudante", "status": "Inativo", "data_cadastro": "05/12/2023", "ultimo_acesso": "Há 60 dias", "cursos_concluidos": 0, "xp": 180 }
+  ]
+}

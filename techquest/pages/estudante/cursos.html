@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Meus Cursos — Tech Quest</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.47.0/tabler-icons.min.css">
+  <link rel="stylesheet" href="../../css/style.css">
+</head>
+<body>
+<div class="app-container app-container--wide">
+
+  <header class="top-bar">
+    <div class="top-bar__brand"><span>Meus Cursos</span></div>
+    <div class="top-bar__actions">
+      <a href="notificacoes.html" class="top-bar__icon-btn"><i class="ti ti-bell" style="font-size:22px;"></i></a>
+      <a href="perfil.html" class="top-bar__avatar">FA</a>
+    </div>
+  </header>
+
+  <main class="main-content">
+
+    <h1 class="page-title animate-in">Meus Cursos</h1>
+    <p class="page-subtitle">Continue de onde parou ou explore novos conteúdos.</p>
+
+    <!-- Filtros -->
+    <div class="tabs tabs--pills mb-lg animate-in animate-in-delay-1">
+      <button class="tab active">Todos (2)</button>
+      <button class="tab">Em andamento</button>
+      <button class="tab">Concluídos</button>
+    </div>
+
+    <div class="courses-grid animate-in animate-in-delay-2" id="coursesGrid"></div>
+
+    <!-- Sugestões -->
+    <h3 class="section-title mt-xl">Sugestões para você</h3>
+    <div class="courses-grid">
+      <div class="course-card" style="opacity:0.6;">
+        <div class="course-card__cover course-card__cover--web">
+          <i class="ti ti-brand-react course-card__cover-icon"></i>
+          <span class="course-card__level">EM BREVE</span>
+          <span class="course-card__name">React do Zero</span>
+        </div>
+        <div class="course-card__body">
+          <p class="course-card__desc">Aprenda o framework mais usado de front-end no mercado.</p>
+          <button class="btn btn--ghost btn--full" disabled>Em breve</button>
+        </div>
+      </div>
+      <div class="course-card" style="opacity:0.6;">
+        <div class="course-card__cover course-card__cover--bd">
+          <i class="ti ti-cloud course-card__cover-icon"></i>
+          <span class="course-card__level">EM BREVE</span>
+          <span class="course-card__name">DevOps e Azure</span>
+        </div>
+        <div class="course-card__body">
+          <p class="course-card__desc">CI/CD, Docker e Kubernetes para sua aplicação .NET.</p>
+          <button class="btn btn--ghost btn--full" disabled>Em breve</button>
+        </div>
+      </div>
+    </div>
+
+  </main>
+<nav class="bottom-nav">
+    <a href="home.html" class="bottom-nav__item"><i class="ti ti-home"></i><span>Home</span></a>
+    <a href="cursos.html" class="bottom-nav__item active"><i class="ti ti-book-2"></i><span>Cursos</span></a>
+    <a href="conquistas.html" class="bottom-nav__item"><i class="ti ti-trophy"></i><span>Conquistas</span></a>
+    <a href="perfil.html" class="bottom-nav__item"><i class="ti ti-user"></i><span>Perfil</span></a>
+  </nav>
+
+</div>
+
+<script src="../../js/app.js"></script>
+<script>
+function onPageLoad() {
+  if (!TQ.data) return;
+  const grid = document.getElementById('coursesGrid');
+  const rotasCurso = {
+    'fundamentos-csharp': 'curso.html',
+    'bd-modelagem': 'curso-bd.html'
+  };
+  grid.innerHTML = TQ.data.cursos.map(c => `
+    <div class="course-card">
+      <div class="course-card__cover ${c.cor_tema === 'data' ? 'course-card__cover--data' : ''}">
+        <i class="ti ${c.icone} course-card__cover-icon"></i>
+        <span class="course-card__level">${c.nivel}</span>
+        <span class="course-card__name">${c.titulo}</span>
+      </div>
+      <div class="course-card__body">
+        <p class="course-card__desc">${c.descricao}</p>
+        <div class="course-card__meta">
+          <span><i class="ti ti-clock"></i> ${c.duracao_horas}h</span>
+          <span><i class="ti ti-users"></i> ${c.alunos_inscritos.toLocaleString('pt-BR')}</span>
+          <span><i class="ti ti-user"></i> ${c.instrutor}</span>
+        </div>
+        <div class="course-card__progress">
+          <div class="course-card__progress-label">
+            <span class="text-secondary">Progresso</span>
+            <span class="font-semibold">${c.progresso_aluno}%</span>
+          </div>
+          <div class="progress"><div class="progress__fill" style="width:${c.progresso_aluno}%"></div></div>
+        </div>
+        <a href="${rotasCurso[c.id] || 'curso.html'}" class="btn btn--primary btn--full">
+          Continuar <i class="ti ti-arrow-right"></i>
+        </a>
+      </div>
+    </div>
+  `).join('');
+}
+</script>
+</body>
+</html>

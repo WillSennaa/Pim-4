@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cursos — Tech Quest Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.47.0/tabler-icons.min.css">
+  <link rel="stylesheet" href="../../css/style.css">
+</head>
+<body>
+<div class="app-container app-container--wide">
+
+  <aside class="sidebar-nav">
+    <div class="sidebar-nav__brand"><i class="ti ti-shield-check"></i> Tech Quest Admin</div>
+    <a href="home.html" class="sidebar-nav__item"><i class="ti ti-layout-dashboard"></i> Dashboard</a>
+    <a href="usuarios.html" class="sidebar-nav__item"><i class="ti ti-users"></i> Usuários</a>
+    <div class="sidebar-nav__item active"><i class="ti ti-book"></i> Cursos</div>
+    <a href="aprovacoes.html" class="sidebar-nav__item"><i class="ti ti-checks"></i> Aprovações <span class="badge badge--danger" style="margin-left:auto;">4</span></a>
+    <a href="relatorios.html" class="sidebar-nav__item"><i class="ti ti-chart-pie"></i> Relatórios</a>
+    <a href="configuracoes.html" class="sidebar-nav__item"><i class="ti ti-settings"></i> Configurações</a>
+    <div style="flex:1;"></div>
+    <a href="../../index.html" class="sidebar-nav__item" onclick="return confirmarSaida(event)"><i class="ti ti-logout"></i> Sair</a>
+  </aside>
+
+  <div style="flex:1; display:flex; flex-direction:column;">
+
+    <header class="top-bar">
+      <a href="home.html" class="top-bar__back"><i class="ti ti-arrow-left"></i></a>
+      <span class="top-bar__title">Cursos</span>
+      <div class="top-bar__avatar" style="background:#1E293B;">CM</div>
+    </header>
+
+    <main class="main-content">
+
+      <div class="flex justify-between items-center mb-md animate-in" style="flex-wrap:wrap; gap:var(--space-md);">
+        <div>
+          <h1 class="page-title" style="margin-bottom:0;">Gerenciar Cursos</h1>
+          <p class="page-subtitle" style="margin-bottom:0;">Todos os cursos da plataforma, com filtros por status e categoria.</p>
+        </div>
+        <a href="aprovacoes.html" class="btn btn--warning">
+          <i class="ti ti-clock"></i> <span id="totalAguardando">3</span> aguardando aprovação
+        </a>
+      </div>
+
+      <!-- KPIs -->
+      <div class="dashboard-grid mb-lg animate-in animate-in-delay-1">
+        <div class="card" style="margin:0; border-top:3px solid var(--color-success); cursor:pointer;" onclick="filtrarStatus('publicado')">
+          <div class="text-xs text-muted font-semibold" style="letter-spacing:1px;">PUBLICADOS</div>
+          <div class="font-bold" style="font-size:28px;" id="kpiPublicados">5</div>
+        </div>
+        <div class="card" style="margin:0; border-top:3px solid var(--color-warning); cursor:pointer;" onclick="filtrarStatus('aguardando')">
+          <div class="text-xs text-muted font-semibold" style="letter-spacing:1px;">AGUARDANDO</div>
+          <div class="font-bold" style="font-size:28px;" id="kpiAguardando">3</div>
+        </div>
+        <div class="card" style="margin:0; border-top:3px solid var(--color-danger); cursor:pointer;" onclick="filtrarStatus('exclusao_solicitada')">
+          <div class="text-xs text-muted font-semibold" style="letter-spacing:1px;">EXCLUSÃO PEDIDA</div>
+          <div class="font-bold" style="font-size:28px;" id="kpiExclusao">1</div>
+        </div>
+        <div class="card" style="margin:0; border-top:3px solid var(--color-text-muted); cursor:pointer;" onclick="filtrarStatus('rascunho')">
+          <div class="text-xs text-muted font-semibold" style="letter-spacing:1px;">RASCUNHOS</div>
+          <div class="font-bold" style="font-size:28px;" id="kpiRascunhos">1</div>
+        </div>
+      </div>
+
+      <!-- Filtros funcionais -->
+      <div class="tabs tabs--pills mb-md animate-in animate-in-delay-1" id="filtrosStatus">
+        <button class="tab active" data-status="todos">Todos</button>
+        <button class="tab" data-status="publicado">Publicados</button>
+        <button class="tab" data-status="aguardando">Aguardando</button>
+        <button class="tab" data-status="exclusao_solicitada">Exclusão pedida</button>
+        <button class="tab" data-status="rascunho">Rascunho</button>
+      </div>
+
+      <div class="card animate-in animate-in-delay-2">
+        <div class="flex gap-sm" style="flex-wrap:wrap;">
+          <div class="form-input-wrapper" style="flex:1; min-width:200px;">
+            <i class="ti ti-search"></i>
+            <input type="text" id="buscaCurso" class="form-input form-input--with-icon" placeholder="Buscar curso..." oninput="renderCursos()">
+          </div>
+          <select class="form-input" id="filtroCategoria" style="max-width:160px;" onchange="renderCursos()">
+            <option value="todos">Todas categorias</option>
+            <option value="Programação">Programação</option>
+            <option value="Database">Database</option>
+            <option value="Frontend">Frontend</option>
+            <option value="Backend">Backend</option>
+            <option value="DevOps">DevOps</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Tabela -->
+      <div class="card card--no-padding animate-in animate-in-delay-2">
+        <div style="overflow-x:auto;">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Curso</th>
+                <th>Tutor</th>
+                <th>Categoria</th>
+                <th>Alunos</th>
+                <th>Rating</th>
+                <th>Status</th>
+                <th>Ações</th>
+              </tr>
+            </thead>
+            <tbody id="cursosTableBody"></tbody>
+          </table>
+        </div>
+        <div id="emptyState" style="display:none; padding:var(--space-2xl); text-align:center;">
+          <i class="ti ti-mood-empty" style="font-size:48px; color:var(--color-text-muted);"></i>
+          <p class="text-muted mt-md">Nenhum curso encontrado com esses filtros.</p>
+        </div>
+      </div>
+
+      <p class="text-xs text-muted text-center mt-md">Mostrando <span id="contagemTotal">10</span> cursos · Clique em uma linha para ver detalhes</p>
+
+    </main>
+
+    <nav class="bottom-nav">
+      <a href="home.html" class="bottom-nav__item"><i class="ti ti-layout-dashboard"></i><span>Dashboard</span></a>
+      <a href="usuarios.html" class="bottom-nav__item"><i class="ti ti-users"></i><span>Usuários</span></a>
+      <a href="cursos.html" class="bottom-nav__item active"><i class="ti ti-book"></i><span>Cursos</span></a>
+      <a href="aprovacoes.html" class="bottom-nav__item"><i class="ti ti-checks"></i><span>Aprovar</span></a>
+    </nav>
+
+  </div>
+</div>
+
+<script src="../../js/app.js"></script>
+<script>
+let filtroStatus = 'todos';
+
+function filtrarStatus(s) {
+  filtroStatus = s;
+  document.querySelectorAll('#filtrosStatus .tab').forEach(t => t.classList.remove('active'));
+  const tab = document.querySelector(`#filtrosStatus .tab[data-status="${s}"]`);
+  if (tab) tab.classList.add('active');
+  renderCursos();
+}
+
+function renderCursos() {
+  if (!TQ.data) return;
+  const busca = (document.getElementById('buscaCurso').value || '').toLowerCase().trim();
+  const cat = document.getElementById('filtroCategoria').value;
+
+  let cursos = TQ.data.admin_cursos;
+  if (filtroStatus !== 'todos') cursos = cursos.filter(c => c.status === filtroStatus);
+  if (cat !== 'todos') cursos = cursos.filter(c => c.categoria === cat);
+  if (busca) cursos = cursos.filter(c =>
+    c.titulo.toLowerCase().includes(busca) ||
+    c.tutor.toLowerCase().includes(busca)
+  );
+
+  const tbody = document.getElementById('cursosTableBody');
+  const empty = document.getElementById('emptyState');
+  document.getElementById('contagemTotal').textContent = cursos.length;
+
+  if (cursos.length === 0) {
+    tbody.innerHTML = '';
+    empty.style.display = '';
+    return;
+  }
+  empty.style.display = 'none';
+
+  const statusInfo = {
+    'publicado': { class: 'success', label: 'PUBLICADO' },
+    'aguardando': { class: 'warning', label: 'AGUARDANDO' },
+    'exclusao_solicitada': { class: 'danger', label: 'EXCLUSÃO PEDIDA' },
+    'rascunho': { class: 'neutral', label: 'RASCUNHO' }
+  };
+
+  tbody.innerHTML = cursos.map(c => {
+    const s = statusInfo[c.status];
+    return `<tr style="cursor:pointer;" onclick="window.location.href='curso-detalhe.html?id=${c.id}'">
+      <td>
+        <div class="font-medium">${c.titulo}</div>
+        <div class="text-xs text-muted">Criado em ${c.criado_em}</div>
+      </td>
+      <td class="text-sm">${c.tutor}</td>
+      <td><span class="badge badge--neutral">${c.categoria}</span></td>
+      <td class="text-sm">${c.alunos.toLocaleString('pt-BR')}</td>
+      <td class="text-sm">${c.rating > 0 ? '⭐ ' + c.rating : '—'}</td>
+      <td><span class="badge badge--${s.class}">${s.label}</span></td>
+      <td onclick="event.stopPropagation();">
+        <div class="flex gap-sm">
+          <a href="curso-detalhe.html?id=${c.id}" class="btn btn--ghost btn--sm" style="padding:6px;" title="Ver detalhes"><i class="ti ti-eye"></i></a>
+        </div>
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+document.addEventListener('click', e => {
+  if (e.target.closest('#filtrosStatus .tab')) {
+    filtrarStatus(e.target.closest('.tab').dataset.status);
+  }
+});
+
+function onPageLoad() {
+  if (!TQ.data) return;
+  // Atualiza KPIs
+  const c = TQ.data.admin_cursos;
+  document.getElementById('kpiPublicados').textContent = c.filter(x => x.status === 'publicado').length;
+  document.getElementById('kpiAguardando').textContent = c.filter(x => x.status === 'aguardando').length;
+  document.getElementById('kpiExclusao').textContent = c.filter(x => x.status === 'exclusao_solicitada').length;
+  document.getElementById('kpiRascunhos').textContent = c.filter(x => x.status === 'rascunho').length;
+  document.getElementById('totalAguardando').textContent = c.filter(x => x.status === 'aguardando').length;
+  renderCursos();
+}
+</script>
+</body>
+</html>

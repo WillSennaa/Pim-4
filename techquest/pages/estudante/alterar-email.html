@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Alterar E-mail — Tech Quest</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.47.0/tabler-icons.min.css">
+  <link rel="stylesheet" href="../../css/style.css">
+</head>
+<body>
+<div class="app-container app-container--wide">
+
+  <main class="main-content" style="padding-top:var(--space-2xl);">
+
+    <div class="card animate-in" style="padding:var(--space-2xl) var(--space-xl);">
+      <div class="text-center mb-lg">
+        <div style="width:56px; height:56px; background:var(--color-primary-light); color:var(--color-primary-dark); border-radius:var(--radius-full); display:inline-flex; align-items:center; justify-content:center; font-size:24px;">
+          <i class="ti ti-hand-stop"></i>
+        </div>
+      </div>
+
+      <h2 class="text-center font-bold mb-sm" style="font-size:22px;">Alterar e-mail?</h2>
+      <p class="text-center text-secondary text-sm mb-lg" style="line-height:1.6;">
+        Por motivos de segurança, para realizar a troca do seu e-mail de acesso, precisamos confirmar sua identidade através da sua senha atual.
+      </p>
+
+      <form onsubmit="event.preventDefault(); abrirModal('modalSalvo');">
+        <div class="form-group">
+          <label class="form-label">Senha atual</label>
+          <div class="form-input-wrapper">
+            <i class="ti ti-lock"></i>
+            <input type="password" class="form-input form-input--with-icon" placeholder="Digite sua senha" required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Novo e-mail</label>
+          <div class="form-input-wrapper">
+            <i class="ti ti-mail"></i>
+            <input type="email" class="form-input form-input--with-icon" placeholder="novo@email.com" required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Confirmar novo e-mail</label>
+          <div class="form-input-wrapper">
+            <i class="ti ti-mail-check"></i>
+            <input type="email" class="form-input form-input--with-icon" placeholder="Confirme o novo e-mail" required>
+          </div>
+        </div>
+
+        <div class="flex flex-col gap-sm mt-xl">
+          <a href="editar-perfil.html" class="btn btn--secondary btn--full">Cancelar</a>
+          <button type="submit" class="btn btn--primary btn--full btn--lg">Confirmar alteração</button>
+        </div>
+      </form>
+    </div>
+
+  </main>
+
+</div>
+
+<div class="modal-overlay" id="modalSalvo">
+  <div class="modal">
+    <div class="modal__icon modal__icon--success"><i class="ti ti-check"></i></div>
+    <h3 class="modal__title">E-mail alterado!</h3>
+    <p class="modal__text">Seu novo e-mail foi salvo com sucesso. Use-o no próximo login.</p>
+    <div class="modal__actions">
+      <a href="perfil.html" class="btn btn--primary btn--full">OK</a>
+    </div>
+  </div>
+</div>
+
+<script src="../../js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Prova: Análise de Sistemas — Tech Quest</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.47.0/tabler-icons.min.css">
+  <link rel="stylesheet" href="../../css/style.css">
+</head>
+<body>
+<div class="app-container app-container--wide">
+
+  <header class="top-bar">
+    <button class="top-bar__back" onclick="abrirModal('modalSair')">
+      <i class="ti ti-arrow-left"></i> Sair
+    </button>
+    <div style="flex:1; text-align:right;">
+      <div class="font-semibold text-sm" id="quizTitulo">Prova: Análise de Sistemas</div>
+      <div class="text-xs text-muted" id="quizSubtitulo">Curso: Banco de Dados</div>
+    </div>
+  </header>
+
+  <div class="quiz-header" id="quizProgress"></div>
+
+  <main class="main-content main-content--no-padding" style="padding-bottom: 120px;">
+    <div id="quizContent">
+      <div style="padding:var(--space-2xl); text-align:center; color:var(--color-text-muted);">
+        Carregando questões...
+      </div>
+    </div>
+  </main>
+
+  <div class="quiz-nav" style="position:fixed; bottom:0; left:0; right:0; z-index:50;">
+    <button class="btn btn--ghost" id="btnAnterior" onclick="QUIZ.anterior()" disabled>
+      <i class="ti ti-arrow-left"></i> Anterior
+    </button>
+    <button class="btn btn--primary" id="btnProxima" onclick="QUIZ.proxima()" disabled>
+      Próxima <i class="ti ti-arrow-right"></i>
+    </button>
+  </div>
+
+</div>
+
+<div class="modal-overlay" id="modalSair">
+  <div class="modal">
+    <div class="modal__icon modal__icon--warning"><i class="ti ti-alert-triangle"></i></div>
+    <h3 class="modal__title">Sair da prova?</h3>
+    <p class="modal__text">Seu progresso atual será perdido. Deseja realmente interromper agora?</p>
+    <div class="modal__actions">
+      <button class="btn btn--ghost btn--full" onclick="fecharModal('modalSair')">Cancelar</button>
+      <a href="curso-bd.html" class="btn btn--danger btn--full">Sim, sair da prova</a>
+    </div>
+  </div>
+</div>
+
+<style>
+@media (min-width: 768px) {
+  .quiz-nav { left: 240px !important; }
+}
+</style>
+
+<script src="../../js/app.js"></script>
+<script>
+function onPageLoad() {
+  QUIZ.iniciar('prova_bd', 'resultado-aprovado-bd.html', 'resultado-reprovado.html', 'curso-bd.html');
+}
+</script>
+</body>
+</html>

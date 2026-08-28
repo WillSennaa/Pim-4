@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Central de Ajuda — Tech Quest</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.47.0/tabler-icons.min.css">
+  <link rel="stylesheet" href="../../css/style.css">
+</head>
+<body>
+<div class="app-container app-container--wide">
+
+  <header class="top-bar">
+    <a href="perfil.html" class="top-bar__back"><i class="ti ti-arrow-left"></i></a>
+    <span class="top-bar__title">Central de Ajuda</span>
+    <a href="perfil.html" class="top-bar__avatar">FA</a>
+  </header>
+
+  <main class="main-content">
+
+    <h1 class="page-title animate-in">Central de Ajuda</h1>
+    <p class="page-subtitle">Encontre respostas para as dúvidas mais comuns ou fale com nosso suporte.</p>
+
+    <!-- Busca -->
+    <div class="card animate-in animate-in-delay-1">
+      <div class="form-input-wrapper">
+        <i class="ti ti-search"></i>
+        <input type="text" class="form-input form-input--with-icon" placeholder="Digite sua dúvida...">
+      </div>
+    </div>
+
+    <!-- Ações rápidas -->
+    <div class="dashboard-grid mb-lg animate-in animate-in-delay-2">
+      <a href="suporte.html" class="card" style="margin:0; text-decoration:none; cursor:pointer;">
+        <div class="list-item__icon mb-md"><i class="ti ti-message-circle"></i></div>
+        <div class="font-semibold mb-sm">Fale com Suporte</div>
+        <div class="text-xs text-secondary">Abra um chamado técnico</div>
+      </a>
+      <a href="#" onclick="event.preventDefault(); alert('📚 Tutoriais em vídeo em breve! Por enquanto, consulte o FAQ abaixo.');" class="card" style="margin:0; text-decoration:none; cursor:pointer;">
+        <div class="list-item__icon list-item__icon--warning mb-md"><i class="ti ti-book-2"></i></div>
+        <div class="font-semibold mb-sm">Tutoriais</div>
+        <div class="text-xs text-secondary">Guias passo a passo</div>
+      </a>
+      <a href="#" onclick="event.preventDefault(); alert('🎥 Canal de vídeos sendo migrado para a plataforma. Em breve!');" class="card" style="margin:0; text-decoration:none; cursor:pointer;">
+        <div class="list-item__icon list-item__icon--success mb-md"><i class="ti ti-video"></i></div>
+        <div class="font-semibold mb-sm">Vídeos</div>
+        <div class="text-xs text-secondary">Aprenda em vídeo</div>
+      </a>
+      <a href="#" onclick="event.preventDefault(); alert('💬 Comunidade no Discord: discord.gg/techquest');" class="card" style="margin:0; text-decoration:none; cursor:pointer;">
+        <div class="list-item__icon list-item__icon--danger mb-md"><i class="ti ti-users"></i></div>
+        <div class="font-semibold mb-sm">Comunidade</div>
+        <div class="text-xs text-secondary">Fórum de discussão</div>
+      </a>
+    </div>
+
+    <h3 class="section-title mt-xl">Perguntas Frequentes</h3>
+
+    <div id="faqList" class="animate-in animate-in-delay-3"></div>
+
+    <!-- CTA suporte -->
+    <div class="card mt-xl animate-in" style="text-align:center; background:linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%); color:white; border:none;">
+      <i class="ti ti-headset" style="font-size:36px; margin-bottom:var(--space-md);"></i>
+      <h3 class="font-bold" style="font-size:18px; margin-bottom:var(--space-sm);">Não encontrou o que procurava?</h3>
+      <p class="text-sm mb-md" style="opacity:0.9;">Nossa equipe responde em até 24 horas.</p>
+      <a href="suporte.html" class="btn btn--secondary" style="background:white; color:var(--color-primary);">
+        <i class="ti ti-message-2"></i> Abrir chamado
+      </a>
+    </div>
+
+  </main>
+
+  <nav class="bottom-nav">
+    <a href="home.html" class="bottom-nav__item"><i class="ti ti-home"></i><span>Home</span></a>
+    <a href="cursos.html" class="bottom-nav__item"><i class="ti ti-book-2"></i><span>Cursos</span></a>
+    <a href="conquistas.html" class="bottom-nav__item"><i class="ti ti-trophy"></i><span>Conquistas</span></a>
+    <a href="perfil.html" class="bottom-nav__item active"><i class="ti ti-user"></i><span>Perfil</span></a>
+  </nav>
+
+</div>
+
+<script src="../../js/app.js"></script>
+<script>
+function onPageLoad() {
+  if (!TQ.data || !TQ.data.faq) return;
+  const list = document.getElementById('faqList');
+  list.innerHTML = TQ.data.faq.map((f, i) => `
+    <div class="faq-item" id="faq-${i}">
+      <div class="faq-item__question" onclick="document.getElementById('faq-${i}').classList.toggle('open')">
+        <span>${f.pergunta}</span>
+        <i class="ti ti-chevron-down"></i>
+      </div>
+      <div class="faq-item__answer">${f.resposta}</div>
+    </div>
+  `).join('');
+}
+</script>
+</body>
+</html>

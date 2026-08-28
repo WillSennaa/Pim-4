@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Início — Tech Quest</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.47.0/tabler-icons.min.css">
+  <link rel="stylesheet" href="../../css/style.css">
+</head>
+<body>
+<div class="app-container app-container--wide">
+
+  <!-- Top Bar -->
+  <header class="top-bar">
+    <div class="top-bar__brand">
+      <span>Tech Quest</span>
+    </div>
+    <div class="top-bar__actions">
+      <a href="notificacoes.html" class="top-bar__icon-btn top-bar__icon-btn--badge"><i class="ti ti-bell" style="font-size:22px;"></i></a>
+      <a href="perfil.html" class="top-bar__avatar" id="userInitials">FA</a>
+    </div>
+  </header>
+
+  <main class="main-content">
+
+    <!-- Saudação -->
+    <div class="welcome-block animate-in">
+      <h1 class="welcome-block__hello">Olá, <span id="userName">Felipe</span>! <span class="wave">👋</span></h1>
+      <p class="welcome-block__date">Segunda-feira, 22 de Maio de 2024</p>
+    </div>
+
+    <!-- Card de nível -->
+    <div class="card card--accent-warning animate-in animate-in-delay-1">
+      <div class="level-card">
+        <div class="level-card__avatar-wrapper">
+          <div class="level-card__avatar" style="background:linear-gradient(135deg, #475569, #64748B); display:flex; align-items:center; justify-content:center; color:white; font-weight:700; font-size:32px;">F</div>
+          <div class="level-card__badge" id="userLevel">7</div>
+        </div>
+        <div class="level-card__title">
+          <i class="ti ti-medal" style="vertical-align:-2px;"></i>
+          Nível <span id="userLevelText">7</span>
+        </div>
+        <div class="level-card__xp">
+          <span><span id="userXP">2.450</span> / <span id="userXPNext">3.000</span> XP para o Nível 8</span>
+          <span class="text-primary font-semibold" id="userProgressLabel">82%</span>
+        </div>
+        <div class="progress">
+          <div class="progress__fill" id="userProgressBar" style="width:82%"></div>
+        </div>
+        <p class="level-card__quote" id="userQuote">"Você está apenas a 550 XP de se tornar um Especialista!"</p>
+      </div>
+    </div>
+
+    <!-- Conquistas Recentes -->
+    <div class="card animate-in animate-in-delay-2">
+      <div class="card__header">
+        <h3 class="card__title">CONQUISTAS RECENTES</h3>
+        <a href="../estudante/conquistas.html" class="text-warning"><i class="ti ti-star-filled" style="font-size:20px;"></i></a>
+      </div>
+      <div id="conquistasList"></div>
+    </div>
+
+    <!-- Cursos em andamento -->
+    <div class="card course-progress-card animate-in animate-in-delay-3">
+      <span class="badge badge--primary">EM ANDAMENTO</span>
+      <h3 class="course-progress-card__title mt-sm" id="currentCourseTitle">Fundamentos de C#</h3>
+      <div class="course-progress-card__info">
+        <span class="text-secondary">Progresso do curso</span>
+        <span class="font-semibold" id="currentCourseProgress">50%</span>
+      </div>
+      <div class="progress mb-md">
+        <div class="progress__fill" id="currentCourseBar" style="width:50%"></div>
+      </div>
+      <a href="curso.html" class="btn btn--primary btn--full">Continuar <i class="ti ti-player-play"></i></a>
+    </div>
+
+    <!-- Segundo curso -->
+    <div class="card animate-in animate-in-delay-3" style="border-top:4px solid #6D28D9;">
+      <span class="badge" style="background:#F3E8FF; color:#6D28D9;">EM ANDAMENTO</span>
+      <h3 class="course-progress-card__title mt-sm">Banco de Dados e Modelagem</h3>
+      <div class="course-progress-card__info">
+        <span class="text-secondary">Progresso do curso</span>
+        <span class="font-semibold" style="color:#6D28D9;">30%</span>
+      </div>
+      <div class="progress mb-md">
+        <div class="progress__fill" style="width:30%; background:#6D28D9;"></div>
+      </div>
+      <a href="curso-bd.html" class="btn btn--full" style="background:#6D28D9; color:white;">Continuar <i class="ti ti-player-play"></i></a>
+    </div>
+
+    <!-- Próxima prova -->
+    <div class="card next-test-card animate-in animate-in-delay-3">
+      <span class="badge badge--danger">PRÓXIMA PROVA</span>
+      <h3 class="course-progress-card__title mt-sm">Arrays e Listas</h3>
+      <div class="next-test-card__row"><i class="ti ti-book-2"></i><span>Curso: Fundamentos de C#</span></div>
+      <div class="next-test-card__row"><i class="ti ti-chart-bar"></i><span>Nível: Iniciante</span></div>
+      <div class="next-test-card__row next-test-card__row--alert"><i class="ti ti-clock"></i><span>Disponível até: Amanhã, 23:59</span></div>
+      <button class="btn btn--secondary btn--full mt-md" onclick="abrirModal('modalIniciarProva')">Começar <i class="ti ti-arrow-right"></i></button>
+    </div>
+
+    <!-- Atalho certificados -->
+    <a href="certificados.html" class="card flex items-center gap-md animate-in animate-in-delay-3" style="background:linear-gradient(135deg, #FEFCE8 0%, #FEF3C7 100%); border:1px solid #FCD34D; text-decoration:none;">
+      <div class="list-item__icon list-item__icon--warning" style="width:48px; height:48px; font-size:24px;">
+        <i class="ti ti-certificate"></i>
+      </div>
+      <div style="flex:1;">
+        <div class="font-bold">Meus Certificados</div>
+        <div class="text-xs text-secondary">1 emitido · 1 disponível em breve</div>
+      </div>
+      <i class="ti ti-chevron-right text-muted"></i>
+    </a>
+
+  </main>
+
+  <!-- Bottom Navigation -->
+  <nav class="bottom-nav">
+    <a href="home.html" class="bottom-nav__item active">
+      <i class="ti ti-home"></i><span>Home</span>
+    </a>
+    <a href="cursos.html" class="bottom-nav__item">
+      <i class="ti ti-book-2"></i><span>Cursos</span>
+    </a>
+    <a href="conquistas.html" class="bottom-nav__item">
+      <i class="ti ti-trophy"></i><span>Conquistas</span>
+    </a>
+    <a href="perfil.html" class="bottom-nav__item">
+      <i class="ti ti-user"></i><span>Perfil</span>
+    </a>
+  </nav>
+
+</div>
+
+<!-- Modal confirmar início da prova -->
+<div class="modal-overlay" id="modalIniciarProva">
+  <div class="modal">
+    <div class="modal__icon modal__icon--warning"><i class="ti ti-clipboard-check"></i></div>
+    <h3 class="modal__title">Iniciar a prova agora?</h3>
+    <p class="modal__text">Você está prestes a iniciar a prova de <strong>Arrays e Listas</strong> do curso Fundamentos de C#. Certifique-se de ter tempo suficiente — uma vez iniciada, o cronômetro começa.</p>
+    <div class="modal__actions">
+      <a href="prova.html" class="btn btn--primary btn--full"><i class="ti ti-player-play"></i> Sim, iniciar prova</a>
+      <button class="btn btn--secondary btn--full" onclick="fecharModal('modalIniciarProva')">Voltar, ainda não estou pronto</button>
+    </div>
+  </div>
+</div>
+
+<script src="../../js/app.js"></script>
+<script>
+function onPageLoad() {
+  if (TQ.data) renderEstudanteHome();
+}
+</script>
+</body>
+</html>

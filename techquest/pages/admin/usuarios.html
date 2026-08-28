@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gerenciar Usuários — Tech Quest Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.47.0/tabler-icons.min.css">
+  <link rel="stylesheet" href="../../css/style.css">
+</head>
+<body>
+<div class="app-container app-container--wide">
+
+  <aside class="sidebar-nav">
+    <div class="sidebar-nav__brand"><i class="ti ti-shield-check"></i> Tech Quest Admin</div>
+    <a href="home.html" class="sidebar-nav__item"><i class="ti ti-layout-dashboard"></i> Dashboard</a>
+    <div class="sidebar-nav__item active"><i class="ti ti-users"></i> Usuários</div>
+    <a href="cursos.html" class="sidebar-nav__item"><i class="ti ti-book"></i> Cursos</a>
+    <a href="aprovacoes.html" class="sidebar-nav__item"><i class="ti ti-checks"></i> Aprovações <span class="badge badge--danger" style="margin-left:auto;">4</span></a>
+    <a href="relatorios.html" class="sidebar-nav__item"><i class="ti ti-chart-pie"></i> Relatórios</a>
+    <a href="configuracoes.html" class="sidebar-nav__item"><i class="ti ti-settings"></i> Configurações</a>
+    <div style="flex:1;"></div>
+    <a href="../../index.html" class="sidebar-nav__item" onclick="return confirmarSaida(event)"><i class="ti ti-logout"></i> Sair</a>
+  </aside>
+
+  <div style="flex:1; display:flex; flex-direction:column;">
+
+    <header class="top-bar">
+      <a href="home.html" class="top-bar__back"><i class="ti ti-arrow-left"></i></a>
+      <span class="top-bar__title">Usuários</span>
+      <div class="top-bar__avatar" style="background:#1E293B;">CM</div>
+    </header>
+
+    <main class="main-content">
+
+      <div class="flex justify-between items-center mb-md animate-in" style="flex-wrap:wrap; gap:var(--space-md);">
+        <div>
+          <h1 class="page-title" style="margin-bottom:0;">Gerenciar Usuários</h1>
+          <p class="page-subtitle" style="margin-bottom:0;">Estudantes, tutores e administradores da plataforma.</p>
+        </div>
+        <a href="criar-tutor.html" class="btn btn--primary">
+          <i class="ti ti-user-plus"></i> Cadastrar novo Tutor
+        </a>
+      </div>
+
+      <!-- Aviso sobre cadastros -->
+      <div class="card animate-in animate-in-delay-1" style="background:var(--color-primary-lighter); border-color:var(--color-primary-light);">
+        <div class="flex items-start gap-md">
+          <i class="ti ti-info-circle text-primary" style="font-size:24px;"></i>
+          <div>
+            <h4 class="font-bold mb-sm">Como funciona o cadastro de usuários?</h4>
+            <p class="text-sm text-secondary"><strong>Estudantes</strong> se cadastram livremente pela tela pública. <strong>Tutores</strong> são cadastrados exclusivamente pelo administrador (botão acima). <strong>Admins</strong> são criados manualmente pelo banco de dados por motivos de segurança.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- KPIs -->
+      <div class="dashboard-grid mb-lg animate-in animate-in-delay-1">
+        <div class="card" style="margin:0; border-top:3px solid var(--color-primary); cursor:pointer;" onclick="filtrarTipo('Estudante')">
+          <div class="text-xs text-muted font-semibold" style="letter-spacing:1px;">ESTUDANTES</div>
+          <div class="font-bold" style="font-size:28px;" id="kpiEstudantes">0</div>
+        </div>
+        <div class="card" style="margin:0; border-top:3px solid var(--color-warning); cursor:pointer;" onclick="filtrarTipo('Tutor')">
+          <div class="text-xs text-muted font-semibold" style="letter-spacing:1px;">TUTORES</div>
+          <div class="font-bold" style="font-size:28px;" id="kpiTutores">0</div>
+        </div>
+        <div class="card" style="margin:0; border-top:3px solid #1E293B; cursor:pointer;" onclick="filtrarTipo('Admin')">
+          <div class="text-xs text-muted font-semibold" style="letter-spacing:1px;">ADMINS</div>
+          <div class="font-bold" style="font-size:28px;" id="kpiAdmins">0</div>
+        </div>
+        <div class="card" style="margin:0; border-top:3px solid var(--color-success);">
+          <div class="text-xs text-muted font-semibold" style="letter-spacing:1px;">ATIVOS</div>
+          <div class="font-bold" style="font-size:28px;" id="kpiAtivos">0</div>
+        </div>
+      </div>
+
+      <!-- Filtros funcionais -->
+      <div class="tabs tabs--pills mb-md animate-in animate-in-delay-2" id="filtrosTipo">
+        <button class="tab active" data-tipo="todos">Todos</button>
+        <button class="tab" data-tipo="Estudante">Estudantes</button>
+        <button class="tab" data-tipo="Tutor">Tutores</button>
+        <button class="tab" data-tipo="Admin">Admins</button>
+      </div>
+
+      <div class="card animate-in animate-in-delay-2">
+        <div class="flex gap-sm" style="flex-wrap:wrap;">
+          <div class="form-input-wrapper" style="flex:1; min-width:200px;">
+            <i class="ti ti-search"></i>
+            <input type="text" id="buscaUsuario" class="form-input form-input--with-icon" placeholder="Buscar por nome ou e-mail..." oninput="renderUsuarios()">
+          </div>
+          <select class="form-input" id="filtroStatus" style="max-width:160px;" onchange="renderUsuarios()">
+            <option value="todos">Todos status</option>
+            <option value="Ativo">Ativo</option>
+            <option value="Inativo">Inativo</option>
+            <option value="Suspenso">Suspenso</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Tabela -->
+      <div class="card card--no-padding animate-in animate-in-delay-3">
+        <div style="overflow-x:auto;">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Usuário</th>
+                <th>Tipo</th>
+                <th>Status</th>
+                <th>Cadastro</th>
+                <th>Último acesso</th>
+                <th>Ações</th>
+              </tr>
+            </thead>
+            <tbody id="usuariosTableBody"></tbody>
+          </table>
+        </div>
+        <div id="emptyState" style="display:none; padding:var(--space-2xl); text-align:center;">
+          <i class="ti ti-mood-empty" style="font-size:48px; color:var(--color-text-muted);"></i>
+          <p class="text-muted mt-md">Nenhum usuário encontrado.</p>
+        </div>
+      </div>
+
+      <p class="text-xs text-muted text-center mt-md">Mostrando <span id="contagemTotal">15</span> de 1.487 usuários · Clique em uma linha para ver detalhes</p>
+
+    </main>
+
+    <nav class="bottom-nav">
+      <a href="home.html" class="bottom-nav__item"><i class="ti ti-layout-dashboard"></i><span>Dashboard</span></a>
+      <a href="usuarios.html" class="bottom-nav__item active"><i class="ti ti-users"></i><span>Usuários</span></a>
+      <a href="cursos.html" class="bottom-nav__item"><i class="ti ti-book"></i><span>Cursos</span></a>
+      <a href="aprovacoes.html" class="bottom-nav__item"><i class="ti ti-checks"></i><span>Aprovar</span></a>
+    </nav>
+
+  </div>
+</div>
+
+<script src="../../js/app.js"></script>
+<script>
+let filtroTipo = 'todos';
+
+function filtrarTipo(t) {
+  filtroTipo = t;
+  document.querySelectorAll('#filtrosTipo .tab').forEach(tab => tab.classList.remove('active'));
+  const tab = document.querySelector(`#filtrosTipo .tab[data-tipo="${t}"]`);
+  if (tab) tab.classList.add('active');
+  renderUsuarios();
+}
+
+function renderUsuarios() {
+  if (!TQ.data) return;
+  const busca = (document.getElementById('buscaUsuario').value || '').toLowerCase().trim();
+  const status = document.getElementById('filtroStatus').value;
+  let usrs = TQ.data.admin_usuarios;
+  if (filtroTipo !== 'todos') usrs = usrs.filter(u => u.tipo === filtroTipo);
+  if (status !== 'todos') usrs = usrs.filter(u => u.status === status);
+  if (busca) usrs = usrs.filter(u =>
+    u.nome.toLowerCase().includes(busca) ||
+    u.email.toLowerCase().includes(busca)
+  );
+
+  const tbody = document.getElementById('usuariosTableBody');
+  const empty = document.getElementById('emptyState');
+  document.getElementById('contagemTotal').textContent = usrs.length;
+
+  if (usrs.length === 0) {
+    tbody.innerHTML = '';
+    empty.style.display = '';
+    return;
+  }
+  empty.style.display = 'none';
+
+  const tipoBadge = {
+    'Estudante': 'primary',
+    'Tutor': 'warning',
+    'Admin': 'neutral'
+  };
+  const statusBadge = {
+    'Ativo': 'success',
+    'Inativo': 'neutral',
+    'Suspenso': 'danger'
+  };
+
+  tbody.innerHTML = usrs.map(u => `
+    <tr style="cursor:pointer;" onclick="window.location.href='usuario-detalhe.html?id=${u.id}'">
+      <td>
+        <div class="flex items-center gap-md">
+          <div class="avatar avatar--sm">${u.nome.split(' ').map(n=>n[0]).join('').substring(0,2)}</div>
+          <div>
+            <div class="font-medium">${u.nome}</div>
+            <div class="text-xs text-muted">${u.email}</div>
+          </div>
+        </div>
+      </td>
+      <td><span class="badge badge--${tipoBadge[u.tipo]}">${u.tipo}</span></td>
+      <td><span class="badge badge--${statusBadge[u.status]}">${u.status}</span></td>
+      <td class="text-sm text-muted">${u.data_cadastro}</td>
+      <td class="text-sm text-muted">${u.ultimo_acesso}</td>
+      <td onclick="event.stopPropagation();">
+        <div class="flex gap-sm">
+          <a href="usuario-detalhe.html?id=${u.id}" class="btn btn--ghost btn--sm" style="padding:6px;" title="Ver detalhes"><i class="ti ti-eye"></i></a>
+        </div>
+      </td>
+    </tr>
+  `).join('');
+}
+
+document.addEventListener('click', e => {
+  if (e.target.closest('#filtrosTipo .tab')) {
+    filtrarTipo(e.target.closest('.tab').dataset.tipo);
+  }
+});
+
+function onPageLoad() {
+  if (!TQ.data) return;
+  const u = TQ.data.admin_usuarios;
+  document.getElementById('kpiEstudantes').textContent = u.filter(x => x.tipo === 'Estudante').length;
+  document.getElementById('kpiTutores').textContent = u.filter(x => x.tipo === 'Tutor').length;
+  document.getElementById('kpiAdmins').textContent = u.filter(x => x.tipo === 'Admin').length;
+  document.getElementById('kpiAtivos').textContent = u.filter(x => x.status === 'Ativo').length;
+  renderUsuarios();
+}
+</script>
+</body>
+</html>

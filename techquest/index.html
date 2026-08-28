@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tech Quest — Aprenda. Pratique. Conquiste.</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.47.0/tabler-icons.min.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="app-container">
+
+  <!-- Top Bar -->
+  <header class="top-bar">
+    <div class="top-bar__brand">
+      <div class="top-bar__brand-icon"><i class="ti ti-terminal-2"></i></div>
+      <span>Tech Quest</span>
+    </div>
+    <div class="top-bar__actions">
+      <a href="pages/login.html" class="btn btn--ghost btn--sm">Login</a>
+      <a href="pages/cadastro.html" class="btn btn--primary btn--sm">Cadastrar-se</a>
+    </div>
+  </header>
+
+  <main class="main-content" style="padding: 0; padding-bottom: 80px;">
+
+    <!-- Hero -->
+    <section class="landing-hero animate-in">
+      <h1 class="landing-hero__title">
+        Aprenda.<br>
+        Pratique.<br>
+        <span>Conquiste.</span>
+      </h1>
+      <p class="landing-hero__text">
+        A plataforma definitiva para desenvolvedores que desejam transformar teoria em maestria através de desafios práticos e trilhas gamificadas.
+      </p>
+      <a href="pages/cadastro.html" class="btn btn--primary btn--lg">Começar agora</a>
+      <div class="landing-hero__image">
+        <svg viewBox="0 0 720 460" xmlns="http://www.w3.org/2000/svg" style="width:100%; height:auto; display:block;">
+          <!-- Tela do app (fundo claro com bordas arredondadas) -->
+          <rect x="20" y="20" width="680" height="420" rx="16" fill="#F1F5F9"/>
+
+          <!-- Top bar -->
+          <rect x="20" y="20" width="680" height="50" rx="16" fill="#FFFFFF"/>
+          <rect x="20" y="40" width="680" height="30" fill="#FFFFFF"/>
+          <rect x="20" y="69" width="680" height="1" fill="#E2E8F0"/>
+          <!-- Logo -->
+          <rect x="40" y="34" width="22" height="22" rx="5" fill="#2563EB"/>
+          <text x="51" y="50" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700" fill="#FFFFFF" text-anchor="middle">&gt;_</text>
+          <text x="72" y="51" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="700" fill="#2563EB">Tech Quest</text>
+          <!-- Avatar -->
+          <circle cx="671" cy="45" r="14" fill="#2563EB"/>
+          <text x="671" y="50" font-family="Inter, Arial, sans-serif" font-size="11" font-weight="700" fill="#FFFFFF" text-anchor="middle">FA</text>
+          <!-- Sino notificação -->
+          <circle cx="635" cy="45" r="3" fill="#94A3B8"/>
+          <circle cx="641" cy="40" r="2" fill="#F59E0B"/>
+
+          <!-- Saudação -->
+          <text x="40" y="105" font-family="Inter, Arial, sans-serif" font-size="20" font-weight="700" fill="#0F172A">Olá, Felipe! 👋</text>
+          <text x="40" y="122" font-family="Inter, Arial, sans-serif" font-size="10" fill="#94A3B8">Segunda-feira, 22 de Maio de 2024</text>
+
+          <!-- Card de nível -->
+          <rect x="40" y="140" width="640" height="110" rx="14" fill="#FFFFFF" stroke="#E2E8F0"/>
+          <rect x="40" y="140" width="640" height="4" rx="2" fill="#F59E0B"/>
+
+          <!-- Avatar circular -->
+          <circle cx="90" cy="195" r="26" fill="#475569"/>
+          <text x="90" y="203" font-family="Inter, Arial, sans-serif" font-size="20" font-weight="700" fill="#FFFFFF" text-anchor="middle">F</text>
+          <circle cx="110" cy="213" r="10" fill="#F59E0B" stroke="#FFFFFF" stroke-width="2"/>
+          <text x="110" y="217" font-family="Inter, Arial, sans-serif" font-size="9" font-weight="700" fill="#FFFFFF" text-anchor="middle">7</text>
+
+          <!-- Texto nível e XP -->
+          <text x="135" y="175" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="700" fill="#B45309">★ Nível 7</text>
+          <text x="135" y="195" font-family="Inter, Arial, sans-serif" font-size="11" fill="#475569">2.450 / 3.000 XP para Nível 8</text>
+          <text x="660" y="195" font-family="Inter, Arial, sans-serif" font-size="11" font-weight="700" fill="#2563EB" text-anchor="end">82%</text>
+          <!-- Progress bar -->
+          <rect x="135" y="205" width="525" height="8" rx="4" fill="#E2E8F0"/>
+          <rect x="135" y="205" width="430" height="8" rx="4" fill="#2563EB"/>
+          <text x="135" y="234" font-family="Inter, Arial, sans-serif" font-size="9" fill="#94A3B8" font-style="italic">"Você está a 550 XP de se tornar um Especialista!"</text>
+
+          <!-- Cards lado a lado: Conquistas e Curso -->
+          <!-- Card Conquistas -->
+          <rect x="40" y="265" width="310" height="135" rx="14" fill="#FFFFFF" stroke="#E2E8F0"/>
+          <text x="60" y="287" font-family="Inter, Arial, sans-serif" font-size="9" font-weight="700" fill="#475569" letter-spacing="1">CONQUISTAS RECENTES</text>
+          <circle cx="332" cy="284" r="6" fill="#FEF3C7"/>
+          <text x="332" y="288" font-family="Inter, Arial, sans-serif" font-size="9" fill="#F59E0B" text-anchor="middle">★</text>
+          <!-- Item 1 -->
+          <rect x="60" y="298" width="32" height="32" rx="8" fill="#DBEAFE"/>
+          <text x="76" y="320" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700" fill="#1E40AF" text-anchor="middle">[ ]</text>
+          <text x="100" y="312" font-family="Inter, Arial, sans-serif" font-size="11" font-weight="600" fill="#0F172A">Mestre em Arrays</text>
+          <text x="100" y="324" font-family="Inter, Arial, sans-serif" font-size="9" fill="#94A3B8">Ontem às 18:30</text>
+          <text x="332" y="320" font-family="Inter, Arial, sans-serif" font-size="10" font-weight="700" fill="#F59E0B" text-anchor="end">+200 XP</text>
+          <!-- Item 2 -->
+          <rect x="60" y="338" width="32" height="32" rx="8" fill="#DBEAFE"/>
+          <text x="76" y="360" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700" fill="#1E40AF" text-anchor="middle">{ }</text>
+          <text x="100" y="352" font-family="Inter, Arial, sans-serif" font-size="11" font-weight="600" fill="#0F172A">Variáveis e Tipos</text>
+          <text x="100" y="364" font-family="Inter, Arial, sans-serif" font-size="9" fill="#94A3B8">Há 2 horas</text>
+          <text x="332" y="360" font-family="Inter, Arial, sans-serif" font-size="10" font-weight="700" fill="#F59E0B" text-anchor="end">+50 XP</text>
+
+          <!-- Card Curso em andamento -->
+          <rect x="370" y="265" width="310" height="135" rx="14" fill="#FFFFFF" stroke="#E2E8F0"/>
+          <rect x="370" y="265" width="310" height="4" rx="2" fill="#2563EB"/>
+          <!-- Badge EM ANDAMENTO -->
+          <rect x="390" y="282" width="100" height="18" rx="9" fill="#DBEAFE"/>
+          <text x="440" y="295" font-family="Inter, Arial, sans-serif" font-size="8" font-weight="700" fill="#1E40AF" text-anchor="middle" letter-spacing="1">EM ANDAMENTO</text>
+          <!-- Título -->
+          <text x="390" y="320" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="700" fill="#0F172A">Fundamentos de C#</text>
+          <!-- Progresso -->
+          <text x="390" y="343" font-family="Inter, Arial, sans-serif" font-size="10" fill="#475569">Progresso do curso</text>
+          <text x="660" y="343" font-family="Inter, Arial, sans-serif" font-size="10" font-weight="700" fill="#0F172A" text-anchor="end">50%</text>
+          <rect x="390" y="350" width="270" height="6" rx="3" fill="#E2E8F0"/>
+          <rect x="390" y="350" width="135" height="6" rx="3" fill="#2563EB"/>
+          <!-- Botão -->
+          <rect x="390" y="368" width="270" height="22" rx="6" fill="#2563EB"/>
+          <text x="525" y="382" font-family="Inter, Arial, sans-serif" font-size="11" font-weight="700" fill="#FFFFFF" text-anchor="middle">Continuar ▶</text>
+
+          <!-- Bottom nav -->
+          <rect x="20" y="410" width="680" height="30" rx="0" fill="#FFFFFF"/>
+          <rect x="20" y="410" width="680" height="1" fill="#E2E8F0"/>
+          <!-- 4 itens -->
+          <circle cx="105" cy="420" r="2.5" fill="#2563EB"/>
+          <text x="105" y="434" font-family="Inter, Arial, sans-serif" font-size="8" font-weight="700" fill="#2563EB" text-anchor="middle">Home</text>
+          <circle cx="270" cy="420" r="2.5" fill="#94A3B8"/>
+          <text x="270" y="434" font-family="Inter, Arial, sans-serif" font-size="8" fill="#94A3B8" text-anchor="middle">Cursos</text>
+          <circle cx="450" cy="420" r="2.5" fill="#94A3B8"/>
+          <text x="450" y="434" font-family="Inter, Arial, sans-serif" font-size="8" fill="#94A3B8" text-anchor="middle">Conquistas</text>
+          <circle cx="615" cy="420" r="2.5" fill="#94A3B8"/>
+          <text x="615" y="434" font-family="Inter, Arial, sans-serif" font-size="8" fill="#94A3B8" text-anchor="middle">Perfil</text>
+        </svg>
+      </div>
+    </section>
+
+    <!-- Metodologia -->
+    <section class="landing-section landing-section--alt">
+      <h2 class="landing-section__title">Nossa Metodologia</h2>
+
+      <div class="landing-feature landing-feature--blue animate-in">
+        <div class="landing-feature__icon landing-feature__icon--blue"><i class="ti ti-book-2"></i></div>
+        <h3 class="landing-feature__title">Aprenda</h3>
+        <p class="landing-feature__text">Acesso a conteúdos técnicos profundos, curados por especialistas da indústria e atualizados semanalmente.</p>
+      </div>
+
+      <div class="landing-feature landing-feature--purple animate-in animate-in-delay-1">
+        <div class="landing-feature__icon landing-feature__icon--purple"><i class="ti ti-code"></i></div>
+        <h3 class="landing-feature__title">Pratique</h3>
+        <p class="landing-feature__text">Ambiente de codificação integrado com feedbacks em tempo real e desafios baseados em casos reais.</p>
+      </div>
+
+      <div class="landing-feature landing-feature--orange animate-in animate-in-delay-2">
+        <div class="landing-feature__icon landing-feature__icon--orange"><i class="ti ti-medal"></i></div>
+        <h3 class="landing-feature__title">Conquiste</h3>
+        <p class="landing-feature__text">Ganhe medalhas, suba no ranking e conquiste certificações reconhecidas pelo mercado de tecnologia.</p>
+      </div>
+    </section>
+
+    <!-- Jornada -->
+    <section class="landing-section">
+      <h2 class="landing-section__title">Sua jornada rumo ao topo</h2>
+
+      <div class="landing-step animate-in">
+        <div class="landing-step__number">01</div>
+        <h4 class="landing-step__title">Crie seu Perfil</h4>
+        <p class="landing-step__text">Personalize sua experiência com suas tecnologias preferidas.</p>
+      </div>
+
+      <div class="landing-step animate-in animate-in-delay-1">
+        <div class="landing-step__number">02</div>
+        <h4 class="landing-step__title">Escolha sua Trilha</h4>
+        <p class="landing-step__text">Do Front-end ao DevOps, temos o caminho certo para você.</p>
+      </div>
+
+      <div class="landing-step animate-in animate-in-delay-2">
+        <div class="landing-step__number">03</div>
+        <h4 class="landing-step__title">Enfrente Desafios</h4>
+        <p class="landing-step__text">Resolva problemas reais e valide seu conhecimento prático.</p>
+      </div>
+
+      <div class="landing-step animate-in animate-in-delay-3">
+        <div class="landing-step__number">04</div>
+        <h4 class="landing-step__title">Seja Contratado</h4>
+        <p class="landing-step__text">Destaque-se para empresas parceiras com seu portfólio.</p>
+      </div>
+    </section>
+
+    <!-- Depoimentos -->
+    <section class="landing-section landing-section--alt">
+      <h2 class="landing-section__title">O que dizem nossos membros</h2>
+
+      <div class="testimonial-card animate-in">
+        <div class="testimonial-card__quote">"</div>
+        <p class="testimonial-card__text">"A Tech Quest mudou minha forma de estudar. Os desafios de código são viciantes e o ranking me mantém motivado todos os dias."</p>
+        <div class="testimonial-card__author">
+          <div class="avatar">FA</div>
+          <div>
+            <div class="testimonial-card__name">Felipe Almeida</div>
+            <div class="testimonial-card__role">Full Stack Developer</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="testimonial-card animate-in animate-in-delay-1">
+        <div class="testimonial-card__quote">"</div>
+        <p class="testimonial-card__text">"Consegui minha primeira vaga em uma multinacional graças aos projetos que desenvolvi seguindo as trilhas da plataforma."</p>
+        <div class="testimonial-card__author">
+          <div class="avatar">BS</div>
+          <div>
+            <div class="testimonial-card__name">Beatriz Santos</div>
+            <div class="testimonial-card__role">Frontend Engineer</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="testimonial-card animate-in animate-in-delay-2">
+        <div class="testimonial-card__quote">"</div>
+        <p class="testimonial-card__text">"O suporte dos mentores e a comunidade são o diferencial. Você nunca se sente sozinho em sua jornada de aprendizado."</p>
+        <div class="testimonial-card__author">
+          <div class="avatar">RM</div>
+          <div>
+            <div class="testimonial-card__name">Ricardo Mendonça</div>
+            <div class="testimonial-card__role">Data Analyst</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="landing-footer">
+      <div class="landing-footer__brand">Tech Quest</div>
+      <p class="landing-footer__tagline">Elevando o padrão do ensino tecnológico através da gamificação e prática intensiva.</p>
+
+      <h5 class="landing-footer__heading">Plataforma</h5>
+      <ul class="landing-footer__list">
+        <li>Cursos</li>
+        <li>Trilhas</li>
+        <li>Ranking</li>
+        <li>Empresas</li>
+      </ul>
+
+      <h5 class="landing-footer__heading">Suporte</h5>
+      <ul class="landing-footer__list">
+        <li>Central de Ajuda</li>
+        <li>Comunidade</li>
+        <li>Termos de Uso</li>
+        <li>Privacidade</li>
+      </ul>
+
+      <h5 class="landing-footer__heading">Redes Sociais</h5>
+      <div class="landing-footer__social">
+        <a href="#" aria-label="Website"><i class="ti ti-world"></i></a>
+        <a href="#" aria-label="Compartilhar"><i class="ti ti-share"></i></a>
+        <a href="#" aria-label="E-mail"><i class="ti ti-mail"></i></a>
+      </div>
+
+      <p class="landing-footer__copyright">© 2024 Tech Quest. Todos os direitos reservados. 🌐 Português (BR)</p>
+    </footer>
+
+  </main>
+
+  <!-- Botão flutuante de troca de persona -->
+  <div class="persona-switcher" onclick="abrirModal('modalPersona')">
+    Trocar Persona: Estudante <i class="ti ti-arrow-right"></i>
+  </div>
+
+</div>
+
+<!-- Modal de troca de persona -->
+<div class="modal-overlay" id="modalPersona">
+  <div class="modal">
+    <div class="modal__icon modal__icon--primary"><i class="ti ti-users"></i></div>
+    <h3 class="modal__title">Trocar de persona</h3>
+    <p class="modal__text">Escolha qual perfil deseja simular na demonstração do sistema.</p>
+    <div class="modal__actions">
+      <button class="btn btn--primary btn--full" onclick="trocarPersona('estudante')">
+        <i class="ti ti-school"></i> Estudante — Felipe
+      </button>
+      <button class="btn btn--secondary btn--full" onclick="trocarPersona('tutor')">
+        <i class="ti ti-user-bolt"></i> Tutor — Ana
+      </button>
+      <button class="btn btn--secondary btn--full" onclick="trocarPersona('admin')">
+        <i class="ti ti-shield-check"></i> Admin — Carlos
+      </button>
+      <button class="btn btn--ghost btn--full" onclick="fecharModal('modalPersona')">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+<script src="js/app.js"></script>
+</body>
+</html>

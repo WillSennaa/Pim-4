@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Banco de Dados e Modelagem — Tech Quest</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.47.0/tabler-icons.min.css">
+  <link rel="stylesheet" href="../../css/style.css">
+</head>
+<body>
+<div class="app-container app-container--wide">
+
+  <header class="top-bar">
+    <a href="cursos.html" class="top-bar__back"><i class="ti ti-arrow-left"></i></a>
+    <span class="top-bar__title" style="color:#6D28D9;">Tech Quest</span>
+    <a href="perfil.html" class="top-bar__avatar">FA</a>
+  </header>
+
+  <main class="main-content">
+
+    <!-- Hero do curso -->
+    <div class="course-hero animate-in" style="background: linear-gradient(135deg, #6D28D9 0%, #4C1D95 100%);">
+      <div class="course-hero__badges">
+        <span class="badge" style="background:#A78BFA; color:white;">DATABASE</span>
+        <span class="badge" style="background:rgba(255,255,255,0.2); color:white;">INTERMEDIÁRIO</span>
+      </div>
+      <h1 class="course-hero__title">Banco de Dados e Modelagem de Sistemas</h1>
+      <p class="course-hero__text">Domine modelagem de dados, SQL e os fundamentos de análise de sistemas, RUP e técnicas de elicitação de requisitos.</p>
+      <div class="course-hero__instructor">
+        <div class="avatar avatar--sm" style="background:#FDA4AF; color:#9F1239;">AS</div>
+        <div>
+          <div class="course-hero__instructor-name">Ana Souza</div>
+          <div class="course-hero__instructor-role">Senior Developer & Instrutora</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Progresso -->
+    <div class="card animate-in animate-in-delay-1">
+      <div class="flex justify-between mb-sm">
+        <span class="font-medium">Progresso do Curso</span>
+        <span class="font-semibold" style="color:#6D28D9;">30%</span>
+      </div>
+      <div class="progress">
+        <div class="progress__fill" style="width:30%; background:#6D28D9;"></div>
+      </div>
+    </div>
+
+    <h3 class="section-title mt-lg">Conteúdo do Curso</h3>
+
+    <div class="module-item animate-in animate-in-delay-2">
+      <div class="module-item__icon module-item__icon--done"><i class="ti ti-check"></i></div>
+      <div class="module-item__line"></div>
+      <div class="module-item__body">
+        <div class="module-item__card">
+          <div class="flex justify-between items-center">
+            <span class="module-item__label">MÓDULO 1</span>
+            <span class="badge badge--success">CONCLUÍDO</span>
+          </div>
+          <h4 class="module-item__title">Introdução a Banco de Dados</h4>
+          <p class="module-item__text">Conceitos fundamentais de SGBDs e modelos relacionais.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="module-item animate-in animate-in-delay-2">
+      <div class="module-item__icon module-item__icon--done"><i class="ti ti-check"></i></div>
+      <div class="module-item__line"></div>
+      <div class="module-item__body">
+        <div class="module-item__card">
+          <div class="flex justify-between items-center">
+            <span class="module-item__label">MÓDULO 2</span>
+            <span class="badge badge--success">CONCLUÍDO</span>
+          </div>
+          <h4 class="module-item__title">Modelagem Entidade-Relacionamento</h4>
+          <p class="module-item__text">Crie modelos conceituais e lógicos de banco de dados.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="module-item module-item--active animate-in animate-in-delay-3">
+      <div class="module-item__icon" style="background:#6D28D9; color:white;"><i class="ti ti-player-play"></i></div>
+      <div class="module-item__line"></div>
+      <div class="module-item__body">
+        <div class="module-item__card" style="border-color:#6D28D9; background:#F3E8FF;">
+          <div class="flex justify-between items-center">
+            <span class="module-item__label" style="color:#6D28D9;">MÓDULO 3 • ATUAL</span>
+            <a href="aula-bd.html" style="width:36px; height:36px; background:#6D28D9; color:white; border-radius:var(--radius-md); display:flex; align-items:center; justify-content:center;">
+              <i class="ti ti-player-play"></i>
+            </a>
+          </div>
+          <h4 class="module-item__title">Análise de Sistemas e RUP</h4>
+          <p class="module-item__text">Engenharia de software, processo iterativo e levantamento de requisitos.</p>
+          <div class="module-item__meta">
+            <span><i class="ti ti-clock"></i> 55 min</span>
+            <span><i class="ti ti-list"></i> 8 aulas</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="module-item module-item--locked animate-in animate-in-delay-3">
+      <div class="module-item__icon module-item__icon--locked"><i class="ti ti-lock"></i></div>
+      <div class="module-item__body">
+        <div class="module-item__card">
+          <div class="flex justify-between items-center">
+            <span class="module-item__label">MÓDULO 4</span>
+            <span class="badge badge--neutral">BLOQUEADO</span>
+          </div>
+          <h4 class="module-item__title">SQL Avançado e Otimização</h4>
+          <p class="module-item__text">JOINs complexos, índices e tuning de consultas.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Recompensa -->
+    <div class="card mt-lg" style="border-top:4px solid #6D28D9;">
+      <h4 class="font-semibold mb-md"><i class="ti ti-medal" style="vertical-align:-2px; color:#6D28D9;"></i> Recompensa</h4>
+      <div class="list-item" style="background:#F3E8FF; border-radius:var(--radius-md);">
+        <div class="list-item__icon" style="background:#A78BFA; color:white;"><i class="ti ti-database"></i></div>
+        <div class="list-item__body">
+          <div class="list-item__title">DBA Junior Medal</div>
+          <div class="list-item__subtitle">Ao concluir todos os módulos com nota acima de 75%.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Informações -->
+    <div class="card">
+      <h4 class="font-semibold mb-md">Informações</h4>
+      <div class="flex justify-between mb-sm"><span class="text-secondary">Dificuldade</span><span style="color:#6D28D9;" class="font-medium">Intermediário</span></div>
+      <div class="flex justify-between mb-sm"><span class="text-secondary">Duração Total</span><span class="font-medium">18 horas</span></div>
+      <div class="flex justify-between mb-sm"><span class="text-secondary">Alunos inscritos</span><span class="font-medium">856</span></div>
+      <div class="flex justify-between"><span class="text-secondary">Última atualização</span><span class="font-medium">Mar 2024</span></div>
+    </div>
+
+  </main>
+
+  <nav class="bottom-nav">
+    <a href="home.html" class="bottom-nav__item"><i class="ti ti-home"></i><span>Home</span></a>
+    <a href="cursos.html" class="bottom-nav__item active"><i class="ti ti-book-2"></i><span>Cursos</span></a>
+    <a href="conquistas.html" class="bottom-nav__item"><i class="ti ti-trophy"></i><span>Conquistas</span></a>
+    <a href="perfil.html" class="bottom-nav__item"><i class="ti ti-user"></i><span>Perfil</span></a>
+  </nav>
+
+</div>
+<script src="../../js/app.js"></script>
+</body>
+</html>

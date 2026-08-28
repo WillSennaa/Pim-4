@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Perfil — Tech Quest</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.47.0/tabler-icons.min.css">
+  <link rel="stylesheet" href="../../css/style.css">
+</head>
+<body>
+<div class="app-container app-container--wide">
+
+  <header class="top-bar">
+    <div class="flex items-center gap-sm">
+      <div class="avatar avatar--sm" style="background:#475569;">F</div>
+      <span class="font-semibold text-primary">Perfil</span>
+    </div>
+    <a href="configuracoes.html" class="top-bar__icon-btn"><i class="ti ti-settings" style="font-size:22px;"></i></a>
+  </header>
+
+  <main class="main-content">
+
+    <!-- Header do perfil -->
+    <div class="profile-header animate-in">
+      <div class="profile-header__avatar-wrapper">
+        <div class="profile-header__avatar" style="background:linear-gradient(135deg,#475569,#1E293B); display:flex; align-items:center; justify-content:center; color:white; font-size:36px; font-weight:700;">F</div>
+        <div class="profile-header__avatar-edit"><i class="ti ti-camera"></i></div>
+      </div>
+      <div class="profile-header__name">Felipe Almeida</div>
+      <div class="profile-header__email">felipe.almeida@email.com</div>
+      <div class="profile-header__level-badge">
+        <i class="ti ti-trophy"></i> Nível 7 · 2.450 XP
+      </div>
+      <div class="text-xs text-center mt-md" style="opacity:0.85;">PROGRESSO DO NÍVEL <span style="float:right;">75%</span></div>
+      <div class="progress mt-sm" style="background:rgba(255,255,255,0.2);">
+        <div class="progress__fill" style="width:75%; background:white;"></div>
+      </div>
+    </div>
+
+    <!-- Estatísticas -->
+    <div class="stats-grid animate-in animate-in-delay-1">
+      <div class="stat-card">
+        <div class="stat-card__row">
+          <div class="stat-card__icon" style="background:var(--color-primary-light); color:var(--color-primary-dark);">
+            <i class="ti ti-clipboard-list"></i>
+          </div>
+          <div>
+            <div class="stat-card__value">12</div>
+            <div class="stat-card__label">Provas</div>
+          </div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card__row">
+          <div class="stat-card__icon" style="background:var(--color-warning-light); color:var(--color-warning-dark);">
+            <i class="ti ti-medal"></i>
+          </div>
+          <div>
+            <div class="stat-card__value">5</div>
+            <div class="stat-card__label">Medalhas</div>
+          </div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card__row">
+          <div class="stat-card__icon" style="background:#EDE9FE; color:#6D28D9;">
+            <i class="ti ti-certificate"></i>
+          </div>
+          <div>
+            <div class="stat-card__value">1</div>
+            <div class="stat-card__label">Certificado</div>
+          </div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card__row">
+          <div class="stat-card__icon" style="background:#FEE2E2; color:#B91C1C;">
+            <i class="ti ti-flame"></i>
+          </div>
+          <div>
+            <div class="stat-card__value">7 dias</div>
+            <div class="stat-card__label">Ofensiva</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Atalhos -->
+    <a href="historico.html" class="card flex items-center justify-between animate-in animate-in-delay-2" style="padding:var(--space-md); border:1.5px dashed var(--color-primary);">
+      <div class="flex items-center gap-md">
+        <div class="list-item__icon"><i class="ti ti-history"></i></div>
+        <span class="font-semibold">Ver Histórico</span>
+      </div>
+      <i class="ti ti-chevron-right text-muted"></i>
+    </a>
+
+    <a href="certificados.html" class="card flex items-center justify-between animate-in animate-in-delay-2" style="padding:var(--space-md); border:1.5px dashed var(--color-warning);">
+      <div class="flex items-center gap-md">
+        <div class="list-item__icon list-item__icon--warning"><i class="ti ti-certificate"></i></div>
+        <span class="font-semibold">Meus Certificados</span>
+      </div>
+      <i class="ti ti-chevron-right text-muted"></i>
+    </a>
+
+    <a href="ajuda.html" class="card flex items-center justify-between animate-in animate-in-delay-2" style="padding:var(--space-md); border:1.5px dashed var(--color-success);">
+      <div class="flex items-center gap-md">
+        <div class="list-item__icon list-item__icon--success"><i class="ti ti-help-circle"></i></div>
+        <span class="font-semibold">Central de Ajuda</span>
+      </div>
+      <i class="ti ti-chevron-right text-muted"></i>
+    </a>
+
+    <!-- Informações pessoais -->
+    <h3 class="section-title mt-lg"><i class="ti ti-user" style="vertical-align:-2px;"></i> Informações Pessoais</h3>
+
+    <div class="card animate-in animate-in-delay-2">
+      <div class="mb-md">
+        <div class="text-xs text-muted font-semibold" style="letter-spacing:1px;">NOME</div>
+        <div class="font-medium">Felipe Almeida</div>
+      </div>
+      <div class="mb-md">
+        <div class="text-xs text-muted font-semibold" style="letter-spacing:1px;">E-MAIL</div>
+        <div class="font-medium">felipe.almeida@email.com</div>
+      </div>
+      <div class="mb-md">
+        <div class="text-xs text-muted font-semibold" style="letter-spacing:1px;">SENHA</div>
+        <div class="font-medium">••••••••••••</div>
+      </div>
+      <div class="flex gap-lg mb-md">
+        <div style="flex:1;">
+          <div class="text-xs text-muted font-semibold" style="letter-spacing:1px;">TELEFONE</div>
+          <div class="font-medium">(11) 98888-7777</div>
+        </div>
+        <div style="flex:1;">
+          <div class="text-xs text-muted font-semibold" style="letter-spacing:1px;">NASCIMENTO</div>
+          <div class="font-medium">15/05/1998</div>
+        </div>
+      </div>
+      <div class="mb-lg">
+        <div class="text-xs text-muted font-semibold" style="letter-spacing:1px;">CIDADE</div>
+        <div class="font-medium">São Paulo - SP</div>
+      </div>
+      <a href="editar-perfil.html" class="btn btn--secondary btn--full">Editar dados</a>
+    </div>
+
+    <!-- Preferências -->
+    <h3 class="section-title mt-lg"><i class="ti ti-adjustments" style="vertical-align:-2px;"></i> Preferências</h3>
+
+    <div class="card animate-in animate-in-delay-3">
+      <div class="flex justify-between items-center mb-md">
+        <div class="flex items-center gap-md">
+          <i class="ti ti-bell text-secondary"></i>
+          <span>Notificações</span>
+        </div>
+        <div class="toggle active" onclick="toggleSwitch(this)"></div>
+      </div>
+      <div class="flex justify-between items-center mb-md">
+        <div class="flex items-center gap-md">
+          <i class="ti ti-moon text-secondary"></i>
+          <span>Modo Escuro</span>
+        </div>
+        <div class="toggle" onclick="toggleSwitch(this)"></div>
+      </div>
+      <div class="flex justify-between items-center">
+        <div class="flex items-center gap-md">
+          <i class="ti ti-world text-secondary"></i>
+          <span>Idioma</span>
+        </div>
+        <span class="text-primary font-semibold">Português <i class="ti ti-chevron-down"></i></span>
+      </div>
+    </div>
+
+    <!-- Privacidade -->
+    <h3 class="section-title mt-lg"><i class="ti ti-shield" style="vertical-align:-2px;"></i> Privacidade</h3>
+
+    <div class="card animate-in">
+      <a href="privacidade.html" class="list-item" style="cursor:pointer;">
+        <span style="flex:1;">Política de Privacidade</span>
+        <i class="ti ti-chevron-right text-muted"></i>
+      </a>
+      <a href="termos.html" class="list-item" style="cursor:pointer;">
+        <span style="flex:1;">Termos de Uso</span>
+        <i class="ti ti-chevron-right text-muted"></i>
+      </a>
+      <div class="list-item" style="cursor:pointer;" onclick="alert('Solicitação registrada! Você receberá um e-mail com seus dados em até 24h.');">
+        <span style="flex:1;">Baixar meus dados</span>
+        <i class="ti ti-download text-muted"></i>
+      </div>
+      <div class="list-item" style="color:var(--color-danger); cursor:pointer;" onclick="abrirModal('modalExcluir')">
+        <span style="flex:1;">Excluir conta</span>
+        <i class="ti ti-trash"></i>
+      </div>
+    </div>
+
+    <button class="btn btn--ghost btn--full mt-lg" style="border-color:var(--color-danger); color:var(--color-danger);" onclick="abrirModal('modalSair')">
+      <i class="ti ti-logout"></i> Sair da conta
+    </button>
+    <p class="text-center text-xs text-muted mt-md">Versão 2.4.1 (Build 105)</p>
+
+  </main>
+
+  <nav class="bottom-nav">
+    <a href="home.html" class="bottom-nav__item"><i class="ti ti-home"></i><span>Início</span></a>
+    <a href="cursos.html" class="bottom-nav__item"><i class="ti ti-book-2"></i><span>Cursos</span></a>
+    <a href="conquistas.html" class="bottom-nav__item"><i class="ti ti-trophy"></i><span>Conquistas</span></a>
+    <a href="perfil.html" class="bottom-nav__item active"><i class="ti ti-user"></i><span>Perfil</span></a>
+  </nav>
+
+</div>
+
+<!-- Modal sair -->
+<div class="modal-overlay" id="modalSair">
+  <div class="modal">
+    <div class="modal__icon modal__icon--warning"><i class="ti ti-alert-triangle"></i></div>
+    <h3 class="modal__title">Sair da conta?</h3>
+    <p class="modal__text">Você precisará fazer login novamente para acessar seus cursos e progresso.</p>
+    <div class="modal__actions">
+      <a href="../../index.html" class="btn btn--danger btn--full">Sim, sair</a>
+      <button class="btn btn--secondary btn--full" onclick="fecharModal('modalSair')">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal excluir conta -->
+<div class="modal-overlay" id="modalExcluir">
+  <div class="modal">
+    <div class="modal__icon modal__icon--danger"><i class="ti ti-alert-triangle"></i></div>
+    <h3 class="modal__title">Excluir conta permanentemente?</h3>
+    <p class="modal__text">Esta ação é irreversível. Ao confirmar, todos os seus dados pessoais, histórico de cursos e certificados serão removidos conforme as diretrizes da LGPD. Você perderá o acesso imediato à plataforma.</p>
+    <div class="text-xs text-muted text-center mb-sm" style="letter-spacing:1px;">DIGITE EXCLUIR PARA CONFIRMAR</div>
+    <input type="text" id="confirmDelete" class="form-input mb-md text-center" placeholder="EXCLUIR" style="text-transform:uppercase;">
+    <div class="modal__actions">
+      <button class="btn btn--danger btn--full" onclick="excluirConta()">Excluir minha conta</button>
+      <button class="btn btn--secondary btn--full" onclick="fecharModal('modalExcluir')">Cancelar</button>
+    </div>
+    <p class="text-center text-xs text-muted mt-md"><i class="ti ti-lock"></i> Processamento de dados seguro</p>
+  </div>
+</div>
+
+<!-- Modal de sucesso na exclusão -->
+<div class="modal-overlay" id="modalContaExcluida">
+  <div class="modal">
+    <div class="modal__icon modal__icon--success"><i class="ti ti-check"></i></div>
+    <h3 class="modal__title">Conta excluída</h3>
+    <p class="modal__text">Sua conta e todos os dados associados foram removidos conforme a LGPD. Sentiremos sua falta!</p>
+    <div class="modal__actions">
+      <a href="../../index.html" class="btn btn--primary btn--full">Voltar ao início</a>
+    </div>
+  </div>
+</div>
+
+<script src="../../js/app.js"></script>
+<script>
+function excluirConta() {
+  const valor = document.getElementById('confirmDelete').value.trim().toUpperCase();
+  if (valor !== 'EXCLUIR') {
+    alert('Digite EXCLUIR para confirmar a exclusão da conta.');
+    return;
+  }
+  fecharModal('modalExcluir');
+  // Limpa storage simulando exclusão real dos dados
+  localStorage.removeItem('tq_persona');
+  sessionStorage.clear();
+  // Mostra confirmação e em 2s redireciona
+  abrirModal('modalContaExcluida');
+  setTimeout(function() {
+    window.location.href = '../../index.html';
+  }, 2500);
+}
+</script>
+</body>
+</html>

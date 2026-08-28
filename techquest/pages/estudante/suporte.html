@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Suporte — Tech Quest</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.47.0/tabler-icons.min.css">
+  <link rel="stylesheet" href="../../css/style.css">
+</head>
+<body>
+<div class="app-container app-container--wide">
+
+  <header class="top-bar">
+    <a href="ajuda.html" class="top-bar__back"><i class="ti ti-arrow-left"></i></a>
+    <span class="top-bar__title">Fale com Suporte</span>
+    <a href="perfil.html" class="top-bar__avatar">FA</a>
+  </header>
+
+  <main class="main-content">
+
+    <h1 class="page-title animate-in">Abrir Chamado</h1>
+    <p class="page-subtitle">Descreva seu problema e nossa equipe responderá em até 24 horas.</p>
+
+    <div class="card animate-in animate-in-delay-1" style="border-top:4px solid var(--color-primary);">
+      <form onsubmit="event.preventDefault(); abrirModal('modalEnviarChamado');">
+
+        <div class="form-group">
+          <label class="form-label">Categoria do problema</label>
+          <select class="form-input">
+            <option>Problema técnico</option>
+            <option>Dúvida sobre conteúdo do curso</option>
+            <option>Pagamento e assinatura</option>
+            <option>Certificado</option>
+            <option>Sugestão de melhoria</option>
+            <option>Outros</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Prioridade</label>
+          <div class="flex gap-sm">
+            <label class="checkbox" style="flex:1; padding:var(--space-sm); border:1px solid var(--color-border); border-radius:var(--radius-md); cursor:pointer;">
+              <input type="radio" name="prio" value="baixa">
+              <span class="checkbox__box"></span>
+              <span>Baixa</span>
+            </label>
+            <label class="checkbox" style="flex:1; padding:var(--space-sm); border:1px solid var(--color-border); border-radius:var(--radius-md); cursor:pointer;">
+              <input type="radio" name="prio" value="media" checked>
+              <span class="checkbox__box"></span>
+              <span>Média</span>
+            </label>
+            <label class="checkbox" style="flex:1; padding:var(--space-sm); border:1px solid var(--color-border); border-radius:var(--radius-md); cursor:pointer;">
+              <input type="radio" name="prio" value="alta">
+              <span class="checkbox__box"></span>
+              <span>Alta</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Assunto</label>
+          <input type="text" class="form-input" placeholder="Resuma seu problema em poucas palavras" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Descrição detalhada</label>
+          <textarea class="form-input" rows="6" placeholder="Descreva com detalhes o que está acontecendo, quais passos você tentou e qual o resultado esperado..." required></textarea>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Anexar arquivos (opcional)</label>
+          <div style="border:2px dashed var(--color-border); border-radius:var(--radius-md); padding:var(--space-lg); text-align:center; cursor:pointer;">
+            <i class="ti ti-cloud-upload" style="font-size:32px; color:var(--color-text-muted);"></i>
+            <p class="text-sm text-muted mt-sm">Arraste arquivos aqui ou clique para selecionar</p>
+            <p class="text-xs text-muted">PNG, JPG, PDF (máx. 5MB)</p>
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn--primary btn--lg btn--full">
+          <i class="ti ti-send"></i> Enviar chamado
+        </button>
+      </form>
+    </div>
+
+    <!-- Chamados anteriores -->
+    <h3 class="section-title mt-xl">Meus Chamados</h3>
+
+    <div class="card animate-in animate-in-delay-2">
+      <div class="list-item">
+        <div class="list-item__icon list-item__icon--success"><i class="ti ti-check"></i></div>
+        <div class="list-item__body">
+          <div class="list-item__title">Não recebi e-mail de confirmação</div>
+          <div class="list-item__subtitle">Protocolo #EDU-88219 · Resolvido ontem</div>
+        </div>
+        <span class="badge badge--success">RESOLVIDO</span>
+      </div>
+      <div class="list-item">
+        <div class="list-item__icon list-item__icon--warning"><i class="ti ti-clock"></i></div>
+        <div class="list-item__body">
+          <div class="list-item__title">Vídeo da aula 4 não carrega</div>
+          <div class="list-item__subtitle">Protocolo #EDU-87102 · Em análise</div>
+        </div>
+        <span class="badge badge--warning">EM ANÁLISE</span>
+      </div>
+    </div>
+
+  </main>
+
+  <nav class="bottom-nav">
+    <a href="home.html" class="bottom-nav__item"><i class="ti ti-home"></i><span>Home</span></a>
+    <a href="cursos.html" class="bottom-nav__item"><i class="ti ti-book-2"></i><span>Cursos</span></a>
+    <a href="conquistas.html" class="bottom-nav__item"><i class="ti ti-trophy"></i><span>Conquistas</span></a>
+    <a href="perfil.html" class="bottom-nav__item active"><i class="ti ti-user"></i><span>Perfil</span></a>
+  </nav>
+
+</div>
+
+<div class="modal-overlay" id="modalEnviarChamado">
+  <div class="modal">
+    <div class="modal__icon modal__icon--primary"><i class="ti ti-send"></i></div>
+    <h3 class="modal__title">Enviar chamado?</h3>
+    <p class="modal__text">Seu chamado será encaminhado para nossa equipe de tutores. Você receberá uma resposta em até <strong>24 horas</strong>.</p>
+    <div class="modal__actions">
+      <a href="ajuda.html" class="btn btn--primary btn--full" onclick="alert('Chamado enviado! Protocolo: #EDU-' + Math.floor(Math.random() * 90000 + 10000));">
+        Sim, enviar chamado
+      </a>
+      <button class="btn btn--secondary btn--full" onclick="fecharModal('modalEnviarChamado')">Voltar e revisar</button>
+    </div>
+  </div>
+</div>
+
+<script src="../../js/app.js"></script>
+</body>
+</html>

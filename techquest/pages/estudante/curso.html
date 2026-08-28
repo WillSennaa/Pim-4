@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fundamentos de C# — Tech Quest</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.47.0/tabler-icons.min.css">
+  <link rel="stylesheet" href="../../css/style.css">
+</head>
+<body>
+<div class="app-container app-container--wide">
+
+  <header class="top-bar">
+    <a href="home.html" class="top-bar__back"><i class="ti ti-arrow-left"></i></a>
+    <span class="top-bar__title text-primary">Tech Quest</span>
+    <a href="perfil.html" class="top-bar__avatar">FA</a>
+  </header>
+
+  <main class="main-content">
+
+    <!-- Hero do curso -->
+    <div class="course-hero animate-in">
+      <div class="course-hero__badges">
+        <span class="badge" style="background:var(--color-primary); color:white;">PROGRAMMING</span>
+        <span class="badge" style="background:rgba(255,255,255,0.2); color:white;">LEVEL 1</span>
+      </div>
+      <h1 class="course-hero__title">Fundamentos de C#</h1>
+      <p class="course-hero__text">Domine as bases da linguagem mais poderosa da Microsoft. Do zero ao seu primeiro software profissional com orientação a objetos e boas práticas.</p>
+      <div class="course-hero__instructor">
+        <div class="avatar avatar--sm" style="background:#FDA4AF; color:#9F1239;">AS</div>
+        <div>
+          <div class="course-hero__instructor-name">Ana Souza</div>
+          <div class="course-hero__instructor-role">Senior Developer & Instrutora</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Progresso -->
+    <div class="card animate-in animate-in-delay-1">
+      <div class="flex justify-between mb-sm">
+        <span class="font-medium">Progresso do Curso</span>
+        <span class="text-primary font-semibold">50%</span>
+      </div>
+      <div class="progress">
+        <div class="progress__fill" style="width:50%"></div>
+      </div>
+    </div>
+
+    <!-- Lista de módulos -->
+    <h3 class="section-title mt-lg">Conteúdo do Curso</h3>
+
+    <div class="module-item animate-in animate-in-delay-2">
+      <div class="module-item__icon module-item__icon--done"><i class="ti ti-check"></i></div>
+      <div class="module-item__line"></div>
+      <div class="module-item__body">
+        <div class="module-item__card">
+          <div class="flex justify-between items-center">
+            <span class="module-item__label">MÓDULO 1</span>
+            <span class="badge badge--success">CONCLUÍDO</span>
+          </div>
+          <h4 class="module-item__title">Introdução</h4>
+          <p class="module-item__text">Ambiente de desenvolvimento e o primeiro Hello World.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="module-item animate-in animate-in-delay-2">
+      <div class="module-item__icon module-item__icon--done"><i class="ti ti-check"></i></div>
+      <div class="module-item__line"></div>
+      <div class="module-item__body">
+        <div class="module-item__card">
+          <div class="flex justify-between items-center">
+            <span class="module-item__label">MÓDULO 2</span>
+            <span class="badge badge--success">CONCLUÍDO</span>
+          </div>
+          <h4 class="module-item__title">Sintaxe Básica</h4>
+          <p class="module-item__text">Tipos primitivos, variáveis, constantes e operadores.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="module-item module-item--active animate-in animate-in-delay-3">
+      <div class="module-item__icon module-item__icon--active"><i class="ti ti-player-play"></i></div>
+      <div class="module-item__line"></div>
+      <div class="module-item__body">
+        <div class="module-item__card">
+          <div class="flex justify-between items-center">
+            <span class="module-item__label text-primary">MÓDULO 3 • ATUAL</span>
+            <a href="aula.html" style="width:36px; height:36px; background:var(--color-primary); color:white; border-radius:var(--radius-md); display:flex; align-items:center; justify-content:center; border:1.5px dashed var(--color-primary-dark);">
+              <i class="ti ti-player-play"></i>
+            </a>
+          </div>
+          <h4 class="module-item__title">Arrays e Listas</h4>
+          <p class="module-item__text">Manipulação de coleções de dados de forma eficiente.</p>
+          <div class="module-item__meta">
+            <span><i class="ti ti-clock"></i> 45 min</span>
+            <span><i class="ti ti-list"></i> 12 aulas</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="module-item module-item--locked animate-in animate-in-delay-3">
+      <div class="module-item__icon module-item__icon--locked"><i class="ti ti-lock"></i></div>
+      <div class="module-item__body">
+        <div class="module-item__card">
+          <div class="flex justify-between items-center">
+            <span class="module-item__label">MÓDULO 4</span>
+            <span class="badge badge--neutral">BLOQUEADO</span>
+          </div>
+          <h4 class="module-item__title">Estruturas de Repetição</h4>
+          <p class="module-item__text">Domine For, While e Do While no C#.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Recompensa -->
+    <div class="card card--accent-warning mt-lg">
+      <h4 class="font-semibold mb-md"><i class="ti ti-medal text-warning" style="vertical-align:-2px;"></i> Recompensa</h4>
+      <div class="list-item" style="background:var(--color-warning-light); border-radius:var(--radius-md);">
+        <div class="list-item__icon list-item__icon--warning"><i class="ti ti-award"></i></div>
+        <div class="list-item__body">
+          <div class="list-item__title">C# Master Medal</div>
+          <div class="list-item__subtitle">Ao concluir todos os módulos com nota acima de 80%.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Informações -->
+    <div class="card">
+      <h4 class="font-semibold mb-md">Informações</h4>
+      <div class="flex justify-between mb-sm"><span class="text-secondary">Dificuldade</span><span class="text-primary font-medium">Iniciante</span></div>
+      <div class="flex justify-between mb-sm"><span class="text-secondary">Duração Total</span><span class="font-medium">12 horas</span></div>
+      <div class="flex justify-between mb-sm"><span class="text-secondary">Alunos inscritos</span><span class="font-medium">1.240</span></div>
+      <div class="flex justify-between"><span class="text-secondary">Última atualização</span><span class="font-medium">Ago 2023</span></div>
+    </div>
+
+  </main>
+
+  <nav class="bottom-nav">
+    <a href="home.html" class="bottom-nav__item"><i class="ti ti-home"></i><span>Home</span></a>
+    <a href="curso.html" class="bottom-nav__item active"><i class="ti ti-book-2"></i><span>Cursos</span></a>
+    <a href="conquistas.html" class="bottom-nav__item"><i class="ti ti-trophy"></i><span>Conquistas</span></a>
+    <a href="perfil.html" class="bottom-nav__item"><i class="ti ti-user"></i><span>Perfil</span></a>
+  </nav>
+
+</div>
+<script src="../../js/app.js"></script>
+</body>
+</html>

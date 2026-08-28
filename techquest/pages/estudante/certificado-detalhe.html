@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Certificado — Tech Quest</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.47.0/tabler-icons.min.css">
+  <link rel="stylesheet" href="../../css/style.css">
+</head>
+<body>
+<div class="app-container app-container--wide">
+
+  <header class="top-bar">
+    <a href="certificados.html" class="top-bar__back"><i class="ti ti-arrow-left"></i></a>
+    <span class="top-bar__title">Certificado</span>
+    <button class="top-bar__icon-btn" onclick="window.print()"><i class="ti ti-printer" style="font-size:22px;"></i></button>
+  </header>
+
+  <main class="main-content">
+
+    <div id="certificadoConteudo" class="animate-in">
+      <!-- Renderizado via JS -->
+    </div>
+
+    <!-- Ações -->
+    <div class="flex gap-sm mt-lg flex-col animate-in animate-in-delay-2" id="acoesCert">
+      <button class="btn btn--primary btn--lg btn--full" onclick="window.print()">
+        <i class="ti ti-download"></i> Baixar em PDF
+      </button>
+      <button class="btn btn--secondary btn--full" onclick="abrirModal('modalCompartilhar')">
+        <i class="ti ti-share"></i> Compartilhar no LinkedIn
+      </button>
+      <a href="certificados.html" class="btn btn--ghost btn--full">Voltar</a>
+    </div>
+
+    <!-- Validação -->
+    <div class="card mt-lg animate-in animate-in-delay-3">
+      <h4 class="font-semibold mb-md"><i class="ti ti-shield-check text-primary" style="vertical-align:-2px;"></i> Validação do certificado</h4>
+      <p class="text-sm text-secondary mb-md">Este certificado pode ser verificado publicamente por empresas e instituições através do código único de validação:</p>
+      <div style="background:var(--color-surface-2); padding:var(--space-md); border-radius:var(--radius-md); font-family:monospace; text-align:center; font-weight:600; letter-spacing:1px;" id="codigoValidacao">TQ-CS-2024-001-FA</div>
+      <p class="text-xs text-muted mt-sm text-center">techquest.com/validar/<span id="urlValidacao">TQ-CS-2024-001-FA</span></p>
+    </div>
+
+  </main>
+
+  <nav class="bottom-nav">
+    <a href="home.html" class="bottom-nav__item"><i class="ti ti-home"></i><span>Home</span></a>
+    <a href="cursos.html" class="bottom-nav__item"><i class="ti ti-book-2"></i><span>Cursos</span></a>
+    <a href="conquistas.html" class="bottom-nav__item"><i class="ti ti-trophy"></i><span>Conquistas</span></a>
+    <a href="perfil.html" class="bottom-nav__item"><i class="ti ti-user"></i><span>Perfil</span></a>
+  </nav>
+
+</div>
+
+<!-- Modal compartilhar -->
+<div class="modal-overlay" id="modalCompartilhar">
+  <div class="modal">
+    <div class="modal__icon modal__icon--primary"><i class="ti ti-share"></i></div>
+    <h3 class="modal__title">Compartilhar conquista</h3>
+    <p class="modal__text">Seu certificado será publicado no seu perfil profissional do LinkedIn.</p>
+    <div class="modal__actions">
+      <button class="btn btn--primary btn--full" onclick="fecharModal('modalCompartilhar'); alert('Compartilhado com sucesso! 🎉');">
+        <i class="ti ti-brand-linkedin"></i> Publicar no LinkedIn
+      </button>
+      <button class="btn btn--secondary btn--full" onclick="fecharModal('modalCompartilhar')">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+<style>
+@media print {
+  .top-bar, .bottom-nav, .sidebar-nav, #acoesCert, .card:last-of-type, .persona-switcher { display: none !important; }
+  .main-content { padding: 0 !important; }
+  body, .app-container { background: white !important; }
+}
+</style>
+
+<script src="../../js/app.js"></script>
+<script>
+function onPageLoad() {
+  if (!TQ.data) return;
+
+  // Pega ID da URL ou usa o primeiro emitido
+  const params = new URLSearchParams(window.location.search);
+  const id = params.get('id') || 'cert-001';
+  const cert = TQ.data.certificados.find(c => c.id === id) || TQ.data.certificados[0];
+  const aluno = TQ.data.personas.estudante;
+
+  document.getElementById('codigoValidacao').textContent = cert.codigo_validacao || 'TQ-PENDENTE';
+  document.getElementById('urlValidacao').textContent = cert.codigo_validacao || 'TQ-PENDENTE';
+
+  document.getElementById('certificadoConteudo').innerHTML = `
+    <div class="certificate-wrapper">
+      <div class="certificate-seal"><i class="ti ti-award"></i></div>
+      <div class="certificate-title">Tech Quest — Plataforma de Aprendizagem</div>
+      <h1 class="certificate-heading">Certificado de Conclusão</h1>
+      <p class="certificate-text">Certificamos que</p>
+      <div class="certificate-name">${aluno.nome}</div>
+      <p class="certificate-text">concluiu com aproveitamento o curso de</p>
+      <div class="certificate-course">${cert.curso_titulo}</div>
+      <p class="certificate-text">com carga horária total de <strong>${cert.carga_horaria} horas</strong>, obtendo nota final <strong>${cert.nota_final.toString().replace('.', ',')}</strong>.</p>
+      <div class="certificate-meta">
+        <div>
+          <strong>${cert.data_emissao}</strong>
+          Data de emissão
+        </div>
+        <div>
+          <strong>${cert.instrutor}</strong>
+          Instrutora responsável
+        </div>
+        <div>
+          <strong style="font-family:monospace; font-size:11px;">${cert.codigo_validacao}</strong>
+          Código de validação
+        </div>
+      </div>
+    </div>
+  `;
+}
+</script>
+</body>
+</html>

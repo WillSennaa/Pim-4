@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Detalhes do Aluno — Tech Quest</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.47.0/tabler-icons.min.css">
+  <link rel="stylesheet" href="../../css/style.css">
+</head>
+<body>
+<div class="app-container app-container--wide">
+
+  <aside class="sidebar-nav">
+    <div class="sidebar-nav__brand"><i class="ti ti-terminal-2"></i> Tech Quest</div>
+    <a href="home.html" class="sidebar-nav__item"><i class="ti ti-layout-dashboard"></i> Painel</a>
+    <a href="alunos.html" class="sidebar-nav__item active"><i class="ti ti-users"></i> Meus Alunos</a>
+    <a href="duvidas.html" class="sidebar-nav__item"><i class="ti ti-message-circle"></i> Dúvidas</a>
+    <a href="cursos.html" class="sidebar-nav__item"><i class="ti ti-book"></i> Meus Cursos</a>
+    <div style="flex:1;"></div>
+    <a href="../../index.html" class="sidebar-nav__item" onclick="return confirmarSaida(event)"><i class="ti ti-logout"></i> Sair</a>
+  </aside>
+
+  <div style="flex:1; display:flex; flex-direction:column;">
+
+    <header class="top-bar">
+      <a href="alunos.html" class="top-bar__back"><i class="ti ti-arrow-left"></i></a>
+      <span class="top-bar__title">Perfil do Aluno</span>
+      <div class="top-bar__avatar" style="background:#FDA4AF; color:#9F1239;">AS</div>
+    </header>
+
+    <main class="main-content" id="alunoDetalhe">
+      <div style="text-align:center; padding:var(--space-2xl);" class="text-muted">Carregando...</div>
+    </main>
+
+    <nav class="bottom-nav">
+      <a href="home.html" class="bottom-nav__item"><i class="ti ti-layout-dashboard"></i><span>Painel</span></a>
+      <a href="alunos.html" class="bottom-nav__item active"><i class="ti ti-users"></i><span>Alunos</span></a>
+      <a href="duvidas.html" class="bottom-nav__item"><i class="ti ti-message-circle"></i><span>Dúvidas</span></a>
+      <a href="cursos.html" class="bottom-nav__item"><i class="ti ti-book"></i><span>Cursos</span></a>
+    </nav>
+
+  </div>
+</div>
+
+<!-- Modal mensagem -->
+<div class="modal-overlay" id="modalMensagem">
+  <div class="modal">
+    <div class="modal__icon modal__icon--primary"><i class="ti ti-message-circle"></i></div>
+    <h3 class="modal__title">Enviar mensagem</h3>
+    <p class="modal__text">Sua mensagem chegará na caixa de notificações do aluno.</p>
+    <textarea class="form-input mb-md" rows="4" placeholder="Olá! Notei seu progresso e..."></textarea>
+    <div class="modal__actions">
+      <button class="btn btn--primary btn--full" onclick="fecharModal('modalMensagem'); alert('✓ Mensagem enviada!');"><i class="ti ti-send"></i> Enviar</button>
+      <button class="btn btn--secondary btn--full" onclick="fecharModal('modalMensagem')">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+<script src="../../js/app.js"></script>
+<script>
+function onPageLoad() {
+  if (!TQ.data) return;
+  const email = new URLSearchParams(window.location.search).get('email');
+  const aluno = TQ.data.tutor_alunos.find(a => a.email === email) || TQ.data.tutor_alunos[0];
+
+  const iniciais = aluno.nome.split(' ').map(n => n[0]).join('').substring(0, 2);
+
+  // Simula histórico de atividades do aluno
+  const atividades = [
+    { tipo: 'concluido', titulo: `Concluiu aula "Arrays e Listas em C#"`, tempo: aluno.ultima_atividade },
+    { tipo: 'success', titulo: 'Aprovado na prova "Sintaxe Básica" (9,0)', tempo: 'Há 2 dias' },
+    { tipo: 'warning', titulo: 'Conquistou medalha "Maratonista"', tempo: 'Há 5 dias' },
+    { tipo: 'default', titulo: `Iniciou o curso "${aluno.curso}"`, tempo: 'Há 1 semana' }
+  ];
+
+  document.getElementById('alunoDetalhe').innerHTML = `
+    <!-- Header -->
+    <div class="card animate-in" style="text-align:center; padding:var(--space-2xl) var(--space-lg);">
+      <div class="avatar avatar--xl" style="background:linear-gradient(135deg, var(--color-primary), var(--color-primary-dark)); color:white; margin:0 auto var(--space-md);">${iniciais}</div>
+      <h2 class="font-bold" style="font-size:24px; margin-bottom:4px;">${aluno.nome}</h2>
+      <p class="text-secondary mb-md">${aluno.email}</p>
+      <span class="badge badge--primary"><i class="ti ti-school"></i> Estudante</span>
+    </div>
+
+    <!-- KPIs -->
+    <div class="dashboard-grid mb-lg animate-in animate-in-delay-1">
+      <div class="card" style="margin:0; border-top:3px solid var(--color-primary);">
+        <div class="text-xs text-muted font-semibold" style="letter-spacing:1px;">PROGRESSO</div>
+        <div class="font-bold mt-sm" style="font-size:28px;">${aluno.progresso}%</div>
+        <div class="progress mt-sm"><div class="progress__fill" style="width:${aluno.progresso}%"></div></div>
+      </div>
+      <div class="card" style="margin:0; border-top:3px solid var(--color-warning);">
+        <div class="text-xs text-muted font-semibold" style="letter-spacing:1px;">CURSO ATUAL</div>
+        <div class="font-bold mt-sm" style="font-size:14px;">${aluno.curso}</div>
+      </div>
+      <div class="card" style="margin:0; border-top:3px solid var(--color-success);">
+        <div class="text-xs text-muted font-semibold" style="letter-spacing:1px;">ÚLTIMA ATIVIDADE</div>
+        <div class="font-bold mt-sm" style="font-size:16px;">${aluno.ultima_atividade}</div>
+      </div>
+      <div class="card" style="margin:0; border-top:3px solid #8B5CF6;">
+        <div class="text-xs text-muted font-semibold" style="letter-spacing:1px;">PROVAS</div>
+        <div class="font-bold mt-sm" style="font-size:28px;">5</div>
+      </div>
+    </div>
+
+    <!-- Atividades recentes -->
+    <div class="card animate-in animate-in-delay-2">
+      <h3 class="font-bold mb-md"><i class="ti ti-activity text-primary" style="vertical-align:-2px;"></i> Atividades recentes</h3>
+      ${atividades.map(a => {
+        const cores = { concluido: 'success', success: 'success', warning: 'warning', default: 'primary' };
+        const icones = { concluido: 'ti-check', success: 'ti-clipboard-check', warning: 'ti-medal', default: 'ti-play-circle' };
+        return `<div class="list-item">
+          <div class="list-item__icon list-item__icon--${cores[a.tipo]}"><i class="ti ${icones[a.tipo]}"></i></div>
+          <div class="list-item__body">
+            <div class="list-item__title">${a.titulo}</div>
+            <div class="list-item__subtitle">${a.tempo}</div>
+          </div>
+        </div>`;
+      }).join('')}
+    </div>
+
+    <!-- Ações -->
+    <div class="card animate-in animate-in-delay-2" style="border-top:4px solid var(--color-primary);">
+      <h3 class="font-bold mb-md"><i class="ti ti-tool text-primary" style="vertical-align:-2px;"></i> Ações disponíveis</h3>
+      <div class="flex flex-col gap-sm">
+        <button class="btn btn--primary btn--full" onclick="abrirModal('modalMensagem')"><i class="ti ti-message-circle"></i> Enviar mensagem direta</button>
+        <button class="btn btn--secondary btn--full" onclick="alert('📊 Relatório de desempenho enviado para seu e-mail!');"><i class="ti ti-file-text"></i> Gerar relatório de desempenho</button>
+        <button class="btn btn--ghost btn--full" onclick="alert('🎯 Conteúdo sugerido enviado ao aluno!');"><i class="ti ti-bulb"></i> Sugerir conteúdo extra</button>
+      </div>
+    </div>
+  `;
+}
+</script>
+</body>
+</html>

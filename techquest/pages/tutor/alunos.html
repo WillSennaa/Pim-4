@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Meus Alunos — Tech Quest</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.47.0/tabler-icons.min.css">
+  <link rel="stylesheet" href="../../css/style.css">
+</head>
+<body>
+<div class="app-container app-container--wide">
+
+  <aside class="sidebar-nav">
+    <div class="sidebar-nav__brand"><i class="ti ti-terminal-2"></i> Tech Quest</div>
+    <a href="home.html" class="sidebar-nav__item"><i class="ti ti-layout-dashboard"></i> Painel</a>
+    <div class="sidebar-nav__item active"><i class="ti ti-users"></i> Meus Alunos</div>
+    <a href="duvidas.html" class="sidebar-nav__item"><i class="ti ti-message-circle"></i> Dúvidas</a>
+    <a href="cursos.html" class="sidebar-nav__item"><i class="ti ti-book"></i> Meus Cursos</a>
+    <div style="flex:1;"></div>
+    <a href="../../index.html" class="sidebar-nav__item" onclick="return confirmarSaida(event)"><i class="ti ti-logout"></i> Sair</a>
+  </aside>
+
+  <div style="flex:1; display:flex; flex-direction:column;">
+
+    <header class="top-bar">
+      <a href="home.html" class="top-bar__back"><i class="ti ti-arrow-left"></i></a>
+      <span class="top-bar__title">Meus Alunos</span>
+      <div class="top-bar__avatar" style="background:#FDA4AF; color:#9F1239;">AS</div>
+    </header>
+
+    <main class="main-content">
+
+      <h1 class="page-title animate-in">Meus Alunos</h1>
+      <p class="page-subtitle">Acompanhe o progresso de cada aluno em seus cursos.</p>
+
+      <!-- Busca -->
+      <div class="card animate-in animate-in-delay-1">
+        <div class="form-input-wrapper">
+          <i class="ti ti-search"></i>
+          <input type="text" class="form-input form-input--with-icon" placeholder="Buscar aluno por nome ou e-mail...">
+        </div>
+      </div>
+
+      <!-- Tabela (desktop) / Cards (mobile) -->
+      <div class="card card--no-padding animate-in animate-in-delay-2">
+        <div style="overflow-x:auto;">
+          <table class="data-table" id="alunosTable">
+            <thead>
+              <tr>
+                <th>Aluno</th>
+                <th>Curso</th>
+                <th>Progresso</th>
+                <th>Última atividade</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="alunosTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+    </main>
+<nav class="bottom-nav">
+      <a href="home.html" class="bottom-nav__item"><i class="ti ti-layout-dashboard"></i><span>Painel</span></a>
+      <a href="alunos.html" class="bottom-nav__item active"><i class="ti ti-users"></i><span>Alunos</span></a>
+      <a href="duvidas.html" class="bottom-nav__item"><i class="ti ti-message-circle"></i><span>Dúvidas</span></a>
+      <a href="cursos.html" class="bottom-nav__item"><i class="ti ti-book"></i><span>Cursos</span></a>
+    </nav>
+
+  </div>
+</div>
+
+<script src="../../js/app.js"></script>
+<script>
+function onPageLoad() {
+  if (!TQ.data) return;
+  const tbody = document.getElementById('alunosTableBody');
+  tbody.innerHTML = TQ.data.tutor_alunos.map(a => `
+    <tr>
+      <td>
+        <div class="flex items-center gap-md">
+          <div class="avatar avatar--sm">${a.nome.split(' ').map(n=>n[0]).join('').substring(0,2)}</div>
+          <div>
+            <div class="font-medium">${a.nome}</div>
+            <div class="text-xs text-muted">${a.email}</div>
+          </div>
+        </div>
+      </td>
+      <td><span class="badge badge--primary">${a.curso}</span></td>
+      <td style="min-width:140px;">
+        <div class="flex items-center gap-sm">
+          <div class="progress" style="flex:1; max-width:100px;">
+            <div class="progress__fill" style="width:${a.progresso}%"></div>
+          </div>
+          <span class="text-sm font-semibold">${a.progresso}%</span>
+        </div>
+      </td>
+      <td class="text-sm text-muted">${a.ultima_atividade}</td>
+      <td><a href="aluno-detalhe.html?email=${a.email}" class="btn btn--ghost btn--sm">Ver perfil</a></td>
+    </tr>
+  `).join('');
+}
+</script>
+</body>
+</html>

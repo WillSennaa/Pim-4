@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dúvidas dos Alunos — Tech Quest</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.47.0/tabler-icons.min.css">
+  <link rel="stylesheet" href="../../css/style.css">
+</head>
+<body>
+<div class="app-container app-container--wide">
+
+  <aside class="sidebar-nav">
+    <div class="sidebar-nav__brand"><i class="ti ti-terminal-2"></i> Tech Quest</div>
+    <a href="home.html" class="sidebar-nav__item"><i class="ti ti-layout-dashboard"></i> Painel</a>
+    <a href="alunos.html" class="sidebar-nav__item"><i class="ti ti-users"></i> Meus Alunos</a>
+    <div class="sidebar-nav__item active"><i class="ti ti-message-circle"></i> Dúvidas</div>
+    <a href="cursos.html" class="sidebar-nav__item"><i class="ti ti-book"></i> Meus Cursos</a>
+    <div style="flex:1;"></div>
+    <a href="../../index.html" class="sidebar-nav__item" onclick="return confirmarSaida(event)"><i class="ti ti-logout"></i> Sair</a>
+  </aside>
+
+  <div style="flex:1; display:flex; flex-direction:column;">
+
+    <header class="top-bar">
+      <a href="home.html" class="top-bar__back"><i class="ti ti-arrow-left"></i></a>
+      <span class="top-bar__title">Dúvidas</span>
+      <div class="top-bar__avatar" style="background:#FDA4AF; color:#9F1239;">AS</div>
+    </header>
+
+    <main class="main-content">
+
+      <h1 class="page-title animate-in">Dúvidas dos Alunos</h1>
+      <p class="page-subtitle">Responda as perguntas de quem precisa da sua orientação.</p>
+
+      <div class="tabs tabs--pills mb-lg animate-in animate-in-delay-1">
+        <button class="tab active">Pendentes (2)</button>
+        <button class="tab">Respondidas</button>
+        <button class="tab">Todas</button>
+      </div>
+
+      <div id="duvidasList" class="animate-in animate-in-delay-2"></div>
+
+    </main>
+<nav class="bottom-nav">
+      <a href="home.html" class="bottom-nav__item"><i class="ti ti-layout-dashboard"></i><span>Painel</span></a>
+      <a href="alunos.html" class="bottom-nav__item"><i class="ti ti-users"></i><span>Alunos</span></a>
+      <a href="duvidas.html" class="bottom-nav__item active"><i class="ti ti-message-circle"></i><span>Dúvidas</span></a>
+      <a href="cursos.html" class="bottom-nav__item"><i class="ti ti-book"></i><span>Cursos</span></a>
+    </nav>
+
+  </div>
+</div>
+
+<!-- Modal responder -->
+<div class="modal-overlay" id="modalResponder">
+  <div class="modal">
+    <div class="modal__icon modal__icon--primary"><i class="ti ti-message-reply"></i></div>
+    <h3 class="modal__title">Responder dúvida</h3>
+    <p class="modal__text">Sua resposta chegará por notificação ao aluno e ficará visível para outros estudantes com a mesma dúvida.</p>
+    <textarea class="form-input mb-md" rows="5" placeholder="Digite sua resposta detalhada..."></textarea>
+    <div class="modal__actions">
+      <button class="btn btn--primary btn--full" onclick="fecharModal('modalResponder'); alert('✓ Resposta enviada! O aluno foi notificado.');"><i class="ti ti-send"></i> Enviar resposta</button>
+      <button class="btn btn--secondary btn--full" onclick="fecharModal('modalResponder')">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+<script src="../../js/app.js"></script>
+<script>
+function onPageLoad() {
+  if (!TQ.data) return;
+  const list = document.getElementById('duvidasList');
+  list.innerHTML = TQ.data.tutor_duvidas.map((d, i) => `
+    <div class="card" style="border-left:3px solid var(--color-${d.status === 'pendente' ? 'warning' : 'success'});">
+      <div class="flex items-start gap-md mb-md">
+        <div class="avatar">${d.iniciais}</div>
+        <div style="flex:1;">
+          <div class="flex justify-between items-center">
+            <strong>${d.aluno}</strong>
+            <span class="text-xs text-muted">${d.tempo}</span>
+          </div>
+          <div class="text-xs text-muted mb-sm">${d.curso}</div>
+          <p class="text-sm">${d.pergunta}</p>
+        </div>
+      </div>
+      <div class="flex gap-sm">
+        ${d.status === 'pendente'
+          ? `<button class="btn btn--primary btn--sm" style="flex:1;" onclick="abrirModal('modalResponder')"><i class="ti ti-message-reply"></i> Responder</button>
+             <button class="btn btn--ghost btn--sm" onclick="if(confirm('Marcar como respondida sem enviar mensagem?')) { alert('Dúvida marcada como respondida.'); this.closest('.card').style.opacity='0.5'; }">Marcar como respondida</button>`
+          : `<span class="badge badge--success">RESPONDIDA</span>`
+        }
+      </div>
+    </div>
+  `).join('');
+}
+</script>
+</body>
+</html>

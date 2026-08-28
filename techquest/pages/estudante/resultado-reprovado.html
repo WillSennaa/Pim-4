@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Resultado — Tech Quest</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.47.0/tabler-icons.min.css">
+  <link rel="stylesheet" href="../../css/style.css">
+</head>
+<body>
+<div class="app-container app-container--wide">
+
+  <header class="top-bar">
+    <a href="curso.html" class="top-bar__back"><i class="ti ti-arrow-left"></i></a>
+    <span class="top-bar__title">Resultado</span>
+    <span class="top-bar__avatar">FA</span>
+  </header>
+
+  <main class="main-content">
+
+    <div class="result-card result-card--danger animate-in" style="border-radius:var(--radius-lg);">
+      <div class="result-card__icon result-card__icon--danger">
+        <i class="ti ti-x"></i>
+      </div>
+      <h2 class="result-card__title">Quase lá, Felipe!</h2>
+      <p class="result-card__text">Você precisa de pelo menos 7,0 para aprovar nesta avaliação e liberar o próximo módulo.</p>
+      <div class="result-card__score">
+        <div class="result-card__score-value" id="notaFinal">5,5 / 10</div>
+        <div class="text-sm text-secondary">Acertou <span id="acertosTotal">5 de 10</span> questões</div>
+      </div>
+    </div>
+
+    <!-- Análise por tópico -->
+    <div class="card animate-in animate-in-delay-1">
+      <h4 class="font-semibold mb-md"><i class="ti ti-chart-bar text-primary" style="vertical-align:-2px;"></i> Análise por Tópico</h4>
+
+      <div class="mb-md">
+        <div class="flex justify-between text-sm mb-sm"><span>Lógica de Programação</span><span class="text-danger font-semibold">40%</span></div>
+        <div class="progress progress--danger"><div class="progress__fill" style="width:40%"></div></div>
+      </div>
+
+      <div class="mb-md">
+        <div class="flex justify-between text-sm mb-sm"><span>Estrutura de Dados</span><span class="text-warning font-semibold">65%</span></div>
+        <div class="progress progress--warning"><div class="progress__fill" style="width:65%"></div></div>
+      </div>
+
+      <div class="mb-md">
+        <div class="flex justify-between text-sm mb-sm"><span>Algoritmos Avançados</span><span class="text-danger font-semibold">20%</span></div>
+        <div class="progress progress--danger"><div class="progress__fill" style="width:20%"></div></div>
+      </div>
+
+      <div class="tip-box">
+        <div class="tip-box__icon"><i class="ti ti-bulb"></i></div>
+        <div>
+          <div class="tip-box__title">DICA DO MENTOR</div>
+          <div class="tip-box__text">Revise as aulas de "Recursividade" antes de tentar novamente. Esse foi o ponto onde você teve mais dificuldade.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Revisão Detalhada -->
+    <div class="card animate-in animate-in-delay-2">
+      <div class="flex justify-between items-center mb-md">
+        <h4 class="font-semibold"><i class="ti ti-clipboard-check text-primary" style="vertical-align:-2px;"></i> Revisão Detalhada</h4>
+        <span class="badge badge--neutral">10 Questões</span>
+      </div>
+      <div id="reviewListFail"></div>
+    </div>
+
+    <div class="flex flex-col gap-sm mt-lg">
+      <a href="prova.html" class="btn btn--primary btn--lg btn--full">
+        <i class="ti ti-refresh"></i> Refazer prova
+      </a>
+      <a href="curso.html" class="btn btn--ghost btn--full">
+        <i class="ti ti-arrow-left"></i> Voltar ao curso
+      </a>
+      <button class="btn btn--ghost btn--full" disabled>
+        Próximo módulo <i class="ti ti-lock"></i>
+      </button>
+    </div>
+
+  </main>
+
+</div>
+
+<script src="../../js/app.js"></script>
+<script>
+function onPageLoad() {
+  const raw = sessionStorage.getItem('tq_resultado');
+  if (raw) {
+    const r = JSON.parse(raw);
+    document.getElementById('notaFinal').textContent = r.nota.replace('.', ',') + ' / 10';
+    document.getElementById('acertosTotal').textContent = r.acertos + ' de ' + r.total;
+  }
+
+  if (TQ.questoes && TQ.questoes.prova_csharp) {
+    const questoes = TQ.questoes.prova_csharp.questoes.slice(0, 4);
+    const list = document.getElementById('reviewListFail');
+    if (list) {
+      list.innerHTML = questoes.map((q, i) => {
+        const correta = i === 1; // só a 2ª certa
+        const respUsuario = correta ? q.alternativas[q.resposta_correta] : Object.values(q.alternativas)[0];
+        const respCorreta = q.alternativas[q.resposta_correta];
+        return `<div class="card" style="border-left:3px solid var(--color-${correta ? 'success' : 'danger'}); margin-bottom:var(--space-sm); padding:var(--space-md);">
+          <div class="flex justify-between mb-sm">
+            <strong class="text-sm">Questão 0${i+1}</strong>
+            <div class="list-item__icon list-item__icon--${correta ? 'success' : 'danger'}" style="width:24px; height:24px;">
+              <i class="ti ti-${correta ? 'check' : 'x'}" style="font-size:14px;"></i>
+            </div>
+          </div>
+          <p class="text-sm mb-sm">${q.enunciado}</p>
+          ${!correta ? `<div class="text-xs" style="background:var(--color-danger-light); padding:6px 10px; border-radius:6px; margin-bottom:4px;">
+            <strong>✗ ${respUsuario}</strong> — Sua resposta
+          </div>` : ''}
+          <div class="text-xs" style="background:var(--color-success-light); padding:6px 10px; border-radius:6px;">
+            <strong>✓ ${respCorreta}</strong> — Resposta correta
+          </div>
+        </div>`;
+      }).join('');
+    }
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Meus Cursos — Tutor — Tech Quest</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.47.0/tabler-icons.min.css">
+  <link rel="stylesheet" href="../../css/style.css">
+</head>
+<body>
+<div class="app-container app-container--wide">
+
+  <aside class="sidebar-nav">
+    <div class="sidebar-nav__brand"><i class="ti ti-terminal-2"></i> Tech Quest</div>
+    <a href="home.html" class="sidebar-nav__item"><i class="ti ti-layout-dashboard"></i> Painel</a>
+    <a href="alunos.html" class="sidebar-nav__item"><i class="ti ti-users"></i> Meus Alunos</a>
+    <a href="duvidas.html" class="sidebar-nav__item"><i class="ti ti-message-circle"></i> Dúvidas</a>
+    <div class="sidebar-nav__item active"><i class="ti ti-book"></i> Meus Cursos</div>
+    <div style="flex:1;"></div>
+    <a href="../../index.html" class="sidebar-nav__item" onclick="return confirmarSaida(event)"><i class="ti ti-logout"></i> Sair</a>
+  </aside>
+
+  <div style="flex:1; display:flex; flex-direction:column;">
+
+    <header class="top-bar">
+      <a href="home.html" class="top-bar__back"><i class="ti ti-arrow-left"></i></a>
+      <span class="top-bar__title">Meus Cursos</span>
+      <div class="top-bar__avatar" style="background:#FDA4AF; color:#9F1239;">AS</div>
+    </header>
+
+    <main class="main-content">
+
+      <div class="flex justify-between items-center mb-md animate-in" style="flex-wrap:wrap; gap:var(--space-md);">
+        <div>
+          <h1 class="page-title" style="margin-bottom:0;">Meus Cursos</h1>
+          <p class="page-subtitle" style="margin-bottom:0;">Gerencie os cursos que você publica na plataforma.</p>
+        </div>
+        <a href="criar-curso.html" class="btn btn--primary">
+          <i class="ti ti-plus"></i> Solicitar novo curso
+        </a>
+      </div>
+
+      <!-- KPIs clicáveis -->
+      <div class="dashboard-grid mb-lg animate-in animate-in-delay-1">
+        <div class="card" style="margin:0; border-top:3px solid var(--color-success); cursor:pointer;" onclick="filtrarStatus('publicado')">
+          <div class="text-xs text-muted font-semibold" style="letter-spacing:1px;">PUBLICADOS</div>
+          <div class="font-bold" style="font-size:28px;" id="kpiPublicado">0</div>
+        </div>
+        <div class="card" style="margin:0; border-top:3px solid var(--color-text-muted); cursor:pointer;" onclick="filtrarStatus('rascunho')">
+          <div class="text-xs text-muted font-semibold" style="letter-spacing:1px;">RASCUNHOS</div>
+          <div class="font-bold" style="font-size:28px;" id="kpiRascunho">0</div>
+        </div>
+        <div class="card" style="margin:0; border-top:3px solid var(--color-warning); cursor:pointer;" onclick="filtrarStatus('aguardando')">
+          <div class="text-xs text-muted font-semibold" style="letter-spacing:1px;">AGUARDANDO</div>
+          <div class="font-bold" style="font-size:28px;" id="kpiAguardando">0</div>
+        </div>
+        <div class="card" style="margin:0; border-top:3px solid var(--color-primary);">
+          <div class="text-xs text-muted font-semibold" style="letter-spacing:1px;">TOTAL ALUNOS</div>
+          <div class="font-bold" style="font-size:28px;" id="kpiAlunos">0</div>
+        </div>
+      </div>
+
+      <!-- Filtros funcionais -->
+      <div class="tabs tabs--pills mb-lg animate-in animate-in-delay-1" id="filtrosStatus">
+        <button class="tab active" data-status="todos">Todos</button>
+        <button class="tab" data-status="publicado">Publicados</button>
+        <button class="tab" data-status="rascunho">Rascunhos</button>
+        <button class="tab" data-status="aguardando">Aguardando aprovação</button>
+      </div>
+
+      <div class="courses-grid animate-in animate-in-delay-2" id="cursosGrid"></div>
+
+      <div id="emptyState" style="display:none; padding:var(--space-2xl); text-align:center;" class="card">
+        <i class="ti ti-mood-empty" style="font-size:48px; color:var(--color-text-muted);"></i>
+        <p class="text-muted mt-md">Nenhum curso com esse status.</p>
+      </div>
+
+      <div class="card mt-lg" style="background:var(--color-primary-lighter); border-color:var(--color-primary-light);">
+        <div class="flex items-start gap-md">
+          <i class="ti ti-info-circle text-primary" style="font-size:24px;"></i>
+          <div>
+            <h4 class="font-bold mb-sm">Como funciona a criação de cursos?</h4>
+            <p class="text-sm text-secondary">Toda criação ou exclusão de cursos passa por aprovação da equipe administrativa. O prazo médio de análise é de <strong>24 a 48 horas</strong>.</p>
+          </div>
+        </div>
+      </div>
+
+    </main>
+
+    <nav class="bottom-nav">
+      <a href="home.html" class="bottom-nav__item"><i class="ti ti-layout-dashboard"></i><span>Painel</span></a>
+      <a href="alunos.html" class="bottom-nav__item"><i class="ti ti-users"></i><span>Alunos</span></a>
+      <a href="duvidas.html" class="bottom-nav__item"><i class="ti ti-message-circle"></i><span>Dúvidas</span></a>
+      <a href="cursos.html" class="bottom-nav__item active"><i class="ti ti-book"></i><span>Cursos</span></a>
+    </nav>
+
+  </div>
+</div>
+
+<!-- Modal excluir curso -->
+<div class="modal-overlay" id="modalExcluir">
+  <div class="modal">
+    <div class="modal__icon modal__icon--warning"><i class="ti ti-alert-triangle"></i></div>
+    <h3 class="modal__title">Solicitar exclusão?</h3>
+    <p class="modal__text">A exclusão de um curso passa pela aprovação do administrador. Os alunos atualmente matriculados receberão um e-mail antes da remoção.</p>
+    <div class="form-group mb-md">
+      <label class="form-label text-sm">Justificativa (opcional)</label>
+      <textarea class="form-input" rows="3" placeholder="Ex: Conteúdo desatualizado, substituído por outro curso..."></textarea>
+    </div>
+    <div class="modal__actions">
+      <button class="btn btn--danger btn--full" onclick="fecharModal('modalExcluir'); abrirModal('modalSolicitacaoEnviada');">Sim, solicitar exclusão</button>
+      <button class="btn btn--secondary btn--full" onclick="fecharModal('modalExcluir')">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal publicar rascunho -->
+<div class="modal-overlay" id="modalPublicar">
+  <div class="modal">
+    <div class="modal__icon modal__icon--primary"><i class="ti ti-upload"></i></div>
+    <h3 class="modal__title">Submeter para publicação?</h3>
+    <p class="modal__text">Seu rascunho será enviado ao administrador para aprovação. Após aprovado, o curso ficará visível para os alunos.</p>
+    <div class="modal__actions">
+      <button class="btn btn--primary btn--full" onclick="fecharModal('modalPublicar'); abrirModal('modalSolicitacaoEnviada');">Sim, submeter</button>
+      <button class="btn btn--secondary btn--full" onclick="fecharModal('modalPublicar')">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal solicitação enviada -->
+<div class="modal-overlay" id="modalSolicitacaoEnviada">
+  <div class="modal">
+    <div class="modal__icon modal__icon--success"><i class="ti ti-check"></i></div>
+    <h3 class="modal__title">Solicitação enviada!</h3>
+    <p class="modal__text">Sua solicitação foi encaminhada para a equipe administrativa. Você receberá uma notificação assim que for analisada.</p>
+    <div class="modal__actions">
+      <button class="btn btn--primary btn--full" onclick="fecharModal('modalSolicitacaoEnviada')">Entendi</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal sair -->
+<div class="modal-overlay" id="modalSair">
+  <div class="modal">
+    <div class="modal__icon modal__icon--warning"><i class="ti ti-logout"></i></div>
+    <h3 class="modal__title">Sair da conta?</h3>
+    <p class="modal__text">Você precisará fazer login novamente para acessar o painel.</p>
+    <div class="modal__actions">
+      <a href="../../index.html" class="btn btn--danger btn--full">Sim, sair</a>
+      <button class="btn btn--secondary btn--full" onclick="fecharModal('modalSair')">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+<script src="../../js/app.js"></script>
+<script>
+let filtroStatus = 'todos';
+
+function filtrarStatus(s) {
+  filtroStatus = s;
+  document.querySelectorAll('#filtrosStatus .tab').forEach(t => t.classList.remove('active'));
+  const tab = document.querySelector(`#filtrosStatus .tab[data-status="${s}"]`);
+  if (tab) tab.classList.add('active');
+  renderCursos();
+}
+
+function renderCursos() {
+  if (!TQ.data || !TQ.data.tutor_meus_cursos) return;
+  let cursos = TQ.data.tutor_meus_cursos;
+  if (filtroStatus !== 'todos') cursos = cursos.filter(c => c.status === filtroStatus);
+
+  const grid = document.getElementById('cursosGrid');
+  const empty = document.getElementById('emptyState');
+  if (cursos.length === 0) {
+    grid.innerHTML = '';
+    empty.style.display = '';
+    return;
+  }
+  empty.style.display = 'none';
+
+  const statusBadge = {
+    'publicado': { class: 'success', label: 'PUBLICADO' },
+    'rascunho': { class: 'neutral', label: 'RASCUNHO' },
+    'aguardando': { class: 'warning', label: 'AGUARDANDO APROVAÇÃO' }
+  };
+
+  grid.innerHTML = cursos.map(c => {
+    const b = statusBadge[c.status];
+    let acoesBotoes = '';
+
+    if (c.status === 'publicado') {
+      acoesBotoes = `
+        <a href="editar-curso.html?id=${c.id}" class="btn btn--secondary btn--sm" style="flex:1;"><i class="ti ti-edit"></i> Editar</a>
+        <button class="btn btn--ghost btn--sm" style="color:var(--color-danger); border-color:var(--color-danger);" onclick="abrirModal('modalExcluir')" title="Solicitar exclusão"><i class="ti ti-trash"></i></button>
+      `;
+    } else if (c.status === 'rascunho') {
+      acoesBotoes = `
+        <a href="editar-curso.html?id=${c.id}" class="btn btn--secondary btn--sm" style="flex:1;"><i class="ti ti-edit"></i> Continuar editando</a>
+        <button class="btn btn--primary btn--sm" onclick="abrirModal('modalPublicar')" title="Submeter para publicação"><i class="ti ti-upload"></i></button>
+      `;
+    } else { // aguardando
+      acoesBotoes = `
+        <a href="editar-curso.html?id=${c.id}" class="btn btn--ghost btn--sm" style="flex:1;"><i class="ti ti-eye"></i> Ver detalhes</a>
+        <button class="btn btn--ghost btn--sm" disabled title="Aguardando aprovação do admin"><i class="ti ti-clock"></i></button>
+      `;
+    }
+
+    return `<div class="course-card">
+      <div class="course-card__cover ${c.id.includes('bd') ? 'course-card__cover--bd' : ''}">
+        <i class="ti ti-book course-card__cover-icon"></i>
+        <span class="course-card__level">${b.label}</span>
+        <span class="course-card__name">${c.titulo}</span>
+      </div>
+      <div class="course-card__body">
+        <div class="course-card__meta">
+          <span><i class="ti ti-users"></i> ${c.alunos.toLocaleString('pt-BR')} alunos</span>
+          <span><i class="ti ti-stack-2"></i> ${c.modulos} módulos</span>
+          ${c.rating > 0 ? `<span><i class="ti ti-star-filled" style="color:var(--color-warning);"></i> ${c.rating}</span>` : ''}
+        </div>
+        <p class="text-xs text-muted mb-md">Última atualização: ${c.ultima_atualizacao}</p>
+        <div class="flex gap-sm">${acoesBotoes}</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+document.addEventListener('click', e => {
+  if (e.target.closest('#filtrosStatus .tab')) {
+    filtrarStatus(e.target.closest('.tab').dataset.status);
+  }
+});
+
+function confirmarSaida(e) {
+  e.preventDefault();
+  abrirModal('modalSair');
+  return false;
+}
+
+function onPageLoad() {
+  if (!TQ.data || !TQ.data.tutor_meus_cursos) return;
+  const c = TQ.data.tutor_meus_cursos;
+  document.getElementById('kpiPublicado').textContent = c.filter(x => x.status === 'publicado').length;
+  document.getElementById('kpiRascunho').textContent = c.filter(x => x.status === 'rascunho').length;
+  document.getElementById('kpiAguardando').textContent = c.filter(x => x.status === 'aguardando').length;
+  document.getElementById('kpiAlunos').textContent = c.reduce((sum, x) => sum + x.alunos, 0).toLocaleString('pt-BR');
+  renderCursos();
+}
+</script>
+</body>
+</html>

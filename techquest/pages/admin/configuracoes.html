@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Configurações — Tech Quest Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.47.0/tabler-icons.min.css">
+  <link rel="stylesheet" href="../../css/style.css">
+</head>
+<body>
+<div class="app-container app-container--wide">
+
+  <aside class="sidebar-nav">
+    <div class="sidebar-nav__brand"><i class="ti ti-shield-check"></i> Tech Quest Admin</div>
+    <a href="home.html" class="sidebar-nav__item"><i class="ti ti-layout-dashboard"></i> Dashboard</a>
+    <a href="usuarios.html" class="sidebar-nav__item"><i class="ti ti-users"></i> Usuários</a>
+    <a href="cursos.html" class="sidebar-nav__item"><i class="ti ti-book"></i> Cursos</a>
+    <a href="aprovacoes.html" class="sidebar-nav__item"><i class="ti ti-checks"></i> Aprovações <span class="badge badge--danger" style="margin-left:auto;">4</span></a>
+    <a href="relatorios.html" class="sidebar-nav__item"><i class="ti ti-chart-pie"></i> Relatórios</a>
+    <div class="sidebar-nav__item active"><i class="ti ti-settings"></i> Configurações</div>
+    <div style="flex:1;"></div>
+    <a href="../../index.html" class="sidebar-nav__item" onclick="return confirmarSaida(event)"><i class="ti ti-logout"></i> Sair</a>
+  </aside>
+
+  <div style="flex:1; display:flex; flex-direction:column;">
+
+    <header class="top-bar">
+      <a href="home.html" class="top-bar__back"><i class="ti ti-arrow-left"></i></a>
+      <span class="top-bar__title">Configurações</span>
+      <div class="top-bar__avatar" style="background:#1E293B;">CM</div>
+    </header>
+
+    <main class="main-content">
+
+      <h1 class="page-title animate-in">Configurações da Plataforma</h1>
+      <p class="page-subtitle">Ajustes globais que afetam todos os usuários da Tech Quest.</p>
+
+      <!-- Plataforma -->
+      <div class="card animate-in animate-in-delay-1" style="border-top:4px solid var(--color-primary);">
+        <h3 class="font-bold mb-md"><i class="ti ti-world text-primary" style="vertical-align:-2px;"></i> Configurações da Plataforma</h3>
+
+        <div class="form-group">
+          <label class="form-label">Nome da plataforma</label>
+          <input type="text" class="form-input" value="Tech Quest">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">URL principal</label>
+          <input type="text" class="form-input" value="https://techquest.com">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">E-mail de contato</label>
+          <input type="email" class="form-input" value="contato@techquest.com">
+        </div>
+
+        <div class="flex justify-between items-center mb-md" style="padding:var(--space-sm) 0;">
+          <div>
+            <div class="font-medium">Cadastro aberto</div>
+            <div class="text-xs text-muted">Permite que qualquer pessoa se cadastre como estudante</div>
+          </div>
+          <div class="toggle active" onclick="toggleSwitch(this)"></div>
+        </div>
+
+        <div class="flex justify-between items-center" style="padding:var(--space-sm) 0;">
+          <div>
+            <div class="font-medium">Modo manutenção</div>
+            <div class="text-xs text-muted">Bloqueia acesso de não-admins temporariamente</div>
+          </div>
+          <div class="toggle" onclick="toggleSwitch(this)"></div>
+        </div>
+      </div>
+
+      <!-- Gamificação -->
+      <div class="card animate-in animate-in-delay-2" style="border-top:4px solid var(--color-warning);">
+        <h3 class="font-bold mb-md"><i class="ti ti-trophy text-warning" style="vertical-align:-2px;"></i> Sistema de Gamificação</h3>
+
+        <div class="flex gap-md" style="flex-wrap:wrap;">
+          <div class="form-group" style="flex:1; min-width:140px;">
+            <label class="form-label">XP por aula concluída</label>
+            <input type="number" class="form-input" value="50">
+          </div>
+          <div class="form-group" style="flex:1; min-width:140px;">
+            <label class="form-label">XP por prova aprovada</label>
+            <input type="number" class="form-input" value="150">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">XP necessário por nível</label>
+          <input type="number" class="form-input" value="3000">
+          <p class="text-xs text-muted mt-sm">Multiplicado a cada nível (Nível 2 = 3.000, Nível 3 = 6.000, etc.)</p>
+        </div>
+
+        <div class="flex justify-between items-center" style="padding:var(--space-sm) 0;">
+          <div>
+            <div class="font-medium">Ranking público</div>
+            <div class="text-xs text-muted">Exibe ranking de alunos por XP na página inicial</div>
+          </div>
+          <div class="toggle active" onclick="toggleSwitch(this)"></div>
+        </div>
+      </div>
+
+      <!-- Certificados -->
+      <div class="card animate-in animate-in-delay-2" style="border-top:4px solid var(--color-success);">
+        <h3 class="font-bold mb-md"><i class="ti ti-certificate text-success" style="vertical-align:-2px;"></i> Certificados</h3>
+
+        <div class="form-group">
+          <label class="form-label">Nota mínima para emissão</label>
+          <div class="form-input-wrapper">
+            <input type="number" class="form-input" value="70" min="0" max="100">
+            <span style="position:absolute; right:14px; top:50%; transform:translateY(-50%); color:var(--color-text-muted);">%</span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Validade do certificado</label>
+          <select class="form-input">
+            <option>Sem validade (vitalício)</option>
+            <option>1 ano</option>
+            <option>2 anos</option>
+            <option>5 anos</option>
+          </select>
+        </div>
+
+        <div class="flex justify-between items-center" style="padding:var(--space-sm) 0;">
+          <div>
+            <div class="font-medium">Assinatura digital</div>
+            <div class="text-xs text-muted">Aplica assinatura criptográfica nos PDFs emitidos</div>
+          </div>
+          <div class="toggle active" onclick="toggleSwitch(this)"></div>
+        </div>
+      </div>
+
+      <!-- E-mails -->
+      <div class="card animate-in animate-in-delay-3" style="border-top:4px solid #8B5CF6;">
+        <h3 class="font-bold mb-md"><i class="ti ti-mail" style="color:#8B5CF6; vertical-align:-2px;"></i> Notificações por E-mail</h3>
+
+        <div class="flex justify-between items-center mb-md">
+          <span class="text-sm">Boas-vindas a novos cadastros</span>
+          <div class="toggle active" onclick="toggleSwitch(this)"></div>
+        </div>
+        <div class="flex justify-between items-center mb-md">
+          <span class="text-sm">Lembretes de inatividade (7 dias)</span>
+          <div class="toggle active" onclick="toggleSwitch(this)"></div>
+        </div>
+        <div class="flex justify-between items-center mb-md">
+          <span class="text-sm">Conquistas e medalhas</span>
+          <div class="toggle active" onclick="toggleSwitch(this)"></div>
+        </div>
+        <div class="flex justify-between items-center mb-md">
+          <span class="text-sm">Newsletter semanal</span>
+          <div class="toggle" onclick="toggleSwitch(this)"></div>
+        </div>
+        <div class="flex justify-between items-center">
+          <span class="text-sm">Promoções e ofertas</span>
+          <div class="toggle" onclick="toggleSwitch(this)"></div>
+        </div>
+      </div>
+
+      <!-- Segurança -->
+      <div class="card animate-in" style="border-top:4px solid var(--color-danger);">
+        <h3 class="font-bold mb-md"><i class="ti ti-shield-lock text-danger" style="vertical-align:-2px;"></i> Segurança</h3>
+
+        <div class="form-group">
+          <label class="form-label">Tempo máximo de sessão</label>
+          <select class="form-input">
+            <option>30 minutos</option>
+            <option>1 hora</option>
+            <option selected>4 horas</option>
+            <option>24 horas</option>
+          </select>
+        </div>
+
+        <div class="flex justify-between items-center mb-md">
+          <div>
+            <div class="font-medium">Autenticação em 2 fatores (2FA)</div>
+            <div class="text-xs text-muted">Obrigatório para admins e tutores</div>
+          </div>
+          <div class="toggle active" onclick="toggleSwitch(this)"></div>
+        </div>
+
+        <div class="flex justify-between items-center mb-md">
+          <div>
+            <div class="font-medium">Log de auditoria</div>
+            <div class="text-xs text-muted">Registra todas as ações administrativas</div>
+          </div>
+          <div class="toggle active" onclick="toggleSwitch(this)"></div>
+        </div>
+
+        <button class="btn btn--ghost btn--full mt-md" style="border-color:var(--color-danger); color:var(--color-danger);" onclick="if(confirm('Esta ação fará logout de todos os usuários ativos. Confirmar?')) alert('Todas as sessões foram encerradas.');">
+          <i class="ti ti-logout"></i> Forçar logout de todos os usuários
+        </button>
+      </div>
+
+      <!-- Salvar -->
+      <div class="flex flex-col gap-sm mt-lg">
+        <button class="btn btn--primary btn--lg btn--full" onclick="alert('✓ Configurações salvas com sucesso!');">
+          <i class="ti ti-device-floppy"></i> Salvar todas as alterações
+        </button>
+        <a href="home.html" class="btn btn--ghost btn--full">Cancelar</a>
+      </div>
+
+      <p class="text-xs text-muted text-center mt-lg">Tech Quest v2.4.1 · Build 105 · Sistema operacional</p>
+
+    </main>
+
+    <nav class="bottom-nav">
+      <a href="home.html" class="bottom-nav__item"><i class="ti ti-layout-dashboard"></i><span>Dashboard</span></a>
+      <a href="usuarios.html" class="bottom-nav__item"><i class="ti ti-users"></i><span>Usuários</span></a>
+      <a href="cursos.html" class="bottom-nav__item"><i class="ti ti-book"></i><span>Cursos</span></a>
+      <a href="configuracoes.html" class="bottom-nav__item active"><i class="ti ti-settings"></i><span>Config</span></a>
+    </nav>
+
+  </div>
+</div>
+
+<script src="../../js/app.js"></script>
+</body>
+</html>

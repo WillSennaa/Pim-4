@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Editar Perfil — Tech Quest</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.47.0/tabler-icons.min.css">
+  <link rel="stylesheet" href="../../css/style.css">
+</head>
+<body>
+<div class="app-container app-container--wide">
+
+  <header class="top-bar">
+    <a href="perfil.html" class="top-bar__back" onclick="event.preventDefault(); abrirModal('modalDescartar');"><i class="ti ti-arrow-left"></i></a>
+    <span class="top-bar__title text-primary">Editar Perfil</span>
+    <button class="btn btn--sm btn--primary" onclick="abrirModal('modalSalvo')" style="font-size:13px;">Salvar</button>
+  </header>
+
+  <main class="main-content">
+
+    <div class="text-center mb-lg animate-in">
+      <div style="position:relative; width:120px; height:120px; margin:0 auto;">
+        <div class="avatar avatar--xl" style="background:linear-gradient(135deg,#475569,#1E293B); color:white;">F</div>
+        <div style="position:absolute; bottom:0; right:0; width:36px; height:36px; background:var(--color-primary); color:white; border-radius:var(--radius-full); display:flex; align-items:center; justify-content:center; border:3px solid white; cursor:pointer;">
+          <i class="ti ti-camera"></i>
+        </div>
+      </div>
+    </div>
+
+    <div class="card animate-in animate-in-delay-1" style="border-top:4px solid var(--color-primary);">
+      <h3 class="font-bold mb-lg">Informações Pessoais</h3>
+
+      <div class="form-group">
+        <label class="form-label">Nome completo</label>
+        <input type="text" class="form-input" value="Felipe Almeida" onchange="abrirModal('modalSalvar')">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Telefone</label>
+        <input type="tel" class="form-input" value="(11) 98888-7777" onchange="abrirModal('modalSalvar')">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">E-mail</label>
+        <div class="flex gap-sm items-center">
+          <input type="email" class="form-input" value="felipe.almeida@techques..." disabled style="flex:1;">
+          <a href="alterar-email.html" class="btn btn--ghost btn--sm">Alterar</a>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Senha</label>
+        <div class="flex gap-sm items-center">
+          <input type="password" class="form-input" value="••••••••••••" disabled style="flex:1;">
+          <a href="alterar-senha.html" class="btn btn--ghost btn--sm">Alterar</a>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Data de Nascimento</label>
+        <input type="text" class="form-input" value="15/05/1998">
+      </div>
+
+      <div class="form-group" style="margin-bottom:0;">
+        <label class="form-label">Cidade / Estado</label>
+        <input type="text" class="form-input" value="São Paulo - SP">
+      </div>
+    </div>
+
+    <div class="flex flex-col gap-sm mt-lg">
+      <button class="btn btn--primary btn--lg btn--full" onclick="abrirModal('modalSalvo')">Salvar alterações</button>
+      <button class="btn btn--secondary btn--full" onclick="abrirModal('modalDescartar')">Cancelar</button>
+    </div>
+
+  </main>
+
+  <nav class="bottom-nav">
+    <a href="home.html" class="bottom-nav__item"><i class="ti ti-home"></i><span>Início</span></a>
+    <a href="cursos.html" class="bottom-nav__item"><i class="ti ti-book-2"></i><span>Cursos</span></a>
+    <a href="conquistas.html" class="bottom-nav__item"><i class="ti ti-trophy"></i><span>Medalhas</span></a>
+    <a href="perfil.html" class="bottom-nav__item active"><i class="ti ti-user"></i><span>Perfil</span></a>
+  </nav>
+
+</div>
+
+<!-- Modal descartar -->
+<div class="modal-overlay" id="modalDescartar">
+  <div class="modal">
+    <div class="modal__icon modal__icon--warning"><i class="ti ti-alert-triangle"></i></div>
+    <h3 class="modal__title">Descartar alterações?</h3>
+    <p class="modal__text">Você tem alterações não salvas. Se sair agora, perderá o que editou.</p>
+    <div class="modal__actions">
+      <a href="perfil.html" class="btn btn--danger btn--full">Sim, descartar</a>
+      <button class="btn btn--secondary btn--full" onclick="fecharModal('modalDescartar')">Continuar editando</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal salvar -->
+<div class="modal-overlay" id="modalSalvar">
+  <div class="modal">
+    <div class="modal__icon modal__icon--success"><i class="ti ti-check"></i></div>
+    <h3 class="modal__title">Salvar alterações?</h3>
+    <p class="modal__text">Você fez alterações nos seguintes campos:</p>
+    <ul style="text-align:left; margin-bottom:var(--space-lg); padding-left:var(--space-lg); font-size:14px;">
+      <li>Telefone</li>
+      <li>Cidade</li>
+    </ul>
+    <div class="modal__actions">
+      <button class="btn btn--success btn--full" onclick="fecharModal('modalSalvar'); abrirModal('modalSalvo');">Sim, salvar</button>
+      <button class="btn btn--secondary btn--full" onclick="fecharModal('modalSalvar')">Continuar editando</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal sucesso -->
+<div class="modal-overlay" id="modalSalvo">
+  <div class="modal">
+    <div class="modal__icon modal__icon--success"><i class="ti ti-check"></i></div>
+    <h3 class="modal__title">Dados atualizados!</h3>
+    <p class="modal__text">Suas informações foram salvas com sucesso em nossa base de dados.</p>
+    <div class="modal__actions">
+      <a href="perfil.html" class="btn btn--primary btn--full">OK</a>
+    </div>
+  </div>
+</div>
+
+<script src="../../js/app.js"></script>
+</body>
+</html>

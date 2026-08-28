@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Revisão Completa da Prova — Tech Quest</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.47.0/tabler-icons.min.css">
+  <link rel="stylesheet" href="../../css/style.css">
+</head>
+<body>
+<div class="app-container app-container--wide">
+
+  <header class="top-bar">
+    <a href="javascript:history.back()" class="top-bar__back"><i class="ti ti-arrow-left"></i></a>
+    <span class="top-bar__title">Revisão da Prova</span>
+    <a href="perfil.html" class="top-bar__avatar">FA</a>
+  </header>
+
+  <main class="main-content">
+
+    <h1 class="page-title animate-in" id="provaTitulo">Revisão Completa</h1>
+    <p class="page-subtitle" id="provaSubtitulo">Veja todas as questões e o gabarito desta prova.</p>
+
+    <div class="card animate-in animate-in-delay-1" style="border-top:4px solid var(--color-success);" id="resumoCard">
+      <!-- Resumo aqui -->
+    </div>
+
+    <div id="questoesList" class="animate-in animate-in-delay-2"></div>
+
+    <div class="flex flex-col gap-sm mt-lg">
+      <a href="javascript:history.back()" class="btn btn--ghost btn--full">
+        <i class="ti ti-arrow-left"></i> Voltar
+      </a>
+    </div>
+
+  </main>
+
+  <nav class="bottom-nav">
+    <a href="home.html" class="bottom-nav__item"><i class="ti ti-home"></i><span>Home</span></a>
+    <a href="cursos.html" class="bottom-nav__item active"><i class="ti ti-book-2"></i><span>Cursos</span></a>
+    <a href="conquistas.html" class="bottom-nav__item"><i class="ti ti-trophy"></i><span>Conquistas</span></a>
+    <a href="perfil.html" class="bottom-nav__item"><i class="ti ti-user"></i><span>Perfil</span></a>
+  </nav>
+
+</div>
+
+<script src="../../js/app.js"></script>
+<script>
+function onPageLoad() {
+  if (!TQ.questoes) return;
+
+  // Pega resultado da sessão (default: prova_csharp)
+  const raw = sessionStorage.getItem('tq_resultado');
+  const resultado = raw ? JSON.parse(raw) : { prova: 'prova_csharp', acertos: 8, total: 10, nota: '8.5' };
+  const provaKey = resultado.prova || 'prova_csharp';
+  const prova = TQ.questoes[provaKey];
+  if (!prova) return;
+
+  document.getElementById('provaTitulo').textContent = prova.titulo;
+  document.getElementById('provaSubtitulo').textContent = 'Curso: ' + prova.curso;
+
+  // Resumo
+  const aprovado = resultado.aprovado !== false;
+  document.getElementById('resumoCard').innerHTML = `
+    <div class="flex justify-between items-center mb-md" style="flex-wrap:wrap; gap:var(--space-md);">
+      <div>
+        <span class="badge badge--${aprovado ? 'success' : 'danger'}">${aprovado ? 'APROVADO' : 'REPROVADO'}</span>
+        <div class="font-bold mt-sm" style="font-size:22px;">${resultado.nota.toString().replace('.', ',')} / 10</div>
+      </div>
+      <div class="text-right">
+        <div class="text-xs text-muted font-semibold" style="letter-spacing:1px;">ACERTOS</div>
+        <div class="font-bold" style="font-size:22px;">${resultado.acertos} <span class="text-muted" style="font-size:14px;">de ${resultado.total}</span></div>
+      </div>
+    </div>
+    <div class="progress">
+      <div class="progress__fill ${aprovado ? '' : 'progress__fill--danger'}" style="width:${(resultado.acertos / resultado.total) * 100}%; background:${aprovado ? 'var(--color-success)' : 'var(--color-danger)'};"></div>
+    </div>
+  `;
+
+  // Lista de questões com gabarito
+  // Simula respostas: as primeiras `acertos` foram acertadas, o resto não
+  const respostasUsuario = {};
+  prova.questoes.forEach((q, i) => {
+    if (i < resultado.acertos) {
+      respostasUsuario[i] = q.resposta_correta;
+    } else {
+      // Pega uma alternativa errada
+      const letras = Object.keys(q.alternativas).filter(l => l !== q.resposta_correta);
+      respostasUsuario[i] = letras[0];
+    }
+  });
+
+  const list = document.getElementById('questoesList');
+  list.innerHTML = prova.questoes.map((q, i) => {
+    const respostaUsuario = respostasUsuario[i];
+    const correta = respostaUsuario === q.resposta_correta;
+    const corBorda = correta ? 'success' : 'danger';
+
+    let codigoHtml = '';
+    if (q.codigo) {
+      codigoHtml = `<div class="code-block"><div class="code-block__header"><span>EXEMPLO • C#</span></div><pre>${q.codigo.replace(/</g, '&lt;')}</pre></div>`;
+    }
+
+    const alternativasHtml = Object.keys(q.alternativas).map(letra => {
+      const isCorreta = letra === q.resposta_correta;
+      const isResposta = letra === respostaUsuario;
+      let bg = '', icon = '', textColor = '';
+      if (isCorreta) {
+        bg = 'background:var(--color-success-light); border-color:var(--color-success);';
+        icon = '<i class="ti ti-check text-success" style="margin-left:auto;"></i>';
+        textColor = 'color:var(--color-success-dark);';
+      } else if (isResposta) {
+        bg = 'background:var(--color-danger-light); border-color:var(--color-danger);';
+        icon = '<i class="ti ti-x text-danger" style="margin-left:auto;"></i>';
+        textColor = 'color:var(--color-danger-dark);';
+      }
+      return `<div class="flex items-center gap-md" style="padding:var(--space-sm) var(--space-md); border:1px solid var(--color-border); border-radius:var(--radius-md); margin-bottom:var(--space-xs); ${bg}">
+        <div style="width:28px; height:28px; border-radius:6px; background:var(--color-surface); display:flex; align-items:center; justify-content:center; font-weight:700; font-size:13px; flex-shrink:0;">${letra}</div>
+        <span class="text-sm" style="flex:1; ${textColor}">${q.alternativas[letra]}</span>
+        ${icon}
+      </div>`;
+    }).join('');
+
+    return `<div class="card" style="border-left:4px solid var(--color-${corBorda});">
+      <div class="flex justify-between items-center mb-md">
+        <strong class="text-sm">Questão ${String(i+1).padStart(2,'0')}</strong>
+        <span class="badge badge--${corBorda}">${correta ? '✓ Correta' : '✗ Incorreta'}</span>
+      </div>
+      <p class="mb-md" style="line-height:1.6;">${q.enunciado}</p>
+      ${codigoHtml}
+      ${alternativasHtml}
+      ${!correta ? `<div class="tip-box" style="margin-top:var(--space-md);">
+        <div class="tip-box__icon"><i class="ti ti-bulb"></i></div>
+        <div>
+          <div class="tip-box__title">Resposta correta: ${q.resposta_correta}</div>
+          <div class="tip-box__text">${q.alternativas[q.resposta_correta]}</div>
+        </div>
+      </div>` : ''}
+    </div>`;
+  }).join('');
+}
+</script>
+</body>
+</html>
