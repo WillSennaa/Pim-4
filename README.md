@@ -10,9 +10,9 @@ Em desenvolvimento
 
 | ID | Atividade | Prioridade | Sprint | Situação |
 | :---: | :--- | :---: | :---: | :---: |
-| 1 | Mapear e criar o modelo físico no SQL Server | ALTA | 01 | A FAZER |
-| 2 | Implementar Stored Procedures e Triggers no banco SQL | ALTA | 01 | A FAZER |
-| 3 | Configurar e hospedar o banco SQL Server em nuvem | ALTA | 01 | A FAZER |
+| 1 | Mapear e criar o modelo físico no SQL Server | ALTA | 01 | CONCLUÍDO |
+| 2 | Implementar Stored Procedures e Triggers no banco SQL | ALTA | 01 | CONCLUÍDO |
+| 3 | Configurar e hospedar o banco SQL Server em nuvem | ALTA | 01 | CONCLUÍDO |
 | 4 | Estruturar projeto Backend em C# (.NET API REST) | ALTA | 01 | A FAZER |
 | 5 | Criar endpoints da API C# para autenticação e dados | ALTA | 02 | A FAZER |
 | 6 | Refatorar Web (HTML/CSS/JS) trocando JSON por fetch/API | ALTA | 02 | A FAZER |
