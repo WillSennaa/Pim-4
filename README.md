@@ -6,20 +6,20 @@ Desenvolver o projeto de uma plataforma web de avaliação e apoio à aprendizag
 # Status do Projeto
 Em desenvolvimento
 
-### Backlog de Atividades
+### Product Backlog
 
-| ID | Atividade | Prioridade | Sprint | Situação |
-| :---: | :--- | :---: | :---: | :---: |
-| 1 | Mapear e criar o modelo físico no SQL Server | ALTA | 01 | CONCLUÍDO |
-| 2 | Implementar Stored Procedures e Triggers no banco SQL | ALTA | 01 | CONCLUÍDO |
-| 3 | Configurar e hospedar o banco SQL Server em nuvem | ALTA | 01 | CONCLUÍDO |
-| 4 | Estruturar projeto Backend em C# (.NET API REST) | ALTA | 01 | A FAZER |
-| 5 | Criar endpoints da API C# para autenticação e dados | ALTA | 02 | A FAZER |
-| 6 | Refatorar Web (HTML/CSS/JS) trocando JSON por fetch/API | ALTA | 02 | A FAZER |
-| 7 | Desenvolver Aplicação Desktop em C# (Perfil Admin) | ALTA | 03 | A FAZER |
-| 8 | Desenvolver Aplicação Mobile em React Native (Alunos/Profs) | ALTA | 03 | A FAZER |
-| 9 | Integrar aplicações Web, Desktop e Mobile à API C# | ALTA | 03 | A FAZER |
-| 10 | Testar integração ponta a ponta e elaborar relatório PIM | ALTA | 03 | A FAZER |
+| ID | Item / Funcionalidade | Prioridade | Requisito | Estimativa (Pts) | Situação |
+| :---: | :--- | :---: | :---: | :---: | :---: |
+| **PB01** | Mapear e criar o modelo físico no SQL Server | ALTA | Infra DB | 8 | **CONCLUÍDO** |
+| **PB02** | Implementar Stored Procedures e Triggers no banco SQL | ALTA | RF11, RF12 | 5 | **CONCLUÍDO** |
+| **PB03** | Configurar e hospedar o banco SQL Server em nuvem (Azure) | ALTA | Infra Cloud | 3 | **CONCLUÍDO** |
+| **PB04** | Estruturar projeto Backend em C# (.NET Core REST API) | ALTA | Arquitetura | 8 | **EM ANDAMENTO** |
+| **PB05** | Configurar conexão DB (Entity Framework) e Autenticação JWT | ALTA | RF02, RNF01 | 5 | A FAZER |
+| **PB06** | Criar endpoints REST para Cursos, Provas e Suporte | ALTA | RF03-RF10 | 8 | A FAZER |
+| **PB07** | Refatorar Web (HTML/CSS/JS) trocando JSON por requisições `fetch`/API | ALTA | RNF03 | 8 | A FAZER |
+| **PB08** | Desenvolver Aplicação Desktop em C# (Perfil Administrador) | ALTA | RF01, RF11, RF12 | 8 | A FAZER |
+| **PB09** | Desenvolver Aplicação Mobile em React Native (Alunos e Professores) | ALTA | RF05, RF06, RF08 | 8 | A FAZER |
+| **PB10** | Realizar testes de integração ponta a ponta e relatório ABNT PIM IV | ALTA | Geral | 5 | A FAZER |
 
 ### Requisitos Funcionais
 
@@ -49,10 +49,12 @@ Em desenvolvimento
 ### Cronograma de Sprints
 
 | Sprint | Periodo | Objetivo |
-| :---: | :---: | :---: |
-| 01 | 31/08 - 14/09 | Modelagem do Banco SQL Server em Nuvem e Estruturação da API C# |
-| 02 | 15/09 - 05/10 | Implementação dos Endpoints REST C# e Refatoração da Versão Web |
-| 03 | 06/10 - 27/10 | Desenvolvimento das Aplicações Desktop (C#) e Mobile (React Native) |
+| :---: | :---: | :--- |
+| **01** | 31/08 - 14/09 | Modelagem do Banco SQL Server em Nuvem, Stored Procedures e Triggers |
+| **02** | 15/09 - 28/09 | Estruturação do Projeto Backend em C# (.NET API REST) e Conexão DB |
+| **03** | 29/09 - 13/10 | Implementação dos Endpoints REST e Refatoração da Versão Web |
+| **04** | 14/10 - 28/10 | Desenvolvimento da Aplicação Desktop em C# (Perfil Administrador) |
+| **05** | 29/10 - 15/11 | Desenvolvimento Mobile (React Native), Testes Integrados e Relatório PIM |
 
 ### DoR - Definition of Ready
 
@@ -85,7 +87,7 @@ Em desenvolvimento
 
 | NOME | RA | PAPEL | GIT |
 | :---: | :---: | :---: | :---: |
-| Diego Santos Rodrigues | R862JH7 | Scrum Master | [![GitHub](https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColor=white)](https://github.com/dsr-23) |
+| Diego Santos Rodrigues | R862JH7 | Scrum Master | [![GitHub](https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColor=white)](https://github.com/DiegoSantossRodrigues) |
 | Willian Augusto Quincas Senna | H78BIA3 | Dev | [![GitHub](https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColor=white)](https://github.com/WillSennaa) |
 | Cauã Brandão da Costa | R8327B0 | Product Owner | [![GitHub](https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColor=white)](https://github.com/Caua-Brandao) |
 | Luiz Gustavo da Silva Borges | H4062J7 | Dev | [![GitHub](https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColor=white)](https://github.com/LuizBorges16) |
