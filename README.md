@@ -56,6 +56,20 @@ Em desenvolvimento
 | **04** | 14/10 - 28/10 | Desenvolvimento da Aplicação Desktop em C# (Perfil Administrador) |
 | **05** | 29/10 - 15/11 | Desenvolvimento Mobile (React Native), Testes Integrados e Relatório PIM |
 
+### 📋 Quadro Kanban (Status do Projeto)
+
+| 🔴 A FAZER (To Do) | 🟡 EM ANDAMENTO (In Progress) | 🟢 CONCLUÍDO (Done) |
+| :--- | :--- | :--- |
+| **[Backend/API]** Configurar String de Conexão no `appsettings.json` via Entity Framework Core<br>*(Resp: Luiz Borges • Sprint 02)* | **[Backend/API]** Estruturar projeto Backend em C# (.NET API REST - Controllers, Models, Repositories)<br>*(Resp: Luiz Borges • Sprint 02)* | **[Banco de Dados]** Mapear e criar o modelo físico no SQL Server (Tabelas, PKs, FKs)<br>*(Resp: Diego Santos • Sprint 01)* |
+| **[Segurança]** Implementar Autenticação JWT e criptografia Hash de senhas (BCrypt)<br>*(Resp: Willian Senna • Sprint 02)* | | **[Banco de Dados]** Implementar Stored Procedure (`SP_RelatorioDesempenhoEstudante`) e Trigger (`TRG_Auditoria_StatusUsuario`) <br>*(Resp: Willian Senna • Sprint 01)* |
+| **[Backend/API]** Criar endpoints REST para Cursos, Provas, Chamados e Desempenho<br>*(Resp: Willian Senna • Sprint 03)* | | **[Infra/Nuvem]** Provisionar o Azure SQL Database e executar o script DDL na nuvem<br>*(Resp: Cauã Brandão • Sprint 01)* |
+| **[Web]** Refatorar chamadas JavaScript da Aplicação Web trocando arquivos JSON por `fetch`/`axios`<br>*(Resp: Diego Santos • Sprint 03)* | | |
+| **[Integrador]** Testar integração inicial entre Frontend Web e Backend C#<br>*(Resp: Cauã Brandão • Sprint 03)* | | |
+| **[Desktop]** Desenvolver Aplicação Desktop em C# voltada ao Perfil Administrador (Moderação/Logs/Dashboards)<br>*(Resp: Diego Santos / Luiz Borges • Sprint 04)* | | |
+| **[Mobile]** Desenvolver Aplicação Mobile em React Native (Expo) para Alunos e Professores<br>*(Resp: Cauã Brandão / Willian Senna • Sprint 05)* | | |
+| **[QA/Integrador]** Realizar testes de integração ponta a ponta (Web, Desktop, Mobile, API e SQL Cloud)<br>*(Resp: Diego Santos / Luiz Borges • Sprint 05)* | | |
+| **[Documentação]** Redigir relatório acadêmico final no padrão ABNT PIM IV<br>*(Resp: Toda a Equipe • Sprint 05)* | | |
+
 ### DoR - Definition of Ready
 
 * **Revisão da Base do PIM III:** Requisitos (RF/RNF), protótipos e estrutura de telas do PIM III revisados e prontos para integração.
