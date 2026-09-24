@@ -13,10 +13,10 @@ Em desenvolvimento
 | **PB01** | Mapear e criar o modelo físico no SQL Server | ALTA | Infra DB | 8 | **CONCLUÍDO** |
 | **PB02** | Implementar Stored Procedures e Triggers no banco SQL | ALTA | RF11, RF12 | 5 | **CONCLUÍDO** |
 | **PB03** | Configurar e hospedar o banco SQL Server em nuvem (Azure) | ALTA | Infra Cloud | 3 | **CONCLUÍDO** |
-| **PB04** | Estruturar projeto Backend em C# (.NET Core REST API) | ALTA | Arquitetura | 8 | **EM ANDAMENTO** |
-| **PB05** | Configurar conexão DB (Entity Framework) e Autenticação JWT | ALTA | RF02, RNF01 | 5 | A FAZER |
-| **PB06** | Criar endpoints REST para Cursos, Provas e Suporte | ALTA | RF03-RF10 | 8 | A FAZER |
-| **PB07** | Refatorar Web (HTML/CSS/JS) trocando JSON por requisições `fetch`/API | ALTA | RNF03 | 8 | A FAZER |
+| **PB04** | Estruturar projeto Backend em C# (.NET Core REST API) | ALTA | Arquitetura | 8 | **CONCLUÍDO** |
+| **PB05** | Configurar conexão DB (Entity Framework) e Autenticação JWT | ALTA | RF02, RNF01 | 5 | **CONCLUÍDO** |
+| **PB06** | Criar endpoints REST para Cursos, Provas e Suporte | ALTA | RF03-RF10 | 8 | **CONCLUÍDO** |
+| **PB07** | Refatorar Web (HTML/CSS/JS) trocando JSON por requisições `fetch`/API | ALTA | RNF03 | 8 | **EM ANDAMENTO** |
 | **PB08** | Desenvolver Aplicação Desktop em C# (Perfil Administrador) | ALTA | RF01, RF11, RF12 | 8 | A FAZER |
 | **PB09** | Desenvolver Aplicação Mobile em React Native (Alunos e Professores) | ALTA | RF05, RF06, RF08 | 8 | A FAZER |
 | **PB10** | Realizar testes de integração ponta a ponta e relatório ABNT PIM IV | ALTA | Geral | 5 | A FAZER |
@@ -60,15 +60,13 @@ Em desenvolvimento
 
 | 🔴 A FAZER (To Do) | 🟡 EM ANDAMENTO (In Progress) | 🟢 CONCLUÍDO (Done) |
 | :--- | :--- | :--- |
-| **[Backend/API]** Configurar String de Conexão no `appsettings.json` via Entity Framework Core<br>*(Resp: Luiz Borges • Sprint 02)* | **[Backend/API]** Estruturar projeto Backend em C# (.NET API REST - Controllers, Models, Repositories)<br>*(Resp: Luiz Borges • Sprint 02)* | **[Banco de Dados]** Mapear e criar o modelo físico no SQL Server (Tabelas, PKs, FKs)<br>*(Resp: Diego Santos • Sprint 01)* |
-| **[Segurança]** Implementar Autenticação JWT e criptografia Hash de senhas (BCrypt)<br>*(Resp: Willian Senna • Sprint 02)* | | **[Banco de Dados]** Implementar Stored Procedure (`SP_RelatorioDesempenhoEstudante`) e Trigger (`TRG_Auditoria_StatusUsuario`) <br>*(Resp: Willian Senna • Sprint 01)* |
-| **[Backend/API]** Criar endpoints REST para Cursos, Provas, Chamados e Desempenho<br>*(Resp: Willian Senna • Sprint 03)* | | **[Infra/Nuvem]** Provisionar o Azure SQL Database e executar o script DDL na nuvem<br>*(Resp: Cauã Brandão • Sprint 01)* |
-| **[Web]** Refatorar chamadas JavaScript da Aplicação Web trocando arquivos JSON por `fetch`/`axios`<br>*(Resp: Diego Santos • Sprint 03)* | | |
-| **[Integrador]** Testar integração inicial entre Frontend Web e Backend C#<br>*(Resp: Cauã Brandão • Sprint 03)* | | |
-| **[Desktop]** Desenvolver Aplicação Desktop em C# voltada ao Perfil Administrador (Moderação/Logs/Dashboards)<br>*(Resp: Diego Santos / Luiz Borges • Sprint 04)* | | |
-| **[Mobile]** Desenvolver Aplicação Mobile em React Native (Expo) para Alunos e Professores<br>*(Resp: Cauã Brandão / Willian Senna • Sprint 05)* | | |
-| **[QA/Integrador]** Realizar testes de integração ponta a ponta (Web, Desktop, Mobile, API e SQL Cloud)<br>*(Resp: Diego Santos / Luiz Borges • Sprint 05)* | | |
-| **[Documentação]** Redigir relatório acadêmico final no padrão ABNT PIM IV<br>*(Resp: Toda a Equipe • Sprint 05)* | | |
+| **[Integrador]** Testar integração inicial entre Frontend Web e Backend C#<br>*(Resp: Cauã Brandão • Sprint 03)* | **[Web]** Refatorar chamadas JavaScript da Aplicação Web trocando arquivos JSON por `fetch`/`axios`<br>*(Resp: Diego Santos • Sprint 03)* | **[Banco de Dados]** Mapear e criar o modelo físico no SQL Server (Tabelas, PKs, FKs)<br>*(Resp: Diego Santos • Sprint 01)* |
+| **[Desktop]** Desenvolver Aplicação Desktop em C# voltada ao Perfil Administrador (Moderação/Logs/Dashboards)<br>*(Resp: Diego Santos / Luiz Borges • Sprint 04)* | | **[Banco de Dados]** Implementar Stored Procedure (`SP_RelatorioDesempenhoEstudante`) e Trigger (`TRG_Auditoria_StatusUsuario`) <br>*(Resp: Willian Senna • Sprint 01)* |
+| **[Mobile]** Desenvolver Aplicação Mobile em React Native (Expo) para Alunos e Professores<br>*(Resp: Cauã Brandão / Willian Senna • Sprint 05)* | | **[Infra/Nuvem]** Provisionar o Azure SQL Database e executar o script DDL na nuvem<br>*(Resp: Cauã Brandão • Sprint 01)* |
+| **[QA/Integrador]** Realizar testes de integração ponta a ponta (Web, Desktop, Mobile, API e SQL Cloud)<br>*(Resp: Diego Santos / Luiz Borges • Sprint 05)* | | **[Backend/API]** Estruturar projeto Backend em C# (.NET API REST - Controllers, Models, Repositories)<br>*(Resp: Luiz Borges • Sprint 02)* |
+| **[Documentação]** Redigir relatório acadêmico final no padrão ABNT PIM IV<br>*(Resp: Toda a Equipe • Sprint 05)* | | **[Backend/API]** Configurar String de Conexão no `appsettings.json` via Entity Framework Core<br>*(Resp: Luiz Borges • Sprint 02)* |
+| | | **[Segurança]** Implementar Autenticação JWT e criptografia Hash de senhas (BCrypt)<br>*(Resp: Willian Senna • Sprint 02)* |
+| | | **[Backend/API]** Criar endpoints REST para Cursos, Provas, Chamados e Desempenho<br>*(Resp: Willian Senna • Sprint 03)* |
 
 ### DoR - Definition of Ready
 
@@ -91,7 +89,7 @@ Em desenvolvimento
 
 | Camada / Frente | Tecnologias / Ferramentas | Descrição e Aplicação |
 | :--- | :--- | :--- |
-| **Banco de Dados** | Microsoft SQL Server | Relacional, Stored Procedures, Triggers e Índices[cite: 2] |
+| **Banco de Dados** | Microsoft SQL Server | Relacional, Stored Procedures, Triggers e Índices |
 | **Backend & API** | C# / .NET Core REST API | Regras de negócio, Controllers, Entity Framework / Dapper e Autenticação JWT |
 | **Aplicação Web** | HTML5, CSS3, JavaScript | Interface completa (Acesso Geral) integrada à API via `fetch`/`axios` |
 | **Aplicação Desktop** | C# (.NET WPF / WinForms) | Painel exclusivo para Administradores (Moderação, Auditoria/Logs e Dashboards) |
