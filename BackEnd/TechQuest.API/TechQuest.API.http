@@ -1,0 +1,89 @@
+@host = https://localhost:7001
+
+### 1. Conexao com o banco
+GET {{host}}/api/health
+
+### 2. Login do estudante
+# @name login
+POST {{host}}/api/auth/login
+Content-Type: application/json
+
+{ "email": "felipe123@gmail.com", "senha": "aluno123@" }
+
+@token = {{login.response.body.token}}
+
+### 3. Perfil (XP e nivel calculados)
+GET {{host}}/api/perfil
+Authorization: Bearer {{token}}
+
+### 4. Cursos
+GET {{host}}/api/cursos
+Authorization: Bearer {{token}}
+
+### 5. Detalhe do curso
+GET {{host}}/api/cursos/1
+Authorization: Bearer {{token}}
+
+### 6. Matricular no curso 1
+POST {{host}}/api/cursos/1/matricula
+Authorization: Bearer {{token}}
+
+### 7. Concluir a aula 1 (repare no XP e nas medalhas na resposta)
+PUT {{host}}/api/materiais/1/progresso
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{ "concluido": true, "porcentagemAssistida": 100 }
+
+### 8. Prova (sem gabarito)
+GET {{host}}/api/provas/1
+Authorization: Bearer {{token}}
+
+### 9. Submeter tentativa
+POST {{host}}/api/provas/1/tentativas
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "respostas": [
+    { "idQuestao": 1, "letra": "B" },
+    { "idQuestao": 2, "letra": "A" }
+  ]
+}
+
+### 10. Historico do estudante
+GET {{host}}/api/perfil/historico
+Authorization: Bearer {{token}}
+
+### 11. Medalhas (conquistadas e bloqueadas)
+GET {{host}}/api/perfil/conquistas
+Authorization: Bearer {{token}}
+
+### 12. Certificados emitidos
+GET {{host}}/api/perfil/certificados
+Authorization: Bearer {{token}}
+
+### 13. Relatorio de desempenho - executa a PROCEDURE do banco
+GET {{host}}/api/perfil/desempenho
+Authorization: Bearer {{token}}
+
+### 14. Editar perfil
+PUT {{host}}/api/perfil
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{ "telefone": "(12) 99999-0000", "dataNascimento": "2003-05-14", "cidade": "São José dos Campos" }
+
+### 15. Abrir duvida para o tutor (ID_Usuario do tutor = 2)
+POST {{host}}/api/chamados
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{ "tipo": "Duvida", "assunto": "Sobre listas em C#", "descricao": "Qual a diferenca entre List e Array?", "idDestinatario": 2 }
+
+### 16. Minha caixa de chamados
+GET {{host}}/api/chamados
+Authorization: Bearer {{token}}
+
+### 17. Validar certificado - PUBLICO, sem token (troque pelo codigo real)
+GET {{host}}/api/certificados/00000000-0000-0000-0000-000000000000

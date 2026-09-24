@@ -1,0 +1,28 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.11.1" />
+    <PackageReference Include="xunit" Version="2.9.2" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.8.2" />
+  </ItemGroup>
+
+  <!--
+    Referencia APENAS o Domain. Nao ha banco, nao ha HTTP, nao ha EF Core nos
+    testes: as regras de negocio sao classes sem dependencia, e e isso que
+    torna a suite instantanea e deterministica. Se fosse preciso subir um
+    banco para testar o calculo de XP, a arquitetura em camadas nao estaria
+    cumprindo o que promete.
+  -->
+  <ItemGroup>
+    <ProjectReference Include="..\TechQuest.Domain\TechQuest.Domain.csproj" />
+  </ItemGroup>
+
+</Project>

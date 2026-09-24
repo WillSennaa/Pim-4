@@ -1,0 +1,7 @@
+<Solution>
+  <Project Path="TechQuest.API/TechQuest.API.csproj" />
+  <Project Path="TechQuest.Application/TechQuest.Application.csproj" />
+  <Project Path="TechQuest.Domain/TechQuest.Domain.csproj" />
+  <Project Path="TechQuest.Infrastructure/TechQuest.Infrastructure.csproj" />
+  <Project Path="TechQuest.Tests/TechQuest.Tests.csproj" />
+</Solution>

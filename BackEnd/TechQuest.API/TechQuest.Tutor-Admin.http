@@ -1,0 +1,192 @@
+@host = https://localhost:7001
+
+##############################################
+# TUTOR
+##############################################
+
+### T1. Login do tutor
+# @name loginTutor
+POST {{host}}/api/auth/login
+Content-Type: application/json
+
+{ "email": "tutor123@gmail.com", "senha": "tutor123@" }
+
+@tokenTutor = {{loginTutor.response.body.token}}
+
+### T2. Meus cursos
+GET {{host}}/api/tutor/cursos
+Authorization: Bearer {{tokenTutor}}
+
+### T3. Criar curso (nasce como Rascunho)
+# @name novoCurso
+POST {{host}}/api/tutor/cursos
+Authorization: Bearer {{tokenTutor}}
+Content-Type: application/json
+
+{
+  "nome": "Lógica de Programação",
+  "descricao": "Fundamentos de algoritmos e estruturas de decisão.",
+  "categoria": "PROGRAMMING",
+  "nivel": "INICIANTE",
+  "duracaoHoras": 8
+}
+
+@idCurso = {{novoCurso.response.body.id}}
+
+### T4. Adicionar aula
+POST {{host}}/api/tutor/cursos/{{idCurso}}/aulas
+Authorization: Bearer {{tokenTutor}}
+Content-Type: application/json
+
+{ "titulo": "O que é um algoritmo", "tipo": "video" }
+
+### T5. Criar a prova do curso
+# @name novaProva
+POST {{host}}/api/tutor/cursos/{{idCurso}}/prova
+Authorization: Bearer {{tokenTutor}}
+Content-Type: application/json
+
+{ "titulo": "Prova de Lógica", "notaMinima": 7.0, "tempoMinutos": 20 }
+
+@idProva = {{novaProva.response.body.id}}
+
+### T6. Adicionar questão
+POST {{host}}/api/tutor/provas/{{idProva}}/questoes
+Authorization: Bearer {{tokenTutor}}
+Content-Type: application/json
+
+{
+  "enunciado": "Qual estrutura repete um bloco enquanto a condição for verdadeira?",
+  "codigoExemplo": null,
+  "ordem": 1,
+  "alternativas": [
+    { "letra": "A", "texto": "if", "ehCorreta": false },
+    { "letra": "B", "texto": "while", "ehCorreta": true },
+    { "letra": "C", "texto": "switch", "ehCorreta": false },
+    { "letra": "D", "texto": "return", "ehCorreta": false }
+  ]
+}
+
+### T7. Questão com DUAS corretas - deve dar 400
+POST {{host}}/api/tutor/provas/{{idProva}}/questoes
+Authorization: Bearer {{tokenTutor}}
+Content-Type: application/json
+
+{
+  "enunciado": "Teste de validação",
+  "ordem": 2,
+  "alternativas": [
+    { "letra": "A", "texto": "uma", "ehCorreta": true },
+    { "letra": "B", "texto": "outra", "ehCorreta": true }
+  ]
+}
+
+### T8. Submeter para avaliação (Rascunho -> Pendente)
+POST {{host}}/api/tutor/cursos/{{idCurso}}/submeter
+Authorization: Bearer {{tokenTutor}}
+
+### T9. Editar depois de submetido - deve dar 400 (curso travado)
+PUT {{host}}/api/tutor/cursos/{{idCurso}}
+Authorization: Bearer {{tokenTutor}}
+Content-Type: application/json
+
+{ "nome": "Tentando editar", "descricao": null, "categoria": null, "nivel": null, "duracaoHoras": 8 }
+
+### T10. Curso de outro tutor - deve dar 403
+PUT {{host}}/api/tutor/cursos/1
+Authorization: Bearer {{tokenTutor}}
+Content-Type: application/json
+
+{ "nome": "Sequestrando curso alheio", "descricao": null, "categoria": null, "nivel": null, "duracaoHoras": 1 }
+
+### T11. Meus alunos, com progresso e melhor nota
+GET {{host}}/api/tutor/alunos
+Authorization: Bearer {{tokenTutor}}
+
+### T12. Conceder medalha manual (estudante 1, medalha 2)
+POST {{host}}/api/tutor/estudantes/1/medalhas/2
+Authorization: Bearer {{tokenTutor}}
+
+##############################################
+# ADMIN
+##############################################
+
+### A1. Login do admin
+# @name loginAdmin
+POST {{host}}/api/auth/login
+Content-Type: application/json
+
+{ "email": "admin123@gmail.com", "senha": "admin123@" }
+
+@tokenAdmin = {{loginAdmin.response.body.token}}
+
+### A2. Painel
+GET {{host}}/api/admin/resumo
+Authorization: Bearer {{tokenAdmin}}
+
+### A3. Cursos pendentes de avaliação
+GET {{host}}/api/admin/cursos
+Authorization: Bearer {{tokenAdmin}}
+
+### A4. Rejeitar o curso (gera chamado para o tutor)
+POST {{host}}/api/admin/cursos/{{idCurso}}/rejeitar
+Authorization: Bearer {{tokenAdmin}}
+Content-Type: application/json
+
+{ "motivo": "Adicione pelo menos três aulas antes de publicar." }
+
+### A5. Tutor vê a rejeição na caixa de chamados
+GET {{host}}/api/chamados
+Authorization: Bearer {{tokenTutor}}
+
+### A6. Tutor corrige e submete de novo (Rejeitado -> Pendente)
+POST {{host}}/api/tutor/cursos/{{idCurso}}/submeter
+Authorization: Bearer {{tokenTutor}}
+
+### A7. Aprovar (Pendente -> Publicado)
+POST {{host}}/api/admin/cursos/{{idCurso}}/aprovar
+Authorization: Bearer {{tokenAdmin}}
+
+### A8. Aprovar de novo - deve dar 400 (Publicado é estado final)
+POST {{host}}/api/admin/cursos/{{idCurso}}/aprovar
+Authorization: Bearer {{tokenAdmin}}
+
+### A9. Usuários
+GET {{host}}/api/admin/usuarios
+Authorization: Bearer {{tokenAdmin}}
+
+### A10. Criar usuário (senha vai com hash BCrypt)
+POST {{host}}/api/admin/usuarios
+Authorization: Bearer {{tokenAdmin}}
+Content-Type: application/json
+
+{ "nome": "Marina Lopes", "email": "marina@techquest.com", "senha": "marina123@", "papel": "Tutor" }
+
+### A11. Desativar usuário - AQUI A TRIGGER DISPARA
+PATCH {{host}}/api/admin/usuarios/3/status
+Authorization: Bearer {{tokenAdmin}}
+Content-Type: application/json
+
+{ "ativo": false }
+
+### A12. Log de auditoria - a linha do A11 foi criada pela TRIGGER,
+###      a linha do A7 foi criada pela API
+GET {{host}}/api/admin/logs
+Authorization: Bearer {{tokenAdmin}}
+
+### A13. Login do usuário desativado - deve dar 401
+POST {{host}}/api/auth/login
+Content-Type: application/json
+
+{ "email": "felipe123@gmail.com", "senha": "aluno123@" }
+
+### A14. Reativar
+PATCH {{host}}/api/admin/usuarios/3/status
+Authorization: Bearer {{tokenAdmin}}
+Content-Type: application/json
+
+{ "ativo": true }
+
+### A15. Estudante tentando o painel do admin - deve dar 403
+GET {{host}}/api/admin/resumo
+Authorization: Bearer {{tokenTutor}}
