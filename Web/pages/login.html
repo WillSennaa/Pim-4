@@ -56,6 +56,8 @@
       </form>
     </div>
 
+    <div id="statusApi" class="text-center mb-md"></div>
+
     <p class="text-center text-secondary text-sm mt-lg">
       Não tem conta? <a href="cadastro.html" class="form-link" style="border:1.5px dashed var(--color-primary); padding:2px 8px; border-radius:4px;">Cadastre-se</a>
     </p>
@@ -64,7 +66,7 @@
     <div class="card mt-lg animate-in animate-in-delay-2" style="background:var(--color-surface-2); border:1.5px dashed var(--color-primary);">
       <div class="text-center mb-md">
         <span class="badge badge--primary"><i class="ti ti-flask"></i> MODO DEMONSTRAÇÃO</span>
-        <p class="text-xs text-muted mt-sm">Escolha o nível de acesso. Você ainda precisará digitar e-mail e senha.</p>
+        <p class="text-xs text-muted mt-sm">Preenche as credenciais de teste. A validação e o perfil de acesso são definidos pelo servidor.</p>
       </div>
       <div class="flex flex-col gap-sm">
         <button type="button" class="btn btn--primary btn--full btn--sm" onclick="selecionarPersona('estudante')" id="btnEstudante">
@@ -95,9 +97,21 @@
 
 </div>
 
+<script src="../js/api.js"></script>
 <script src="../js/app.js"></script>
 <script>
-// Credenciais válidas para cada persona
+/* --------------------------------------------------------------------------
+   Preenchimento das credenciais de teste.
+
+   MUDANÇA IMPORTANTE EM RELAÇÃO AO PIM III: este bloco NÃO valida mais nada
+   e NÃO decide mais para onde o usuário vai. Antes, o e-mail e a senha de
+   cada perfil estavam escritos aqui, no JavaScript baixado pelo navegador, e
+   o perfil de acesso era escolhido pelo próprio usuário no localStorage —
+   ou seja, qualquer pessoa entrava como Admin editando um valor no DevTools.
+
+   Agora os botões apenas PREENCHEM o formulário. A senha é verificada no
+   servidor contra o hash BCrypt, e o perfil vem dentro do token assinado.
+   -------------------------------------------------------------------------- */
 const CREDS = {
   estudante: { email: 'felipe123@gmail.com', senha: 'aluno123@', label: 'Estudante (Felipe)' },
   tutor:     { email: 'tutor123@gmail.com',  senha: 'tutor123@', label: 'Tutor (Ana)' },
@@ -106,64 +120,61 @@ const CREDS = {
 
 function selecionarPersona(p) {
   localStorage.setItem('tq_persona', p);
-  // Atualiza visual dos botões
+
   ['estudante', 'tutor', 'admin'].forEach(k => {
     const btn = document.getElementById('btn' + k.charAt(0).toUpperCase() + k.slice(1));
-    if (btn) {
-      btn.classList.remove('btn--primary');
-      btn.classList.add('btn--secondary');
-    }
+    if (btn) { btn.classList.remove('btn--primary'); btn.classList.add('btn--secondary'); }
   });
   const ativo = document.getElementById('btn' + p.charAt(0).toUpperCase() + p.slice(1));
-  if (ativo) {
-    ativo.classList.remove('btn--secondary');
-    ativo.classList.add('btn--primary');
-  }
-  // Atualiza label e credenciais visíveis
-  document.getElementById('personaLabel').innerHTML = 'Acessando como <strong>' + CREDS[p].label.split(' ')[0] + '</strong>';
+  if (ativo) { ativo.classList.remove('btn--secondary'); ativo.classList.add('btn--primary'); }
+
+  document.getElementById('personaLabel').innerHTML =
+    'Acessando como <strong>' + CREDS[p].label.split(' ')[0] + '</strong>';
   document.getElementById('credenciaisInfo').innerHTML =
     '<div><strong>E-mail:</strong> ' + CREDS[p].email + '</div>' +
     '<div><strong>Senha:</strong> ' + CREDS[p].senha + '</div>';
-  // Esconde erro se aparecer
+
   document.getElementById('erroLogin').style.display = 'none';
-  // Limpa campos
-  document.getElementById('email').value = '';
-  document.getElementById('senha').value = '';
+
+  // Preenche o formulário para a demonstração ser rápida. Quem estiver
+  // testando pode apagar e digitar credenciais erradas: o servidor recusa.
+  document.getElementById('email').value = CREDS[p].senha ? CREDS[p].email : '';
+  document.getElementById('senha').value = CREDS[p].senha;
 }
 
-function fazerLogin(event) {
-  if (event) event.preventDefault();
-  const email = document.getElementById('email').value.trim().toLowerCase();
-  const senha = document.getElementById('senha').value;
-  const persona = localStorage.getItem('tq_persona') || 'estudante';
-  const creds = CREDS[persona];
+/* fazerLogin() e fazerCadastro() vivem em js/app.js e falam com a API. */
 
-  // Valida credenciais
-  if (email !== creds.email.toLowerCase() || senha !== creds.senha) {
-    document.getElementById('erroLogin').style.display = '';
-    return false;
+function mostrarAvisoDeSessao() {
+  const params = new URLSearchParams(window.location.search);
+  if (!params.has('expirou') && !params.has('exigeLogin')) return;
+
+  const box = document.getElementById('erroLogin');
+  const texto = box.querySelector('p');
+  texto.innerHTML = params.has('expirou')
+    ? '<strong>Sua sessão expirou.</strong> Entre novamente para continuar.'
+    : '<strong>É necessário entrar</strong> para acessar essa página.';
+  box.style.display = '';
+}
+
+/* Verifica se a API está no ar antes de o usuário descobrir isso errando o
+   login. Erro de conexão e senha errada têm causas diferentes. */
+async function verificarApi() {
+  const box = document.getElementById('statusApi');
+  try {
+    await API.saude();
+    box.innerHTML = '<span class="badge badge--success"><i class="ti ti-cloud-check"></i> API conectada</span>';
+  } catch (e) {
+    box.innerHTML = '<span class="badge badge--danger"><i class="ti ti-cloud-off"></i> API offline</span>' +
+      '<p class="text-xs text-muted mt-sm">Inicie a API no Visual Studio e aceite o certificado abrindo ' +
+      '<a href="' + API.base + '/swagger" target="_blank" class="form-link">' + API.base + '</a> no navegador.</p>';
   }
-
-  // Sucesso — redireciona pra área certa
-  const rotas = {
-    'estudante': '../pages/estudante/home.html',
-    'tutor': '../pages/tutor/home.html',
-    'admin': '../pages/admin/home.html'
-  };
-  // Como já estamos em /pages/login.html, o caminho relativo é direto
-  const dest = {
-    'estudante': 'estudante/home.html',
-    'tutor': 'tutor/home.html',
-    'admin': 'admin/home.html'
-  };
-  window.location.href = dest[persona];
-  return false;
 }
 
-// Ao carregar, mostra qual persona foi selecionada da última vez
 window.addEventListener('DOMContentLoaded', () => {
   const p = localStorage.getItem('tq_persona') || 'estudante';
   selecionarPersona(p);
+  mostrarAvisoDeSessao();
+  verificarApi();
 });
 </script>
 </body>

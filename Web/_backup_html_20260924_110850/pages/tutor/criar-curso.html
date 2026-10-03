@@ -1,0 +1,185 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Solicitar Novo Curso â€” Tutor â€” Tech Quest</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.47.0/tabler-icons.min.css">
+  <link rel="stylesheet" href="../../css/style.css">
+</head>
+<body>
+<div class="app-container app-container--wide">
+
+  <aside class="sidebar-nav">
+    <div class="sidebar-nav__brand"><i class="ti ti-terminal-2"></i> Tech Quest</div>
+    <a href="home.html" class="sidebar-nav__item"><i class="ti ti-layout-dashboard"></i> Painel</a>
+    <a href="alunos.html" class="sidebar-nav__item"><i class="ti ti-users"></i> Meus Alunos</a>
+    <a href="duvidas.html" class="sidebar-nav__item"><i class="ti ti-message-circle"></i> DÃºvidas</a>
+    <a href="cursos.html" class="sidebar-nav__item active"><i class="ti ti-book"></i> Meus Cursos</a>
+    <div style="flex:1;"></div>
+    <a href="../../index.html" class="sidebar-nav__item" onclick="return confirmarSaida(event)"><i class="ti ti-logout"></i> Sair</a>
+  </aside>
+
+  <div style="flex:1; display:flex; flex-direction:column;">
+
+    <header class="top-bar">
+      <a href="cursos.html" class="top-bar__back"><i class="ti ti-arrow-left"></i></a>
+      <span class="top-bar__title">Solicitar Novo Curso</span>
+      <div class="top-bar__avatar" style="background:#FDA4AF; color:#9F1239;">AS</div>
+    </header>
+
+    <main class="main-content">
+
+      <h1 class="page-title animate-in">Solicitar criaÃ§Ã£o de curso</h1>
+      <p class="page-subtitle">Preencha as informaÃ§Ãµes abaixo. ApÃ³s o envio, sua solicitaÃ§Ã£o serÃ¡ analisada pela equipe administrativa.</p>
+
+      <form onsubmit="event.preventDefault(); abrirModal('modalConfirmar');" class="animate-in animate-in-delay-1">
+
+        <!-- Info bÃ¡sica -->
+        <div class="card" style="border-top:4px solid var(--color-primary);">
+          <h3 class="font-bold mb-md"><i class="ti ti-info-square text-primary" style="vertical-align:-2px;"></i> InformaÃ§Ãµes bÃ¡sicas</h3>
+
+          <div class="form-group">
+            <label class="form-label">TÃ­tulo do curso *</label>
+            <input type="text" class="form-input" placeholder="Ex: Design Patterns na PrÃ¡tica" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">DescriÃ§Ã£o curta *</label>
+            <textarea class="form-input" rows="3" placeholder="Resuma em 2-3 frases o que o aluno vai aprender..." required></textarea>
+          </div>
+
+          <div class="flex gap-md" style="flex-wrap:wrap;">
+            <div class="form-group" style="flex:1; min-width:160px;">
+              <label class="form-label">Categoria *</label>
+              <select class="form-input" required>
+                <option value="">Selecione...</option>
+                <option>ProgramaÃ§Ã£o</option>
+                <option>Banco de Dados</option>
+                <option>Frontend</option>
+                <option>Backend</option>
+                <option>DevOps</option>
+                <option>Mobile</option>
+                <option>Design</option>
+              </select>
+            </div>
+            <div class="form-group" style="flex:1; min-width:160px;">
+              <label class="form-label">NÃ­vel *</label>
+              <select class="form-input" required>
+                <option value="">Selecione...</option>
+                <option>Iniciante</option>
+                <option>IntermediÃ¡rio</option>
+                <option>AvanÃ§ado</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Estrutura -->
+        <div class="card" style="border-top:4px solid var(--color-warning);">
+          <h3 class="font-bold mb-md"><i class="ti ti-stack-2 text-warning" style="vertical-align:-2px;"></i> Estrutura do curso</h3>
+
+          <div class="flex gap-md" style="flex-wrap:wrap;">
+            <div class="form-group" style="flex:1; min-width:140px;">
+              <label class="form-label">Carga horÃ¡ria *</label>
+              <div class="form-input-wrapper">
+                <i class="ti ti-clock"></i>
+                <input type="number" class="form-input form-input--with-icon" placeholder="Ex: 12" min="1" required>
+              </div>
+            </div>
+            <div class="form-group" style="flex:1; min-width:140px;">
+              <label class="form-label">NÂº de mÃ³dulos *</label>
+              <div class="form-input-wrapper">
+                <i class="ti ti-list-numbers"></i>
+                <input type="number" class="form-input form-input--with-icon" placeholder="Ex: 6" min="1" required>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">PrÃ©-requisitos</label>
+            <input type="text" class="form-input" placeholder="Ex: Conhecimento bÃ¡sico em C# e POO">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Ementa detalhada</label>
+            <textarea class="form-input" rows="5" placeholder="Liste os tÃ³picos principais que serÃ£o abordados, mÃ³dulo por mÃ³dulo..."></textarea>
+          </div>
+        </div>
+
+        <!-- Materiais -->
+        <div class="card" style="border-top:4px solid var(--color-success);">
+          <h3 class="font-bold mb-md"><i class="ti ti-file-text text-success" style="vertical-align:-2px;"></i> Materiais e referÃªncias</h3>
+
+          <div class="form-group">
+            <label class="form-label">Material de apoio</label>
+            <div style="border:2px dashed var(--color-border); border-radius:var(--radius-md); padding:var(--space-lg); text-align:center; cursor:pointer;">
+              <i class="ti ti-cloud-upload" style="font-size:32px; color:var(--color-text-muted);"></i>
+              <p class="text-sm text-muted mt-sm">Arraste arquivos ou clique para selecionar</p>
+              <p class="text-xs text-muted">PDFs, slides, vÃ­deos (mÃ¡x. 100MB por arquivo)</p>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Justificativa para criaÃ§Ã£o</label>
+            <textarea class="form-input" rows="3" placeholder="Por que este curso Ã© relevante para a plataforma? Qual pÃºblico vai atender?"></textarea>
+          </div>
+        </div>
+
+        <!-- AÃ§Ãµes -->
+        <div class="flex flex-col gap-sm mt-lg">
+          <button type="submit" class="btn btn--primary btn--lg btn--full">
+            <i class="ti ti-send"></i> Enviar solicitaÃ§Ã£o ao Admin
+          </button>
+          <button type="button" class="btn btn--ghost btn--full" onclick="alert('Rascunho salvo! VocÃª pode continuar editando depois.');">
+            <i class="ti ti-device-floppy"></i> Salvar como rascunho
+          </button>
+          <a href="cursos.html" class="btn btn--ghost btn--full">Cancelar</a>
+        </div>
+
+      </form>
+
+    </main>
+
+    <nav class="bottom-nav">
+      <a href="home.html" class="bottom-nav__item"><i class="ti ti-layout-dashboard"></i><span>Painel</span></a>
+      <a href="alunos.html" class="bottom-nav__item"><i class="ti ti-users"></i><span>Alunos</span></a>
+      <a href="duvidas.html" class="bottom-nav__item"><i class="ti ti-message-circle"></i><span>DÃºvidas</span></a>
+      <a href="cursos.html" class="bottom-nav__item active"><i class="ti ti-book"></i><span>Cursos</span></a>
+    </nav>
+
+  </div>
+</div>
+
+<!-- Modal confirmar envio -->
+<div class="modal-overlay" id="modalConfirmar">
+  <div class="modal">
+    <div class="modal__icon modal__icon--primary"><i class="ti ti-send"></i></div>
+    <h3 class="modal__title">Enviar solicitaÃ§Ã£o?</h3>
+    <p class="modal__text">Sua solicitaÃ§Ã£o serÃ¡ encaminhada para o administrador. Em atÃ© <strong>48 horas</strong> vocÃª receberÃ¡ um retorno sobre a aprovaÃ§Ã£o do curso. Deseja prosseguir?</p>
+    <div class="modal__actions">
+      <button class="btn btn--primary btn--full" onclick="fecharModal('modalConfirmar'); abrirModal('modalEnviado');">Sim, enviar solicitaÃ§Ã£o</button>
+      <button class="btn btn--secondary btn--full" onclick="fecharModal('modalConfirmar')">Voltar e revisar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal sucesso -->
+<div class="modal-overlay" id="modalEnviado">
+  <div class="modal">
+    <div class="modal__icon modal__icon--success"><i class="ti ti-check"></i></div>
+    <h3 class="modal__title">SolicitaÃ§Ã£o enviada!</h3>
+    <p class="modal__text">Sua solicitaÃ§Ã£o foi enviada com o protocolo <strong>#TUT-2024-088</strong>. VocÃª pode acompanhar o status na aba "Meus Cursos".</p>
+    <div class="modal__actions">
+      <a href="cursos.html" class="btn btn--primary btn--full">Voltar para Meus Cursos</a>
+    </div>
+  </div>
+</div>
+
+<script src="../../js/api.js"></script>
+<script src="../../js/app.js"></script>
+</body>
+</html>
+
