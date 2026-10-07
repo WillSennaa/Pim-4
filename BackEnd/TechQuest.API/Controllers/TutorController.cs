@@ -94,6 +94,25 @@ public class TutorController : ControllerBase
         return Traduzir(await _tutor.AdicionarQuestaoAsync(id.Value, idProva, req, ct));
     }
 
+    /// <summary>Prova do proprio curso, com o gabarito, para revisao.</summary>
+    [HttpGet("provas/{idProva:int}")]
+    public async Task<IActionResult> ObterProva(int idProva, CancellationToken ct)
+    {
+        var id = User.IdTutor();
+        if (id is null) return Forbid();
+        return Traduzir(await _tutor.ObterProvaCompletaAsync(id.Value, idProva, ct));
+    }
+
+    [HttpDelete("questoes/{idQuestao:int}")]
+    public async Task<IActionResult> RemoverQuestao(int idQuestao, CancellationToken ct)
+    {
+        var id = User.IdTutor();
+        if (id is null) return Forbid();
+
+        var r = await _tutor.RemoverQuestaoAsync(id.Value, idQuestao, ct);
+        return r.Status == StatusOperacao.Ok ? NoContent() : Traduzir(r);
+    }
+
     // ---------------- ALUNOS ----------------
     [HttpGet("alunos")]
     public async Task<IActionResult> Alunos([FromQuery] int? idCurso, CancellationToken ct)

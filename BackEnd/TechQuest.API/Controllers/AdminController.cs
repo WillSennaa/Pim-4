@@ -72,6 +72,21 @@ public class AdminController : ControllerBase
         return r.Status == StatusOperacao.Ok ? NoContent() : Traduzir(r);
     }
 
+    // ---------------- MEDALHAS ----------------
+    [HttpGet("medalhas")]
+    public async Task<IActionResult> Medalhas(CancellationToken ct)
+        => Ok(await _admin.ListarMedalhasAsync(ct));
+
+    [HttpPost("medalhas")]
+    public async Task<IActionResult> CriarMedalha(
+        [FromBody] SalvarMedalhaRequest req, CancellationToken ct)
+        => Traduzir(await _admin.CriarMedalhaAsync(req, ct));
+
+    [HttpPut("medalhas/{idMedalha:int}")]
+    public async Task<IActionResult> AtualizarMedalha(
+        int idMedalha, [FromBody] SalvarMedalhaRequest req, CancellationToken ct)
+        => Traduzir(await _admin.AtualizarMedalhaAsync(idMedalha, req, ct));
+
     [HttpGet("logs")]
     public async Task<IActionResult> Logs([FromQuery] int limite = 100, CancellationToken ct = default)
         => Ok(await _admin.ListarLogsAsync(limite, ct));

@@ -26,12 +26,12 @@
         Por motivos de segurança, para realizar a troca do seu e-mail de acesso, precisamos confirmar sua identidade através da sua senha atual.
       </p>
 
-      <form onsubmit="event.preventDefault(); abrirModal('modalSalvo');">
+      <form onsubmit="event.preventDefault(); trocarEmail(this.querySelector('button[type=submit]'));">
         <div class="form-group">
           <label class="form-label">Senha atual</label>
           <div class="form-input-wrapper">
             <i class="ti ti-lock"></i>
-            <input type="password" class="form-input form-input--with-icon" placeholder="Digite sua senha" required>
+            <input type="password" class="form-input form-input--with-icon" id="emailSenha" placeholder="Digite sua senha" required>
           </div>
         </div>
 
@@ -39,7 +39,7 @@
           <label class="form-label">Novo e-mail</label>
           <div class="form-input-wrapper">
             <i class="ti ti-mail"></i>
-            <input type="email" class="form-input form-input--with-icon" placeholder="novo@email.com" required>
+            <input type="email" class="form-input form-input--with-icon" id="emailNovo" placeholder="novo@email.com" required>
           </div>
         </div>
 
@@ -47,7 +47,7 @@
           <label class="form-label">Confirmar novo e-mail</label>
           <div class="form-input-wrapper">
             <i class="ti ti-mail-check"></i>
-            <input type="email" class="form-input form-input--with-icon" placeholder="Confirme o novo e-mail" required>
+            <input type="email" class="form-input form-input--with-icon" id="emailConfirmar" placeholder="Confirme o novo e-mail" required>
           </div>
         </div>
 

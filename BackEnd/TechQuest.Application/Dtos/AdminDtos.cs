@@ -19,3 +19,16 @@ public record CriarUsuarioRequest(string Nome, string Email, string Senha, strin
 public record AlterarStatusRequest(bool Ativo);
 
 public record LogAuditoriaDto(int Id, int IdAdm, string? Administrador, string? Acao, DateTime Data);
+
+/// <summary>
+/// Medalha como catalogo gerenciavel.
+///
+/// A tabela Medalha existia desde o PIM III mas so era LIDA: as doze medalhas
+/// vinham do script de carga e nao havia como criar outras. Com a plataforma
+/// recebendo cursos novos, o catalogo precisa acompanhar.
+/// </summary>
+public record MedalhaAdminDto(
+    int Id, string Nome, string? Raridade, string? Descricao, int TotalConquistas);
+
+public record SalvarMedalhaRequest(string Nome, string? Raridade, string? Descricao);
+

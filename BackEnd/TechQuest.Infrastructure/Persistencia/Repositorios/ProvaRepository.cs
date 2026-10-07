@@ -32,4 +32,12 @@ public class ProvaRepository : IProvaRepository
               .FirstOrDefaultAsync(q => q.IdQuestao == idQuestao, ct);
 
     public void RemoverQuestao(Questao questao) => _db.Questoes.Remove(questao);
+
+    /// <summary>
+    /// Alguem ja respondeu esta prova? Remover questao de prova ja respondida
+    /// invalidaria as notas existentes: a nota foi calculada sobre N questoes,
+    /// e passaria a nao corresponder a prova guardada.
+    /// </summary>
+    public Task<bool> ProvaTemTentativaAsync(int idProva, CancellationToken ct = default)
+        => _db.Desempenhos.AnyAsync(d => d.IdProva == idProva, ct);
 }

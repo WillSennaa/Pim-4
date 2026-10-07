@@ -31,8 +31,33 @@ public record QuestaoTutorDto(
     string? LetraCorreta, int TotalAlternativas);
 
 // ----- Acompanhamento de alunos -----
+/// <summary>
+/// IdEstudante e IdUsuario sao coisas diferentes e os dois precisam vir: o
+/// primeiro identifica a MATRICULA (usado para progresso, notas e medalhas),
+/// o segundo identifica a PESSOA (usado para enderecar um chamado). Mandar so
+/// um dos dois obriga a tela a adivinhar o outro.
+/// </summary>
 public record AlunoDoTutorDto(
-    int IdEstudante, string Nome, string? Email,
+    int IdEstudante, int IdUsuario, string Nome, string? Email,
     int IdCurso, string Curso, string? Status,
     int AulasConcluidas, int TotalAulas, int PercentualCurso,
     decimal? MelhorNota, int Tentativas);
+
+/// <summary>
+/// Prova como o TUTOR a ve: com o gabarito.
+///
+/// Existe separada do ProvaDto porque sao publicos diferentes. O aluno recebe
+/// a prova sem a resposta correta -- esse e o ponto da correcao no servidor.
+/// O tutor escreveu as questoes e precisa conferir o gabarito antes de
+/// submeter o curso; esconder dele seria esconder o proprio trabalho.
+/// </summary>
+public record ProvaCompletaTutorDto(
+    int Id, string? Titulo, decimal NotaMinima, int TempoMinutos,
+    IReadOnlyList<QuestaoCompletaTutorDto> Questoes);
+
+public record QuestaoCompletaTutorDto(
+    int Id, int Ordem, string Enunciado, string? CodigoExemplo,
+    IReadOnlyList<AlternativaCompletaDto> Alternativas);
+
+public record AlternativaCompletaDto(int Id, string? Letra, string? Texto, bool EhCorreta);
+

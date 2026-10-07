@@ -5,15 +5,51 @@
    direto: toda chamada passa por aqui.
 
    POR QUE UM ARQUIVO SÓ: a URL da API, o envio do token, o tratamento de
-   sessão expirada e o formato de erro ficam definidos em um lugar. Quando a
-   API for publicada no Azure, muda UMA linha (API.base) e as 47 páginas
-   passam a apontar para a nuvem.
+   sessão expirada e o formato de erro ficam definidos em um lugar. A API
+   saiu do localhost e foi para o Azure App Service, e as 47 páginas
+   passaram a apontar para a nuvem sem nenhuma delas ser alterada.
    ========================================================================== */
 
+/* --------------------------------------------------------------------------
+   Endereço do back-end.
+
+   A API está publicada no Azure App Service (região Brazil South). O endereço
+   local continua registrado aqui porque depurar contra a API rodando no
+   Visual Studio é mais rápido do que publicar a cada mudança.
+
+   Para alternar, há dois caminhos:
+     1. permanente  — troque AMBIENTE_ATIVO abaixo para 'local';
+     2. temporário  — no console do navegador:
+            localStorage.setItem('tq_api_base', 'https://localhost:7160')
+        e para voltar à nuvem:
+            localStorage.removeItem('tq_api_base')
+        Útil para um integrante testar contra a própria API sem editar (e sem
+        commitar) arquivo nenhum.
+   -------------------------------------------------------------------------- */
+const AMBIENTES = {
+  nuvem: 'https://tqbackendapi-cpb2edg0gxcsfggz.brazilsouth-01.azurewebsites.net',
+  local: 'https://localhost:7160'
+};
+
+const AMBIENTE_ATIVO = 'nuvem';
+
+function resolverBaseApi() {
+  try {
+    const forcado = localStorage.getItem('tq_api_base');
+    // Remove barra final: a base é concatenada com rotas que já começam com "/".
+    if (forcado) return forcado.replace(/\/+$/, '');
+  } catch (e) {
+    // localStorage bloqueado (navegação privada, política do navegador):
+    // segue com o ambiente padrão em vez de derrubar a página.
+  }
+  return AMBIENTES[AMBIENTE_ATIVO];
+}
+
 const API = {
-  // Porta do perfil "https" do Visual Studio (Properties/launchSettings.json).
-  // Ao publicar no Azure, troque por https://techquest-api.azurewebsites.net
-  base: 'https://localhost:7160',
+  base: resolverBaseApi(),
+
+  /** true quando está falando com a API publicada, e não com a local. */
+  get naNuvem() { return this.base === AMBIENTES.nuvem; },
 
   // sessionStorage e não localStorage: o token morre quando a aba fecha.
   // localStorage mantém o token indefinidamente, inclusive em computador
@@ -123,6 +159,9 @@ const API = {
   submeterProva: (id, respostas) => API.post('/api/provas/' + id + '/tentativas', { respostas }),
   perfil: () => API.get('/api/perfil'),
   salvarPerfil: (dados) => API.put('/api/perfil', dados),
+  trocarSenha: (senhaAtual, senhaNova) => API.put('/api/perfil/senha', { senhaAtual, senhaNova }),
+  trocarEmail: (senha, emailNovo) => API.put('/api/perfil/email', { senha, emailNovo }),
+  desativarConta: (senha) => API.post('/api/perfil/desativar', { senha }),
   historico: () => API.get('/api/perfil/historico'),
   conquistas: () => API.get('/api/perfil/conquistas'),
   certificados: () => API.get('/api/perfil/certificados'),
@@ -145,6 +184,8 @@ const API = {
   tutorRemoverAula: (idMaterial) => API.del('/api/tutor/aulas/' + idMaterial),
   tutorCriarProva: (idCurso, dados) => API.post('/api/tutor/cursos/' + idCurso + '/prova', dados),
   tutorAdicionarQuestao: (idProva, dados) => API.post('/api/tutor/provas/' + idProva + '/questoes', dados),
+  tutorProvaCompleta: (idProva) => API.get('/api/tutor/provas/' + idProva),
+  tutorRemoverQuestao: (idQuestao) => API.del('/api/tutor/questoes/' + idQuestao),
   tutorAlunos: (idCurso) => API.get('/api/tutor/alunos' + (idCurso ? '?idCurso=' + idCurso : '')),
   tutorConcederMedalha: (idEstudante, idMedalha) =>
     API.post('/api/tutor/estudantes/' + idEstudante + '/medalhas/' + idMedalha),
@@ -157,5 +198,8 @@ const API = {
   adminUsuarios: () => API.get('/api/admin/usuarios'),
   adminCriarUsuario: (dados) => API.post('/api/admin/usuarios', dados),
   adminAlterarStatus: (id, ativo) => API.patch('/api/admin/usuarios/' + id + '/status', { ativo }),
-  adminLogs: (limite) => API.get('/api/admin/logs?limite=' + (limite || 100))
+  adminLogs: (limite) => API.get('/api/admin/logs?limite=' + (limite || 100)),
+  adminMedalhas: () => API.get('/api/admin/medalhas'),
+  adminCriarMedalha: (dados) => API.post('/api/admin/medalhas', dados),
+  adminAtualizarMedalha: (id, dados) => API.put('/api/admin/medalhas/' + id, dados)
 };

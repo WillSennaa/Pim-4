@@ -15,9 +15,17 @@ public class UsuarioRepository : IUsuarioRepository
     public Task<Usuario?> ObterPorIdAsync(int idUsuario, CancellationToken ct = default)
         => Completo().AsNoTracking().FirstOrDefaultAsync(u => u.IdUsuario == idUsuario, ct);
 
-    /// <summary>Sem AsNoTracking: o EF precisa acompanhar para gerar o UPDATE.</summary>
+    /// <summary>
+    /// Sem AsNoTracking: o EF precisa acompanhar para gerar o UPDATE.
+    ///
+    /// As especializacoes vem junto porque algumas regras dependem do PAPEL de
+    /// quem esta sendo alterado -- por exemplo, impedir que um administrador
+    /// encerre a propria conta e deixe a plataforma sem quem reative usuarios.
+    /// </summary>
     public Task<Usuario?> ObterParaEdicaoAsync(int idUsuario, CancellationToken ct = default)
-        => _db.Usuarios.FirstOrDefaultAsync(u => u.IdUsuario == idUsuario, ct);
+        => _db.Usuarios
+              .Include(u => u.Adm).Include(u => u.Tutor).Include(u => u.Estudante)
+              .FirstOrDefaultAsync(u => u.IdUsuario == idUsuario, ct);
 
     public async Task<IReadOnlyList<Usuario>> ListarAsync(CancellationToken ct = default)
         => await Completo().OrderBy(u => u.Nome).AsNoTracking().ToListAsync(ct);

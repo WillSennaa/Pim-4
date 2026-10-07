@@ -26,12 +26,12 @@
         <span class="badge" style="background:var(--color-primary); color:white;">PROGRAMMING</span>
         <span class="badge" style="background:rgba(255,255,255,0.2); color:white;">LEVEL 1</span>
       </div>
-      <h1 class="course-hero__title">Fundamentos de C#</h1>
-      <p class="course-hero__text">Domine as bases da linguagem mais poderosa da Microsoft. Do zero ao seu primeiro software profissional com orientação a objetos e boas práticas.</p>
+      <h1 class="course-hero__title" id="cursoTitulo">Fundamentos de C#</h1>
+      <p class="course-hero__text" id="cursoDescricao">Domine as bases da linguagem mais poderosa da Microsoft. Do zero ao seu primeiro software profissional com orientação a objetos e boas práticas.</p>
       <div class="course-hero__instructor">
-        <div class="avatar avatar--sm" style="background:#FDA4AF; color:#9F1239;">AS</div>
+        <div class="avatar avatar--sm" style="background:#FDA4AF; color:#9F1239;" id="cursoInstrutorIniciais">AS</div>
         <div>
-          <div class="course-hero__instructor-name">Ana Souza</div>
+          <div class="course-hero__instructor-name" id="cursoInstrutor">Ana Souza</div>
           <div class="course-hero__instructor-role">Senior Developer & Instrutora</div>
         </div>
       </div>
@@ -41,80 +41,23 @@
     <div class="card animate-in animate-in-delay-1">
       <div class="flex justify-between mb-sm">
         <span class="font-medium">Progresso do Curso</span>
-        <span class="text-primary font-semibold">50%</span>
+        <span class="text-primary font-semibold" id="cursoProgressoLabel">0%</span>
       </div>
       <div class="progress">
-        <div class="progress__fill" style="width:50%"></div>
+        <div class="progress__fill" id="cursoProgressoBarra" style="width:0%"></div>
       </div>
+      <button class="btn btn--secondary btn--full btn--sm mt-md" onclick="matricularNoCurso(this)">
+        <i class="ti ti-bookmark"></i> Matricular-me neste curso
+      </button>
     </div>
 
-    <!-- Lista de módulos -->
-    <h3 class="section-title mt-lg">Conteúdo do Curso</h3>
+    <!-- Lista de aulas: preenchida pela API em renderCursoDetalhe() -->
+    <h3 class="section-title mt-lg">Conteudo do Curso</h3>
+    <p class="text-sm text-muted mb-md" id="cursoAulasResumo">Carregando aulas...</p>
 
-    <div class="module-item animate-in animate-in-delay-2">
-      <div class="module-item__icon module-item__icon--done"><i class="ti ti-check"></i></div>
-      <div class="module-item__line"></div>
-      <div class="module-item__body">
-        <div class="module-item__card">
-          <div class="flex justify-between items-center">
-            <span class="module-item__label">MÓDULO 1</span>
-            <span class="badge badge--success">CONCLUÍDO</span>
-          </div>
-          <h4 class="module-item__title">Introdução</h4>
-          <p class="module-item__text">Ambiente de desenvolvimento e o primeiro Hello World.</p>
-        </div>
-      </div>
-    </div>
+    <div id="listaAulas"></div>
 
-    <div class="module-item animate-in animate-in-delay-2">
-      <div class="module-item__icon module-item__icon--done"><i class="ti ti-check"></i></div>
-      <div class="module-item__line"></div>
-      <div class="module-item__body">
-        <div class="module-item__card">
-          <div class="flex justify-between items-center">
-            <span class="module-item__label">MÓDULO 2</span>
-            <span class="badge badge--success">CONCLUÍDO</span>
-          </div>
-          <h4 class="module-item__title">Sintaxe Básica</h4>
-          <p class="module-item__text">Tipos primitivos, variáveis, constantes e operadores.</p>
-        </div>
-      </div>
-    </div>
-
-    <div class="module-item module-item--active animate-in animate-in-delay-3">
-      <div class="module-item__icon module-item__icon--active"><i class="ti ti-player-play"></i></div>
-      <div class="module-item__line"></div>
-      <div class="module-item__body">
-        <div class="module-item__card">
-          <div class="flex justify-between items-center">
-            <span class="module-item__label text-primary">MÓDULO 3 • ATUAL</span>
-            <a href="aula.html" style="width:36px; height:36px; background:var(--color-primary); color:white; border-radius:var(--radius-md); display:flex; align-items:center; justify-content:center; border:1.5px dashed var(--color-primary-dark);">
-              <i class="ti ti-player-play"></i>
-            </a>
-          </div>
-          <h4 class="module-item__title">Arrays e Listas</h4>
-          <p class="module-item__text">Manipulação de coleções de dados de forma eficiente.</p>
-          <div class="module-item__meta">
-            <span><i class="ti ti-clock"></i> 45 min</span>
-            <span><i class="ti ti-list"></i> 12 aulas</span>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="module-item module-item--locked animate-in animate-in-delay-3">
-      <div class="module-item__icon module-item__icon--locked"><i class="ti ti-lock"></i></div>
-      <div class="module-item__body">
-        <div class="module-item__card">
-          <div class="flex justify-between items-center">
-            <span class="module-item__label">MÓDULO 4</span>
-            <span class="badge badge--neutral">BLOQUEADO</span>
-          </div>
-          <h4 class="module-item__title">Estruturas de Repetição</h4>
-          <p class="module-item__text">Domine For, While e Do While no C#.</p>
-        </div>
-      </div>
-    </div>
+    <div id="areaProva" class="mt-lg"></div>
 
     <!-- Recompensa -->
     <div class="card card--accent-warning mt-lg">
@@ -131,8 +74,8 @@
     <!-- Informações -->
     <div class="card">
       <h4 class="font-semibold mb-md">Informações</h4>
-      <div class="flex justify-between mb-sm"><span class="text-secondary">Dificuldade</span><span class="text-primary font-medium">Iniciante</span></div>
-      <div class="flex justify-between mb-sm"><span class="text-secondary">Duração Total</span><span class="font-medium">12 horas</span></div>
+      <div class="flex justify-between mb-sm"><span class="text-secondary">Dificuldade</span><span class="text-primary font-medium" id="cursoDificuldade">-</span></div>
+      <div class="flex justify-between mb-sm"><span class="text-secondary">Duração Total</span><span class="font-medium" id="cursoDuracao">-</span></div>
       <div class="flex justify-between mb-sm"><span class="text-secondary">Alunos inscritos</span><span class="font-medium">1.240</span></div>
       <div class="flex justify-between"><span class="text-secondary">Última atualização</span><span class="font-medium">Ago 2023</span></div>
     </div>
@@ -149,6 +92,9 @@
 </div>
 <script src="../../js/api.js"></script>
 <script src="../../js/app.js"></script>
+<script>
+function onPageLoad() { renderCursoDetalhe(); }
+</script>
 </body>
 </html>
 

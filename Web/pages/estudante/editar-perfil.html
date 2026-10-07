@@ -15,7 +15,7 @@
   <header class="top-bar">
     <a href="perfil.html" class="top-bar__back" onclick="event.preventDefault(); abrirModal('modalDescartar');"><i class="ti ti-arrow-left"></i></a>
     <span class="top-bar__title text-primary">Editar Perfil</span>
-    <button class="btn btn--sm btn--primary" onclick="abrirModal('modalSalvo')" style="font-size:13px;">Salvar</button>
+    <button class="btn btn--sm btn--primary" onclick="salvarPerfilEstudante(this)" style="font-size:13px;">Salvar</button>
   </header>
 
   <main class="main-content">
@@ -34,18 +34,18 @@
 
       <div class="form-group">
         <label class="form-label">Nome completo</label>
-        <input type="text" class="form-input" value="Felipe Almeida" onchange="abrirModal('modalSalvar')">
+        <input type="text" class="form-input" id="perfilNome" disabled title="O nome e definido no cadastro e nao e editavel aqui.">
       </div>
 
       <div class="form-group">
         <label class="form-label">Telefone</label>
-        <input type="tel" class="form-input" value="(11) 98888-7777" onchange="abrirModal('modalSalvar')">
+        <input type="tel" class="form-input" id="perfilTelefone" placeholder="(11) 90000-0000">
       </div>
 
       <div class="form-group">
         <label class="form-label">E-mail</label>
         <div class="flex gap-sm items-center">
-          <input type="email" class="form-input" value="felipe.almeida@techques..." disabled style="flex:1;">
+          <input type="email" class="form-input" id="perfilEmail" disabled style="flex:1;">
           <a href="alterar-email.html" class="btn btn--ghost btn--sm">Alterar</a>
         </div>
       </div>
@@ -60,17 +60,17 @@
 
       <div class="form-group">
         <label class="form-label">Data de Nascimento</label>
-        <input type="text" class="form-input" value="15/05/1998">
+        <input type="text" class="form-input" id="perfilNascimento" placeholder="dd/mm/aaaa">
       </div>
 
       <div class="form-group" style="margin-bottom:0;">
         <label class="form-label">Cidade / Estado</label>
-        <input type="text" class="form-input" value="São Paulo - SP">
+        <input type="text" class="form-input" id="perfilCidade" placeholder="Cidade - UF">
       </div>
     </div>
 
     <div class="flex flex-col gap-sm mt-lg">
-      <button class="btn btn--primary btn--lg btn--full" onclick="abrirModal('modalSalvo')">Salvar alterações</button>
+      <button class="btn btn--primary btn--lg btn--full" onclick="salvarPerfilEstudante(this)">Salvar alterações</button>
       <button class="btn btn--secondary btn--full" onclick="abrirModal('modalDescartar')">Cancelar</button>
     </div>
 
@@ -109,7 +109,7 @@
       <li>Cidade</li>
     </ul>
     <div class="modal__actions">
-      <button class="btn btn--success btn--full" onclick="fecharModal('modalSalvar'); abrirModal('modalSalvo');">Sim, salvar</button>
+      <button class="btn btn--success btn--full" onclick="fecharModal('modalSalvar'); salvarPerfilEstudante(this);">Sim, salvar</button>
       <button class="btn btn--secondary btn--full" onclick="fecharModal('modalSalvar')">Continuar editando</button>
     </div>
   </div>
@@ -129,6 +129,9 @@
 
 <script src="../../js/api.js"></script>
 <script src="../../js/app.js"></script>
+<script>
+function onPageLoad() { carregarPerfilParaEdicao(); }
+</script>
 </body>
 </html>
 

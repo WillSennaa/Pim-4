@@ -24,11 +24,11 @@
     <p class="page-subtitle">Descreva seu problema e nossa equipe responderá em até 24 horas.</p>
 
     <div class="card animate-in animate-in-delay-1" style="border-top:4px solid var(--color-primary);">
-      <form onsubmit="event.preventDefault(); abrirModal('modalEnviarChamado');">
+      <form onsubmit="event.preventDefault(); enviarChamado(this.querySelector('button[type=submit]'));">
 
         <div class="form-group">
           <label class="form-label">Categoria do problema</label>
-          <select class="form-input">
+          <select class="form-input" id="chamadoTipo">
             <option>Problema técnico</option>
             <option>Dúvida sobre conteúdo do curso</option>
             <option>Pagamento e assinatura</option>
@@ -61,12 +61,12 @@
 
         <div class="form-group">
           <label class="form-label">Assunto</label>
-          <input type="text" class="form-input" placeholder="Resuma seu problema em poucas palavras" required>
+          <input type="text" class="form-input" id="chamadoAssunto" placeholder="Resuma seu problema em poucas palavras" required>
         </div>
 
         <div class="form-group">
           <label class="form-label">Descrição detalhada</label>
-          <textarea class="form-input" rows="6" placeholder="Descreva com detalhes o que está acontecendo, quais passos você tentou e qual o resultado esperado..." required></textarea>
+          <textarea class="form-input" id="chamadoDescricao" rows="6" placeholder="Descreva com detalhes o que está acontecendo, quais passos você tentou e qual o resultado esperado..." required></textarea>
         </div>
 
         <div class="form-group">
@@ -86,27 +86,8 @@
 
     <!-- Chamados anteriores -->
     <h3 class="section-title mt-xl">Meus Chamados</h3>
-
-    <div class="card animate-in animate-in-delay-2">
-      <div class="list-item">
-        <div class="list-item__icon list-item__icon--success"><i class="ti ti-check"></i></div>
-        <div class="list-item__body">
-          <div class="list-item__title">Não recebi e-mail de confirmação</div>
-          <div class="list-item__subtitle">Protocolo #EDU-88219 · Resolvido ontem</div>
-        </div>
-        <span class="badge badge--success">RESOLVIDO</span>
-      </div>
-      <div class="list-item">
-        <div class="list-item__icon list-item__icon--warning"><i class="ti ti-clock"></i></div>
-        <div class="list-item__body">
-          <div class="list-item__title">Vídeo da aula 4 não carrega</div>
-          <div class="list-item__subtitle">Protocolo #EDU-87102 · Em análise</div>
-        </div>
-        <span class="badge badge--warning">EM ANÁLISE</span>
-      </div>
-    </div>
-
-  </main>
+      <div id="meusChamados"><p class="text-sm text-muted">Carregando...</p></div>
+    </main>
 
   <nav class="bottom-nav">
     <a href="home.html" class="bottom-nav__item"><i class="ti ti-home"></i><span>Home</span></a>
@@ -117,22 +98,13 @@
 
 </div>
 
-<div class="modal-overlay" id="modalEnviarChamado">
-  <div class="modal">
-    <div class="modal__icon modal__icon--primary"><i class="ti ti-send"></i></div>
-    <h3 class="modal__title">Enviar chamado?</h3>
-    <p class="modal__text">Seu chamado será encaminhado para nossa equipe de tutores. Você receberá uma resposta em até <strong>24 horas</strong>.</p>
-    <div class="modal__actions">
-      <a href="ajuda.html" class="btn btn--primary btn--full" onclick="alert('Chamado enviado! Protocolo: #EDU-' + Math.floor(Math.random() * 90000 + 10000));">
-        Sim, enviar chamado
-      </a>
-      <button class="btn btn--secondary btn--full" onclick="fecharModal('modalEnviarChamado')">Voltar e revisar</button>
-    </div>
-  </div>
-</div>
+
 
 <script src="../../js/api.js"></script>
 <script src="../../js/app.js"></script>
+<script>
+function onPageLoad() { carregarMeusChamados(); }
+</script>
 </body>
 </html>
 

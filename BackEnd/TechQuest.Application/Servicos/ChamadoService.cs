@@ -57,6 +57,7 @@ public class ChamadoService
 
     private static ChamadoDto Mapear(Chamado c) => new(
         c.IdChamado, c.Tipo, c.Assunto, c.Descricao,
-        c.Remetente.Nome, c.Destinatario?.Nome,
+        c.IdRemetente, c.Remetente.Nome,
+        c.IdDestinatario, c.Destinatario?.Nome,
         c.DataAbertura, c.Status);
 }

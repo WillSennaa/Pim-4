@@ -1,5 +1,6 @@
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -56,6 +57,7 @@ builder.Services.AddScoped<GamificacaoService>();
 builder.Services.AddScoped<ConquistaService>();
 builder.Services.AddScoped<ProgressoService>();
 builder.Services.AddScoped<EstudanteService>();
+builder.Services.AddScoped<ContaService>();
 builder.Services.AddScoped<ChamadoService>();
 builder.Services.AddScoped<RelatorioService>();
 builder.Services.AddScoped<TutorService>();
@@ -90,13 +92,49 @@ builder.Services.AddAuthorization();
 // ---------------------------------------------------------------------------
 // 4. CORS
 // ---------------------------------------------------------------------------
+// Com a API publicada no Azure, a origem que o navegador envia continua sendo
+// a do CLIENTE, nao a do servidor: a aplicacao web rodando em localhost:8080
+// chamando a API na nuvem e uma requisicao de origem cruzada, e precisa estar
+// nesta lista.
+//
+// As origens de desenvolvimento ficam permitidas tambem em producao, por
+// decisao consciente: web, mobile e desktop sao desenvolvidos localmente
+// contra a API ja publicada. Liberar a origem NAO concede acesso a dado
+// nenhum — todo endpoint exige token JWT, e o CORS controla qual pagina pode
+// ler a resposta, nao quem pode autenticar.
+//
+// Origens adicionais (a aplicacao web depois de publicada) entram por
+// configuracao, sem recompilar: no portal do Azure, em Configuracoes do
+// App Service, criar as chaves
+//     Cors__Origens__0 = https://techquest-web.azurestaticapps.net
+//     Cors__Origens__1 = https://outro-dominio
+// O dois sublinhados e como o Azure representa hierarquia de configuracao.
 const string PoliticaCors = "FrontEndTechQuest";
+
+var origensLocais = new[]
+{
+    "http://localhost:8080",
+    "http://127.0.0.1:8080",
+    "http://localhost:5500",      // Live Server do VS Code
+    "http://127.0.0.1:5500",
+    "http://localhost:5501",      // porta alternativa quando a 5500 esta ocupada
+    "http://127.0.0.1:5501"
+};
+
+var origensPublicadas = builder.Configuration
+    .GetSection("Cors:Origens")
+    .Get<string[]>() ?? Array.Empty<string>();
+
+var origensPermitidas = origensLocais
+    .Concat(origensPublicadas)
+    .Where(o => !string.IsNullOrWhiteSpace(o))
+    .Select(o => o.TrimEnd('/'))
+    .Distinct()
+    .ToArray();
+
 builder.Services.AddCors(opt =>
     opt.AddPolicy(PoliticaCors, p => p
-        .WithOrigins(
-            "http://localhost:8080",
-            "http://127.0.0.1:8080",
-            "http://localhost:5500")   // Live Server do VS Code
+        .WithOrigins(origensPermitidas)
         .AllowAnyHeader()
         .AllowAnyMethod()));
 
@@ -139,11 +177,27 @@ var app = builder.Build();
 // precisa envolver todo o resto do pipeline.
 app.UseMiddleware<TratamentoDeErrosMiddleware>();
 
-if (app.Environment.IsDevelopment())
+// Swagger ligado tambem em producao, de proposito: e a documentacao viva do
+// contrato da API, consultada pelos clientes web, mobile e desktop durante o
+// desenvolvimento e usada na demonstracao da banca. O que continua restrito a
+// Development e o DETALHE TECNICO DO ERRO (stack trace), tratado no
+// TratamentoDeErrosMiddleware — essa sim e a informacao que nao pode vazar.
+//
+// ALTERNATIVA REJEITADA: definir ASPNETCORE_ENVIRONMENT=Development no App
+// Service para o Swagger aparecer. Funcionaria, mas ligaria junto a exposicao
+// de stack trace e desligaria otimizacoes de producao — resolveria a
+// documentacao criando um problema maior.
+app.UseSwagger();
+app.UseSwaggerUI();
+
+// No App Service o TLS termina na borda do Azure, que repassa a requisicao
+// para a aplicacao. Sem esta linha o ASP.NET Core enxerga a requisicao
+// interna como HTTP e o UseHttpsRedirection abaixo entraria em laco de
+// redirecionamento. O cabecalho X-Forwarded-Proto preserva o esquema original.
+app.UseForwardedHeaders(new ForwardedHeadersOptions
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+    ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+});
 
 app.UseHttpsRedirection();
 app.UseCors(PoliticaCors);

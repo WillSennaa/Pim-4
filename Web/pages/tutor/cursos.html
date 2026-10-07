@@ -167,87 +167,74 @@ function filtrarStatus(s) {
   renderCursos();
 }
 
-function renderCursos() {
-  if (!TQ.data || !TQ.data.tutor_meus_cursos) return;
-  let cursos = TQ.data.tutor_meus_cursos;
-  if (filtroStatus !== 'todos') cursos = cursos.filter(c => c.status === filtroStatus);
+/* Os status vem do servidor em FluxoPublicacaoCurso: Rascunho, Pendente,
+   Publicado e Rejeitado. Os botoes de cada card dependem do estado, porque
+   o servidor recusa transicao invalida -- a tela so nao oferece o que seria
+   recusado. */
+const ESTADOS = {
+  publicado: { classe: 'success', rotulo: 'PUBLICADO' },
+  pendente:  { classe: 'warning', rotulo: 'EM AVALIACAO' },
+  rascunho:  { classe: 'neutral', rotulo: 'RASCUNHO' },
+  rejeitado: { classe: 'danger',  rotulo: 'REJEITADO' }
+};
 
+function renderCursos() {
   const grid = document.getElementById('cursosGrid');
   const empty = document.getElementById('emptyState');
+  if (!grid) return;
+
+  let cursos = (TQ.data && TQ.data.tutor_meus_cursos) || [];
+  if (filtroStatus !== 'todos') cursos = cursos.filter(c => c.status === filtroStatus);
+
+  const kpi = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
+  const todos = (TQ.data && TQ.data.tutor_meus_cursos) || [];
+  kpi('kpiPublicado', todos.filter(c => c.status === 'publicado').length);
+  kpi('kpiRascunho', todos.filter(c => c.status === 'rascunho').length);
+  kpi('kpiAguardando', todos.filter(c => c.status === 'pendente').length);
+  kpi('kpiAlunos', todos.reduce((s, c) => s + (c.alunos || 0), 0));
+
   if (cursos.length === 0) {
     grid.innerHTML = '';
-    empty.style.display = '';
+    if (empty) empty.style.display = '';
     return;
   }
-  empty.style.display = 'none';
-
-  const statusBadge = {
-    'publicado': { class: 'success', label: 'PUBLICADO' },
-    'rascunho': { class: 'neutral', label: 'RASCUNHO' },
-    'aguardando': { class: 'warning', label: 'AGUARDANDO APROVAÇÃO' }
-  };
+  if (empty) empty.style.display = 'none';
 
   grid.innerHTML = cursos.map(c => {
-    const b = statusBadge[c.status];
-    let acoesBotoes = '';
+    const e = ESTADOS[c.status] || ESTADOS.rascunho;
+    const editavel = c.pode_editar;
 
-    if (c.status === 'publicado') {
-      acoesBotoes = `
-        <a href="editar-curso.html?id=${c.id}" class="btn btn--secondary btn--sm" style="flex:1;"><i class="ti ti-edit"></i> Editar</a>
-        <button class="btn btn--ghost btn--sm" style="color:var(--color-danger); border-color:var(--color-danger);" onclick="abrirModal('modalExcluir')" title="Solicitar exclusão"><i class="ti ti-trash"></i></button>
-      `;
-    } else if (c.status === 'rascunho') {
-      acoesBotoes = `
-        <a href="editar-curso.html?id=${c.id}" class="btn btn--secondary btn--sm" style="flex:1;"><i class="ti ti-edit"></i> Continuar editando</a>
-        <button class="btn btn--primary btn--sm" onclick="abrirModal('modalPublicar')" title="Submeter para publicação"><i class="ti ti-upload"></i></button>
-      `;
-    } else { // aguardando
-      acoesBotoes = `
-        <a href="editar-curso.html?id=${c.id}" class="btn btn--ghost btn--sm" style="flex:1;"><i class="ti ti-eye"></i> Ver detalhes</a>
-        <button class="btn btn--ghost btn--sm" disabled title="Aguardando aprovação do admin"><i class="ti ti-clock"></i></button>
-      `;
-    }
+    const acoes = editavel
+      ? `<a href="editar-curso.html?id=${c.id}" class="btn btn--secondary btn--sm" style="flex:1;">
+           <i class="ti ti-edit"></i> Editar</a>
+         <button class="btn btn--primary btn--sm" onclick="submeterCurso(${c.id}, this)"
+                 title="Submeter para avaliacao"><i class="ti ti-upload"></i></button>`
+      : `<a href="editar-curso.html?id=${c.id}" class="btn btn--ghost btn--sm" style="flex:1;">
+           <i class="ti ti-eye"></i> Ver detalhes</a>
+         <button class="btn btn--ghost btn--sm" disabled
+                 title="${c.status === 'publicado' ? 'Curso publicado nao pode ser alterado' : 'Aguardando avaliacao'}">
+           <i class="ti ti-lock"></i></button>`;
 
     return `<div class="course-card">
-      <div class="course-card__cover ${c.id.includes('bd') ? 'course-card__cover--bd' : ''}">
+      <div class="course-card__cover">
         <i class="ti ti-book course-card__cover-icon"></i>
-        <span class="course-card__level">${b.label}</span>
+        <span class="course-card__level">${e.rotulo}</span>
         <span class="course-card__name">${c.titulo}</span>
       </div>
       <div class="course-card__body">
         <div class="course-card__meta">
-          <span><i class="ti ti-users"></i> ${c.alunos.toLocaleString('pt-BR')} alunos</span>
-          <span><i class="ti ti-stack-2"></i> ${c.modulos} módulos</span>
-          ${c.rating > 0 ? `<span><i class="ti ti-star-filled" style="color:var(--color-warning);"></i> ${c.rating}</span>` : ''}
+          <span><i class="ti ti-users"></i> ${c.alunos || 0} alunos</span>
+          <span><i class="ti ti-list"></i> ${c.modulos || 0} aulas</span>
+          <span><i class="ti ti-help-circle"></i> ${c.total_questoes || 0} questoes</span>
         </div>
-        <p class="text-xs text-muted mb-md">Última atualização: ${c.ultima_atualizacao}</p>
-        <div class="flex gap-sm">${acoesBotoes}</div>
+        <span class="badge badge--${e.classe} mb-sm">${e.rotulo}</span>
+        <div class="flex gap-sm mt-md">${acoes}</div>
       </div>
     </div>`;
   }).join('');
 }
 
-document.addEventListener('click', e => {
-  if (e.target.closest('#filtrosStatus .tab')) {
-    filtrarStatus(e.target.closest('.tab').dataset.status);
-  }
-});
-
-function confirmarSaida(e) {
-  e.preventDefault();
-  abrirModal('modalSair');
-  return false;
-}
-
-function onPageLoad() {
-  if (!TQ.data || !TQ.data.tutor_meus_cursos) return;
-  const c = TQ.data.tutor_meus_cursos;
-  document.getElementById('kpiPublicado').textContent = c.filter(x => x.status === 'publicado').length;
-  document.getElementById('kpiRascunho').textContent = c.filter(x => x.status === 'rascunho').length;
-  document.getElementById('kpiAguardando').textContent = c.filter(x => x.status === 'aguardando').length;
-  document.getElementById('kpiAlunos').textContent = c.reduce((sum, x) => sum + x.alunos, 0).toLocaleString('pt-BR');
-  renderCursos();
-}
+function onPageLoad() { renderCursos(); }
 </script>
 </body>
 </html>

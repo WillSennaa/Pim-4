@@ -70,3 +70,23 @@ public record CertificadoDto(
     DateTime DataEmissao,
     DateOnly? DataConclusao,
     int? CargaHoraria);
+
+// ----- Conta do proprio usuario -----
+/// <summary>
+/// Troca de senha. A senha ATUAL e exigida mesmo com o usuario ja autenticado:
+/// um token roubado ou uma sessao esquecida aberta nao podem servir para
+/// tomar a conta. E a mesma razao pela qual bancos pedem a senha de novo em
+/// operacoes sensiveis.
+/// </summary>
+public record TrocarSenhaRequest(string SenhaAtual, string SenhaNova);
+
+/// <summary>
+/// Troca de e-mail. Tambem exige a senha: o e-mail e a chave de login, entao
+/// alterar o e-mail equivale a transferir a conta.
+/// </summary>
+public record TrocarEmailRequest(string Senha, string EmailNovo);
+
+/// <summary>
+/// Encerramento da propria conta. Exige a senha pelo mesmo motivo.
+/// </summary>
+public record DesativarContaRequest(string Senha);

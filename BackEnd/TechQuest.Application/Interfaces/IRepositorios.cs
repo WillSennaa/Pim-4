@@ -57,6 +57,7 @@ public interface IProvaRepository
     void AdicionarQuestao(Questao questao);
     Task<Questao?> ObterQuestaoAsync(int idQuestao, CancellationToken ct = default);
     void RemoverQuestao(Questao questao);
+    Task<bool> ProvaTemTentativaAsync(int idProva, CancellationToken ct = default);
 }
 
 public interface IDesempenhoRepository
@@ -107,6 +108,12 @@ public interface IConquistaRepository
         IEnumerable<string> nomes, CancellationToken ct = default);
     Task<Medalha?> ObterMedalhaAsync(int idMedalha, CancellationToken ct = default);
     void Adicionar(Conquista conquista);
+
+    // --- catalogo de medalhas (admin) ---
+    Task<Medalha?> ObterMedalhaParaEdicaoAsync(int idMedalha, CancellationToken ct = default);
+    Task<bool> NomeDeMedalhaExisteAsync(string nome, int? ignorarId = null, CancellationToken ct = default);
+    Task<IReadOnlyDictionary<int, int>> ContarConquistasPorMedalhaAsync(CancellationToken ct = default);
+    void AdicionarMedalha(Medalha medalha);
 }
 
 public interface IChamadoRepository
@@ -114,7 +121,6 @@ public interface IChamadoRepository
     Task<IReadOnlyList<Chamado>> ListarDoUsuarioAsync(int idUsuario, CancellationToken ct = default);
     Task<Chamado?> ObterAsync(int idChamado, CancellationToken ct = default);
     void Adicionar(Chamado chamado);
-    Task<int> ContarAbertosAsync(CancellationToken ct = default);
 }
 
 public interface IRelatorioRepository

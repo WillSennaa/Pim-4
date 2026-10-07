@@ -12,15 +12,17 @@ public class AdminService
     private readonly IUsuarioRepository _usuarios;
     private readonly IAdminRepository _admin;
     private readonly IChamadoRepository _chamados;
+    private readonly IConquistaRepository _conquistas;
     private readonly IHashSenhaService _hash;
     private readonly IUnidadeDeTrabalho _uow;
 
     public AdminService(
         ICursoRepository cursos, IUsuarioRepository usuarios, IAdminRepository admin,
-        IChamadoRepository chamados, IHashSenhaService hash, IUnidadeDeTrabalho uow)
+        IChamadoRepository chamados, IConquistaRepository conquistas,
+        IHashSenhaService hash, IUnidadeDeTrabalho uow)
     {
         _cursos = cursos; _usuarios = usuarios; _admin = admin;
-        _chamados = chamados; _hash = hash; _uow = uow;
+        _chamados = chamados; _conquistas = conquistas; _hash = hash; _uow = uow;
     }
 
     public Task<ResumoAdminDto> ResumoAsync(CancellationToken ct = default)
@@ -198,6 +200,83 @@ public class AdminService
         int limite = 100, CancellationToken ct = default)
         => (await _admin.ListarLogsAsync(limite, ct)).Select(l => new LogAuditoriaDto(
             l.IdLog, l.IdAdm, l.Adm?.Usuario?.Nome, l.AcaoRealizada, l.DataAcao)).ToList();
+
+    // -----------------------------------------------------------------------
+    // CATALOGO DE MEDALHAS
+    // -----------------------------------------------------------------------
+    // A tabela Medalha existia desde o PIM III mas so era lida: as doze
+    // medalhas vinham do script de carga e nao havia como criar outras. Com a
+    // plataforma recebendo cursos novos, o catalogo precisa acompanhar.
+
+    public async Task<IReadOnlyList<MedalhaAdminDto>> ListarMedalhasAsync(CancellationToken ct = default)
+    {
+        var medalhas = await _conquistas.ListarMedalhasAsync(ct);
+        var contagens = await _conquistas.ContarConquistasPorMedalhaAsync(ct);
+
+        return medalhas.Select(m => new MedalhaAdminDto(
+            m.IdMedalha, m.Nome, m.Raridade, m.Descricao,
+            contagens.TryGetValue(m.IdMedalha, out var total) ? total : 0)).ToList();
+    }
+
+    public async Task<Resultado<MedalhaAdminDto>> CriarMedalhaAsync(
+        SalvarMedalhaRequest req, CancellationToken ct = default)
+    {
+        var erro = ValidarMedalha(req);
+        if (erro is not null) return Resultado<MedalhaAdminDto>.Invalido(erro);
+
+        var nome = req.Nome.Trim();
+        if (await _conquistas.NomeDeMedalhaExisteAsync(nome, null, ct))
+            return Resultado<MedalhaAdminDto>.Invalido("Ja existe uma medalha com este nome.");
+
+        var medalha = new Medalha
+        {
+            Nome = nome,
+            Raridade = string.IsNullOrWhiteSpace(req.Raridade) ? "Comum" : req.Raridade.Trim(),
+            Descricao = req.Descricao?.Trim()
+        };
+
+        _conquistas.AdicionarMedalha(medalha);
+        await _uow.SalvarAsync(ct);
+
+        return Resultado<MedalhaAdminDto>.Ok(new MedalhaAdminDto(
+            medalha.IdMedalha, medalha.Nome, medalha.Raridade, medalha.Descricao, 0));
+    }
+
+    public async Task<Resultado<MedalhaAdminDto>> AtualizarMedalhaAsync(
+        int idMedalha, SalvarMedalhaRequest req, CancellationToken ct = default)
+    {
+        var erro = ValidarMedalha(req);
+        if (erro is not null) return Resultado<MedalhaAdminDto>.Invalido(erro);
+
+        var medalha = await _conquistas.ObterMedalhaParaEdicaoAsync(idMedalha, ct);
+        if (medalha is null) return Resultado<MedalhaAdminDto>.NaoEncontrado("Medalha nao encontrada.");
+
+        var nome = req.Nome.Trim();
+        if (await _conquistas.NomeDeMedalhaExisteAsync(nome, idMedalha, ct))
+            return Resultado<MedalhaAdminDto>.Invalido("Ja existe outra medalha com este nome.");
+
+        medalha.Nome = nome;
+        medalha.Raridade = string.IsNullOrWhiteSpace(req.Raridade) ? medalha.Raridade : req.Raridade.Trim();
+        medalha.Descricao = req.Descricao?.Trim();
+        await _uow.SalvarAsync(ct);
+
+        var contagens = await _conquistas.ContarConquistasPorMedalhaAsync(ct);
+        return Resultado<MedalhaAdminDto>.Ok(new MedalhaAdminDto(
+            medalha.IdMedalha, medalha.Nome, medalha.Raridade, medalha.Descricao,
+            contagens.TryGetValue(idMedalha, out var t) ? t : 0));
+    }
+
+    /// <summary>
+    /// Nao ha exclusao de medalha de proposito: Conquista aponta para ela por
+    /// chave estrangeira, e apagar uma medalha ja conquistada apagaria o
+    /// registro de quem a recebeu. Medalha fora de uso e editada, nao apagada.
+    /// </summary>
+    private static string? ValidarMedalha(SalvarMedalhaRequest req)
+    {
+        if (string.IsNullOrWhiteSpace(req.Nome)) return "O nome da medalha e obrigatorio.";
+        if (req.Nome.Trim().Length > 50) return "O nome deve ter no maximo 50 caracteres.";
+        return null;
+    }
 
     // -----------------------------------------------------------------------
     private async Task<int?> ObterUsuarioDoTutorAsync(int idTutor, CancellationToken ct)

@@ -46,7 +46,7 @@
             <option>Últimos 90 dias</option>
             <option>Ano atual</option>
           </select>
-          <button class="btn btn--primary" onclick="alert('Relatório exportado em PDF!');">
+          <button class="btn btn--primary" onclick="window.print()">
             <i class="ti ti-download"></i> Exportar
           </button>
         </div>
@@ -163,49 +163,37 @@
 <script src="../../js/api.js"></script>
 <script src="../../js/app.js"></script>
 <script>
+/* Os numeros vem de /api/admin/resumo. Os graficos de serie temporal do
+   PIM III (engajamento diario, receita mensal) nao tem lastro no modelo --
+   nao existe tabela de acesso diario nem de pagamento --, entao sao marcados
+   como ilustrativos em vez de exibir numero inventado como se fosse medicao. */
 function onPageLoad() {
-  if (!TQ.data || !TQ.data.admin_relatorios) return;
-  const r = TQ.data.admin_relatorios;
+  carregarPainelAdmin();
 
-  // Gráfico de barras simples - engajamento diário
-  const eng = document.getElementById('chartEngajamento');
-  const maxAtivos = Math.max(...r.engajamento_diario.map(d => d.ativos));
-  eng.innerHTML = r.engajamento_diario.map(d => {
-    const altura = (d.ativos / maxAtivos) * 100;
-    return `<div style="flex:1; display:flex; flex-direction:column; align-items:center; gap:6px;">
-      <div class="text-xs font-semibold">${d.ativos}</div>
-      <div style="width:100%; height:${altura}%; background:linear-gradient(180deg, var(--color-primary), var(--color-primary-dark)); border-radius:6px 6px 0 0; transition:all 0.3s;"></div>
-      <div class="text-xs text-muted">${d.dia}</div>
-    </div>`;
-  }).join('');
+  ['chartEngajamento', 'chartReceita'].forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.innerHTML = '<div class="card" style="background:var(--color-surface-2);">' +
+      '<p class="text-sm text-muted"><i class="ti ti-info-circle"></i> ' +
+      'Serie historica ilustrativa: o modelo de dados nao registra acesso diario ' +
+      'nem pagamento, entao nao ha como gerar este grafico a partir do banco.</p></div>';
+  });
 
-  // Top cursos
   const top = document.getElementById('topCursos');
-  top.innerHTML = r.top_cursos.map((c, i) => {
-    const cor = c.aprovacao >= 80 ? 'success' : c.aprovacao >= 70 ? 'warning' : 'danger';
-    return `<div class="mb-md">
-      <div class="flex justify-between text-sm mb-sm">
-        <span><strong>#${i+1}</strong> ${c.nome}</span>
-        <div class="flex gap-md">
-          <span class="text-secondary">${c.alunos.toLocaleString('pt-BR')} alunos</span>
-          <span class="font-semibold text-${cor}">${c.aprovacao}%</span>
-        </div>
-      </div>
-      <div class="progress progress--${cor}"><div class="progress__fill" style="width:${c.aprovacao}%"></div></div>
-    </div>`;
-  }).join('');
-
-  // Gráfico receita
-  const rec = document.getElementById('chartReceita');
-  const maxReceita = Math.max(...r.receita_mensal.map(m => m.valor));
-  rec.innerHTML = r.receita_mensal.map(m => {
-    const altura = (m.valor / maxReceita) * 100;
-    return `<div style="flex:1; display:flex; flex-direction:column; align-items:center; gap:6px;">
-      <div class="text-xs font-semibold">R$ ${(m.valor/1000).toFixed(0)}k</div>
-      <div style="width:100%; height:${altura}%; background:linear-gradient(180deg, #22C55E, #15803D); border-radius:6px 6px 0 0;"></div>
-      <div class="text-xs text-muted">${m.mes}</div>
-    </div>`;
-  }).join('');
+  if (top) {
+    const cursos = (TQ.data && TQ.data.admin_cursos) || [];
+    top.innerHTML = cursos.length
+      ? cursos.slice(0, 5).map((c, i) => `
+          <div class="list-item">
+            <div class="list-item__icon">${i + 1}</div>
+            <div class="list-item__body">
+              <div class="list-item__title">${c.titulo}</div>
+              <div class="list-item__subtitle">${c.tutor || 'sem tutor'} - ${c.modulos || 0} aulas</div>
+            </div>
+            <span class="badge badge--neutral">${(c.status || '').toUpperCase()}</span>
+          </div>`).join('')
+      : '<p class="text-sm text-muted">Nenhum curso cadastrado.</p>';
+  }
 }
 </script>
 </body>

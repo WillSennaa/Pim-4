@@ -66,7 +66,7 @@
     <h3 class="modal__title" id="modalAprovarTitle">Aprovar solicitação?</h3>
     <p class="modal__text" id="modalAprovarText">Esta ação será efetivada imediatamente. O solicitante será notificado por e-mail.</p>
     <div class="modal__actions">
-      <button class="btn btn--success btn--full" onclick="confirmarAprovacao()">Sim, aprovar</button>
+      <button class="btn btn--success btn--full" onclick="confirmarAprovacao(this)">Sim, aprovar</button>
       <button class="btn btn--secondary btn--full" onclick="fecharModal('modalAprovar')">Cancelar</button>
     </div>
   </div>
@@ -78,9 +78,9 @@
     <div class="modal__icon modal__icon--danger"><i class="ti ti-x"></i></div>
     <h3 class="modal__title">Rejeitar solicitação?</h3>
     <p class="modal__text">Forneça uma justificativa clara para o solicitante entender o motivo.</p>
-    <textarea class="form-input mb-md" rows="3" placeholder="Motivo da rejeição..."></textarea>
+    <textarea class="form-input mb-md" id="motivoRejeicao" rows="3" placeholder="Motivo da rejeicao (sera enviado ao tutor)"></textarea>
     <div class="modal__actions">
-      <button class="btn btn--danger btn--full" onclick="confirmarRejeicao()">Sim, rejeitar</button>
+      <button class="btn btn--danger btn--full" onclick="confirmarRejeicao(this)">Sim, rejeitar</button>
       <button class="btn btn--secondary btn--full" onclick="fecharModal('modalRejeitar')">Cancelar</button>
     </div>
   </div>
@@ -89,103 +89,83 @@
 <script src="../../js/api.js"></script>
 <script src="../../js/app.js"></script>
 <script>
-let filtroAtual = 'todas';
+/* Curso que os modais estao avaliando. O modal e unico e reaproveitado por
+   todos os cards, entao o id precisa ficar guardado fora dele. */
+let CURSO_AVALIADO = { id: null, nome: '' };
 
-function filtrar(tipo) {
-  filtroAtual = tipo;
-  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-  event.target.classList.add('active');
-  renderSolicitacoes();
+function prepararAprovacao(id, nome) {
+  CURSO_AVALIADO = { id: id, nome: nome };
+  const tit = document.getElementById('modalAprovarTitle');
+  const txt = document.getElementById('modalAprovarText');
+  if (tit) tit.textContent = 'Aprovar "' + nome + '"?';
+  if (txt) txt.textContent = 'O curso passa a Publicado e fica visivel para todos os estudantes.';
+  abrirModal('modalAprovar');
 }
 
+function prepararRejeicao(id, nome) {
+  CURSO_AVALIADO = { id: id, nome: nome };
+  const campo = document.getElementById('motivoRejeicao');
+  if (campo) campo.value = '';
+  abrirModal('modalRejeitar');
+}
+
+function confirmarAprovacao(botao) { aprovarCurso(CURSO_AVALIADO.id, botao); }
+function confirmarRejeicao(botao) { rejeitarCurso(CURSO_AVALIADO.id, botao); }
+
 function renderSolicitacoes() {
-  if (!TQ.data) return;
-  let sols = TQ.data.solicitacoes_pendentes;
-  if (filtroAtual !== 'todas') sols = sols.filter(s => s.tipo === filtroAtual);
-
   const list = document.getElementById('solicitacoesList');
+  if (!list) return;
 
-  if (sols.length === 0) {
-    list.innerHTML = `<div class="card text-center" style="padding:var(--space-2xl);">
-      <i class="ti ti-checks" style="font-size:48px; color:var(--color-success);"></i>
-      <h3 class="font-bold mt-md mb-sm">Tudo em dia!</h3>
-      <p class="text-secondary">Nenhuma solicitação pendente nesta categoria.</p>
-    </div>`;
+  const pendentes = (TQ.data && TQ.data.solicitacoes_pendentes) || [];
+  if (!pendentes.length) {
+    list.innerHTML = '<div class="card"><p class="text-sm text-muted">Nenhum curso aguardando avaliacao.</p></div>';
     return;
   }
 
-  const tipoInfo = {
-    'criar_curso': { icon: 'ti-book-upload', cor: 'primary', label: 'Novo curso' },
-    'excluir_curso': { icon: 'ti-trash', cor: 'danger', label: 'Exclusão' },
-    'novo_tutor': { icon: 'ti-user-plus', cor: 'success', label: 'Novo tutor' }
-  };
-  const prioInfo = {
-    'alta': { class: 'danger', label: 'ALTA' },
-    'media': { class: 'warning', label: 'MÉDIA' },
-    'baixa': { class: 'neutral', label: 'BAIXA' }
-  };
+  list.innerHTML = pendentes.map(s => {
+    const nome = (s.titulo || '').replace(/'/g, "&#39;");
+    /* Curso sem aula ou com prova sem questao e sinalizado: o avaliador ve o
+       problema antes de abrir o curso. */
+    const alertas = [];
+    if (!s.total_aulas) alertas.push('sem aulas');
+    if (s.tem_prova && !s.total_questoes) alertas.push('prova sem questoes');
 
-  list.innerHTML = sols.map(s => {
-    const t = tipoInfo[s.tipo];
-    const p = prioInfo[s.prioridade];
-    return `<div class="card" style="border-left:4px solid var(--color-${t.cor});">
+    return `
+    <div class="card" style="border-left:3px solid var(--color-${alertas.length ? 'danger' : 'warning'});">
       <div class="flex items-start gap-md mb-md">
-        <div class="list-item__icon list-item__icon--${t.cor}" style="width:48px; height:48px;">
-          <i class="ti ${t.icon}" style="font-size:22px;"></i>
-        </div>
+        <div class="avatar">${s.iniciais || '??'}</div>
         <div style="flex:1;">
-          <div class="flex justify-between items-center mb-sm" style="flex-wrap:wrap; gap:var(--space-sm);">
-            <span class="badge badge--${t.cor}">${t.label}</span>
-            <div class="flex gap-sm items-center">
-              <span class="badge badge--${p.class}">${p.label}</span>
-              <span class="text-xs text-muted">${s.data}</span>
-            </div>
+          <div class="flex justify-between items-center">
+            <strong>${s.titulo}</strong>
+            <span class="badge badge--warning">EM AVALIACAO</span>
           </div>
-          <h4 class="font-bold">${s.titulo}</h4>
-          <div class="flex items-center gap-sm mt-sm">
-            <div class="avatar avatar--sm">${s.iniciais}</div>
-            <div>
-              <div class="text-sm font-medium">${s.solicitante}</div>
-              <div class="text-xs text-muted">${s.papel}</div>
-            </div>
+          <div class="text-xs text-muted mb-sm">Tutor: ${s.solicitante || 'nao identificado'}</div>
+          <p class="text-sm">${s.descricao || 'Sem descricao.'}</p>
+          <div class="course-card__meta mt-sm">
+            <span><i class="ti ti-list"></i> ${s.total_aulas} aulas</span>
+            <span><i class="ti ti-help-circle"></i> ${s.total_questoes} questoes</span>
           </div>
-          <p class="text-sm text-secondary mt-md">${s.descricao}</p>
+          ${alertas.length
+            ? `<p class="text-xs text-danger mt-sm"><i class="ti ti-alert-triangle"></i> ${alertas.join(' | ')}</p>`
+            : ''}
         </div>
       </div>
-      <div class="flex gap-sm" style="flex-wrap:wrap;">
-        <button class="btn btn--success btn--sm" style="flex:1;" onclick="prepararAprovacao('${s.tipo}','${s.titulo.replace(/'/g, '')}')"><i class="ti ti-check"></i> Aprovar</button>
-        <button class="btn btn--danger btn--sm" style="flex:1;" onclick="abrirModal('modalRejeitar')"><i class="ti ti-x"></i> Rejeitar</button>
-        <button class="btn btn--ghost btn--sm"><i class="ti ti-eye"></i> Ver detalhes</button>
+      <div class="flex gap-sm">
+        <button class="btn btn--primary btn--sm" style="flex:1;"
+                onclick="prepararAprovacao(${s.id}, '${nome}')">
+          <i class="ti ti-check"></i> Aprovar
+        </button>
+        <button class="btn btn--ghost btn--sm" style="color:var(--color-danger); border-color:var(--color-danger);"
+                onclick="prepararRejeicao(${s.id}, '${nome}')">
+          <i class="ti ti-x"></i> Rejeitar
+        </button>
       </div>
     </div>`;
   }).join('');
 }
 
-function prepararAprovacao(tipo, titulo) {
-  const textoMap = {
-    'criar_curso': { titulo: 'Aprovar novo curso?', texto: 'O curso será publicado imediatamente e ficará visível para todos os estudantes.' },
-    'excluir_curso': { titulo: 'Confirmar exclusão?', texto: 'Os alunos serão notificados e o curso removido em 7 dias. Esta ação pode ser revertida apenas neste período.' },
-    'novo_tutor': { titulo: 'Aprovar novo tutor?', texto: 'O candidato receberá credenciais de tutor e poderá começar a criar cursos imediatamente.' }
-  };
-  const t = textoMap[tipo] || textoMap['criar_curso'];
-  document.getElementById('modalAprovarTitle').textContent = t.titulo;
-  document.getElementById('modalAprovarText').textContent = t.texto;
-  abrirModal('modalAprovar');
-}
-
-function confirmarAprovacao() {
-  fecharModal('modalAprovar');
-  alert('✓ Solicitação aprovada com sucesso! O solicitante foi notificado.');
-}
-
-function confirmarRejeicao() {
-  fecharModal('modalRejeitar');
-  alert('Solicitação rejeitada. O solicitante foi notificado com a justificativa.');
-}
-
-function onPageLoad() {
-  renderSolicitacoes();
-}
+function filtrar(tipo) { renderSolicitacoes(); }
+function onPageLoad() { renderSolicitacoes(); }
 </script>
 </body>
 </html>

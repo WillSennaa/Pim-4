@@ -80,7 +80,8 @@ public class TutorRepository : ITutorRepository
             }
 
             return new AlunoDoTutorDto(
-                h.IdEstudante, h.Estudante.Usuario.Nome, h.Estudante.Usuario.Email,
+                h.IdEstudante, h.Estudante.Usuario.IdUsuario,
+                h.Estudante.Usuario.Nome, h.Estudante.Usuario.Email,
                 h.IdCurso, h.Curso.Nome, h.StatusConclusao,
                 feitas, total,
                 total == 0 ? 0 : (int)Math.Round(feitas * 100.0 / total),

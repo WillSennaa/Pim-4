@@ -220,6 +220,64 @@ public class TutorService
             questao.AlternativaCorreta()?.Letra, questao.Alternativas.Count));
     }
 
+    /// <summary>
+    /// Prova do curso COM o gabarito, para o tutor revisar antes de submeter.
+    /// O endpoint publico da prova (usado pelo aluno) nunca devolve a resposta
+    /// correta -- este e o unico caminho que a expoe, e so para o dono do curso.
+    /// </summary>
+    public async Task<Resultado<ProvaCompletaTutorDto>> ObterProvaCompletaAsync(
+        int idTutor, int idProva, CancellationToken ct = default)
+    {
+        var meus = await _cursos.ListarPorTutorAsync(idTutor, ct);
+        if (!meus.Any(c => c.IdProva == idProva))
+            return Resultado<ProvaCompletaTutorDto>.SemPermissao();
+
+        var prova = await _provas.ObterComQuestoesAsync(idProva, ct);
+        if (prova is null) return Resultado<ProvaCompletaTutorDto>.NaoEncontrado("Prova nao encontrada.");
+
+        var questoes = prova.Questoes
+            .OrderBy(q => q.Ordem)
+            .Select(q => new QuestaoCompletaTutorDto(
+                q.IdQuestao, q.Ordem, q.Enunciado, q.CodigoExemplo,
+                q.Alternativas
+                    .OrderBy(a => a.Letra)
+                    .Select(a => new AlternativaCompletaDto(a.IdAlternativa, a.Letra, a.Texto, a.EhCorreta))
+                    .ToList()))
+            .ToList();
+
+        return Resultado<ProvaCompletaTutorDto>.Ok(new ProvaCompletaTutorDto(
+            prova.IdProva, prova.Titulo, prova.NotaMinima, prova.TempoMinutos, questoes));
+    }
+
+    /// <summary>
+    /// Remove uma questao. O tutor podia adicionar mas nao apagar: um erro de
+    /// digitacao exigia recriar a prova inteira.
+    /// </summary>
+    public async Task<Resultado<bool>> RemoverQuestaoAsync(
+        int idTutor, int idQuestao, CancellationToken ct = default)
+    {
+        var questao = await _provas.ObterQuestaoAsync(idQuestao, ct);
+        if (questao is null) return Resultado<bool>.NaoEncontrado("Questao nao encontrada.");
+
+        var meus = await _cursos.ListarPorTutorAsync(idTutor, ct);
+        var curso = meus.FirstOrDefault(c => c.IdProva == questao.IdProva);
+        if (curso is null) return Resultado<bool>.SemPermissao();
+
+        if (!FluxoPublicacaoCurso.PermiteEdicao(curso.Status))
+            return Resultado<bool>.Invalido(
+                "Nao e possivel alterar a prova de um curso publicado ou em avaliacao.");
+
+        // Prova ja respondida nao muda: a nota foi calculada sobre o numero de
+        // questoes que existia na hora, e deixaria de corresponder a prova.
+        if (await _provas.ProvaTemTentativaAsync(questao.IdProva, ct))
+            return Resultado<bool>.Invalido(
+                "Esta prova ja foi respondida por alunos e nao pode ser alterada.");
+
+        _provas.RemoverQuestao(questao);
+        await _uow.SalvarAsync(ct);
+        return Resultado<bool>.Ok(true);
+    }
+
     // -----------------------------------------------------------------------
     // ALUNOS
     // -----------------------------------------------------------------------

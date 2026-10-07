@@ -19,13 +19,16 @@ public class PerfilController : ControllerBase
     private readonly EstudanteService _estudantes;
     private readonly ConquistaService _conquistas;
     private readonly RelatorioService _relatorios;
+    private readonly ContaService _conta;
 
     public PerfilController(
-        EstudanteService estudantes, ConquistaService conquistas, RelatorioService relatorios)
+        EstudanteService estudantes, ConquistaService conquistas,
+        RelatorioService relatorios, ContaService conta)
     {
         _estudantes = estudantes;
         _conquistas = conquistas;
         _relatorios = relatorios;
+        _conta = conta;
     }
 
     [HttpGet]
@@ -84,4 +87,66 @@ public class PerfilController : ControllerBase
         var id = User.IdEstudante();
         return id is null ? Forbid() : Ok(await _relatorios.DesempenhoAsync(id.Value, ct));
     }
+
+    // ---------------- conta do proprio usuario ----------------
+    // Todas exigem a senha atual, mesmo com o usuario ja autenticado: um
+    // token roubado ou uma sessao esquecida aberta nao podem tomar a conta.
+
+    /// <summary>Troca a propria senha.</summary>
+    [HttpPut("senha")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> TrocarSenha(
+        [FromBody] TrocarSenhaRequest req, CancellationToken ct)
+    {
+        var id = User.IdUsuario();
+        if (id is null) return Unauthorized();
+
+        var r = await _conta.TrocarSenhaAsync(id.Value, req, ct);
+        return r.Status == StatusOperacao.Ok ? NoContent() : Traduzir(r);
+    }
+
+    /// <summary>
+    /// Troca o proprio e-mail. O token continua valido, porque ele carrega o
+    /// ID do usuario e nao o e-mail -- nao e preciso entrar de novo.
+    /// </summary>
+    [HttpPut("email")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> TrocarEmail(
+        [FromBody] TrocarEmailRequest req, CancellationToken ct)
+    {
+        var id = User.IdUsuario();
+        if (id is null) return Unauthorized();
+
+        var r = await _conta.TrocarEmailAsync(id.Value, req, ct);
+        return r.Status == StatusOperacao.Ok ? Ok(new { email = r.Valor }) : Traduzir(r);
+    }
+
+    /// <summary>
+    /// Encerra a propria conta. Desativa e preserva o registro academico, em
+    /// vez de apagar: certificados emitidos continuam validaveis por terceiros.
+    /// </summary>
+    [HttpPost("desativar")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> DesativarConta(
+        [FromBody] DesativarContaRequest req, CancellationToken ct)
+    {
+        var id = User.IdUsuario();
+        if (id is null) return Unauthorized();
+
+        var r = await _conta.DesativarContaAsync(id.Value, req, ct);
+        return r.Status == StatusOperacao.Ok ? NoContent() : Traduzir(r);
+    }
+
+    /// <summary>Converte o resultado de negocio no status HTTP correspondente.</summary>
+    private IActionResult Traduzir<T>(Resultado<T> r) => r.Status switch
+    {
+        StatusOperacao.Ok => Ok(r.Valor),
+        StatusOperacao.NaoEncontrado => NotFound(new { mensagem = r.Mensagem }),
+        StatusOperacao.SemPermissao => StatusCode(StatusCodes.Status403Forbidden,
+                                                  new { mensagem = r.Mensagem }),
+        _ => BadRequest(new { mensagem = r.Mensagem })
+    };
 }

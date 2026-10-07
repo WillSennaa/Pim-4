@@ -59,7 +59,8 @@
       </div>
     </div>
 
-    <div id="materiaisList" class="animate-in animate-in-delay-3"></div>
+    <div id="avisoFiltro"></div>
+      <div id="materiaisList" class="animate-in animate-in-delay-3"></div>
 
   </main>
 
@@ -75,89 +76,35 @@
 <script src="../../js/api.js"></script>
 <script src="../../js/app.js"></script>
 <script>
-// Materiais mockados (em um sistema real viriam do JSON)
-const materiais = [
-  { id: 1, titulo: 'Introdução a C#', curso: 'Fundamentos de C#', modulo: 'Módulo 1', status: 'concluido', favorito: true, data: 'Há 3 semanas', duracao: '30 min', tipo: 'aula', link: 'aula.html' },
-  { id: 2, titulo: 'Sintaxe Básica de C#', curso: 'Fundamentos de C#', modulo: 'Módulo 2', status: 'concluido', favorito: true, data: 'Há 2 semanas', duracao: '40 min', tipo: 'aula', link: 'aula.html' },
-  { id: 3, titulo: 'Arrays e Listas em C#', curso: 'Fundamentos de C#', modulo: 'Módulo 3', status: 'concluido', favorito: true, data: 'Há 2 horas', duracao: '45 min', tipo: 'aula', link: 'aula.html' },
-  { id: 4, titulo: 'Estruturas de Repetição', curso: 'Fundamentos de C#', modulo: 'Módulo 4', status: 'andamento', favorito: false, data: 'Hoje', duracao: '50 min', tipo: 'aula', link: 'aula.html' },
-  { id: 5, titulo: 'Introdução a Banco de Dados', curso: 'Banco de Dados e Modelagem', modulo: 'Módulo 1', status: 'concluido', favorito: false, data: 'Há 1 semana', duracao: '40 min', tipo: 'aula', link: 'aula-bd.html' },
-  { id: 6, titulo: 'Modelagem Entidade-Relacionamento', curso: 'Banco de Dados e Modelagem', modulo: 'Módulo 2', status: 'concluido', favorito: true, data: 'Há 4 dias', duracao: '60 min', tipo: 'aula', link: 'aula-bd.html' },
-  { id: 7, titulo: 'Análise de Sistemas e RUP', curso: 'Banco de Dados e Modelagem', modulo: 'Módulo 3', status: 'andamento', favorito: false, data: 'Ontem', duracao: '55 min', tipo: 'aula', link: 'aula-bd.html' },
-  { id: 8, titulo: 'PDF: Cheat Sheet C#', curso: 'Fundamentos de C#', modulo: 'Apoio', status: 'concluido', favorito: true, data: 'Há 1 semana', duracao: '10 min', tipo: 'pdf', link: '#' }
-];
+/* Lista as aulas dos cursos em que o aluno esta matriculado, com o estado
+   real de cada uma. Antes era um array fixo escrito nesta pagina.
 
-let filtroAtual = 'todos';
+   "Favoritos" nao existe no modelo de dados -- nao ha tabela para isso --,
+   entao o filtro avisa em vez de mostrar uma lista vazia sem explicacao. */
+function filtrarMateriais(tipo, botao) {
+  document.querySelectorAll('.tab').forEach(b => b.classList.remove('active'));
+  if (botao) botao.classList.add('active');
 
-function filtrarMateriais(f, btn) {
-  filtroAtual = f;
-  document.querySelectorAll('.tabs--pills .tab').forEach(t => t.classList.remove('active'));
-  if (btn) btn.classList.add('active');
-  renderMateriais();
-}
+  const aviso = document.getElementById('avisoFiltro');
+  if (aviso) aviso.innerHTML = '';
 
-function renderMateriais() {
-  const busca = (document.getElementById('buscaMaterial').value || '').toLowerCase();
-  let m = materiais;
-  if (filtroAtual === 'concluido') m = m.filter(x => x.status === 'concluido');
-  if (filtroAtual === 'andamento') m = m.filter(x => x.status === 'andamento');
-  if (filtroAtual === 'favorito') m = m.filter(x => x.favorito);
-  if (busca) m = m.filter(x => x.titulo.toLowerCase().includes(busca) || x.curso.toLowerCase().includes(busca));
-
-  const list = document.getElementById('materiaisList');
-  if (m.length === 0) {
-    list.innerHTML = `<div class="card text-center" style="padding:var(--space-2xl);">
-      <i class="ti ti-mood-empty" style="font-size:48px; color:var(--color-text-muted);"></i>
-      <p class="text-muted mt-md">Nenhum material encontrado.</p>
-    </div>`;
+  if (tipo === 'favorito') {
+    if (aviso) {
+      aviso.innerHTML = '<div class="card" style="background:var(--color-warning-light); border-color:var(--color-warning);">' +
+        '<p class="text-sm"><i class="ti ti-info-circle"></i> Favoritos nao estao no modelo de dados desta versao.</p></div>';
+    }
+    document.querySelectorAll('#materiaisList [data-concluido]').forEach(el => el.style.display = 'none');
     return;
   }
 
-  list.innerHTML = m.map(x => {
-    const icone = x.tipo === 'pdf' ? 'ti-file-text' : 'ti-play-circle';
-    const statusClass = x.status === 'concluido' ? 'success' : 'warning';
-    const statusLabel = x.status === 'concluido' ? 'CONCLUÍDO' : 'EM ANDAMENTO';
-    return `<div class="card">
-      <div class="flex items-start gap-md">
-        <div class="list-item__icon list-item__icon--${statusClass}" style="width:48px; height:48px;">
-          <i class="ti ${icone}" style="font-size:22px;"></i>
-        </div>
-        <div style="flex:1; min-width:0;">
-          <div class="flex justify-between items-start mb-sm" style="gap:var(--space-sm);">
-            <h4 class="font-bold">${x.titulo}</h4>
-            <button onclick="toggleFavorito(${x.id})" style="background:none; border:none; cursor:pointer; color:${x.favorito ? 'var(--color-warning)' : 'var(--color-text-muted)'}; font-size:20px;">
-              <i class="ti ti-star${x.favorito ? '-filled' : ''}"></i>
-            </button>
-          </div>
-          <div class="text-sm text-secondary mb-sm">${x.curso} · ${x.modulo}</div>
-          <div class="flex gap-md text-xs text-muted mb-md" style="flex-wrap:wrap;">
-            <span><i class="ti ti-clock"></i> ${x.duracao}</span>
-            <span><i class="ti ti-calendar"></i> ${x.data}</span>
-            <span class="badge badge--${statusClass}">${statusLabel}</span>
-          </div>
-          <div class="flex gap-sm">
-            <a href="${x.link}" class="btn btn--primary btn--sm" style="flex:1;">
-              ${x.status === 'concluido' ? '<i class="ti ti-rotate"></i> Revisar' : '<i class="ti ti-player-play"></i> Continuar'}
-            </a>
-            ${x.tipo === 'pdf' ? '<button class="btn btn--ghost btn--sm" onclick="alert(\'📥 Download iniciado!\');"><i class="ti ti-download"></i></button>' : ''}
-          </div>
-        </div>
-      </div>
-    </div>`;
-  }).join('');
+  document.querySelectorAll('#materiaisList [data-concluido]').forEach(el => {
+    const concluido = el.dataset.concluido === 'true';
+    const mostra = tipo === 'todos' || (tipo === 'concluido' && concluido) || (tipo === 'andamento' && !concluido);
+    el.style.display = mostra ? '' : 'none';
+  });
 }
 
-function toggleFavorito(id) {
-  const m = materiais.find(x => x.id === id);
-  if (m) {
-    m.favorito = !m.favorito;
-    renderMateriais();
-  }
-}
-
-function onPageLoad() {
-  renderMateriais();
-}
+function onPageLoad() { carregarMeusMateriais(); }
 </script>
 </body>
 </html>

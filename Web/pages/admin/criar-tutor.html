@@ -37,6 +37,14 @@
       <h1 class="page-title animate-in">Cadastrar novo Tutor</h1>
       <p class="page-subtitle">Preencha os dados do novo tutor. Ele receberá um e-mail com instruções de acesso.</p>
 
+      <div class="form-group">
+        <label class="form-label" for="novoPapel">Perfil de acesso</label>
+        <select class="form-input" id="novoPapel">
+          <option value="Tutor">Tutor</option>
+          <option value="Admin">Administrador</option>
+          <option value="Estudante">Estudante</option>
+        </select>
+      </div>
       <form onsubmit="event.preventDefault(); abrirModal('modalConfirmar');" class="animate-in animate-in-delay-1">
 
         <!-- Dados básicos -->
@@ -47,7 +55,7 @@
             <label class="form-label">Nome completo *</label>
             <div class="form-input-wrapper">
               <i class="ti ti-user"></i>
-              <input type="text" class="form-input form-input--with-icon" placeholder="Ex: Maria Souza" required>
+              <input type="text" class="form-input form-input--with-icon" id="novoNome" placeholder="Ex: Maria Souza" required>
             </div>
           </div>
 
@@ -56,7 +64,7 @@
               <label class="form-label">E-mail institucional *</label>
               <div class="form-input-wrapper">
                 <i class="ti ti-mail"></i>
-                <input type="email" class="form-input form-input--with-icon" placeholder="tutor@techquest.com" required>
+                <input type="email" class="form-input form-input--with-icon" id="novoEmail" placeholder="tutor@techquest.com" required>
               </div>
             </div>
             <div class="form-group" style="flex:1; min-width:160px;">
@@ -163,7 +171,7 @@
             <label class="form-label">Senha provisória</label>
             <div class="form-input-wrapper">
               <i class="ti ti-lock"></i>
-              <input type="text" class="form-input form-input--with-icon" value="TechQuest@2024" id="senhaProv">
+              <input type="text" class="form-input form-input--with-icon" value="TechQuest@2024" id="novaSenha">
               <button type="button" style="position:absolute; right:14px; top:50%; transform:translateY(-50%); background:none; border:none; color:var(--color-primary); cursor:pointer; font-size:13px; font-weight:600;" onclick="gerarSenha()">Gerar nova</button>
             </div>
             <p class="text-xs text-muted mt-sm">O tutor será obrigado a redefinir esta senha no primeiro acesso.</p>
@@ -205,7 +213,7 @@
     <h3 class="modal__title">Confirmar cadastro?</h3>
     <p class="modal__text">O novo tutor receberá um e-mail com as credenciais de acesso e poderá entrar na plataforma imediatamente.</p>
     <div class="modal__actions">
-      <button class="btn btn--primary btn--full" onclick="fecharModal('modalConfirmar'); abrirModal('modalSucesso');">Sim, cadastrar</button>
+      <button class="btn btn--primary btn--full" onclick="fecharModal('modalConfirmar'); criarUsuarioAdmin(this);">Sim, cadastrar</button>
       <button class="btn btn--secondary btn--full" onclick="fecharModal('modalConfirmar')">Cancelar</button>
     </div>
   </div>
@@ -231,7 +239,7 @@ function gerarSenha() {
   const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789';
   let s = '';
   for (let i = 0; i < 10; i++) s += chars.charAt(Math.floor(Math.random() * chars.length));
-  document.getElementById('senhaProv').value = s + '@';
+  document.getElementById('novaSenha').value = s + '@';
 }
 
 function confirmarSaida(e) {

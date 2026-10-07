@@ -162,11 +162,23 @@ async function verificarApi() {
   const box = document.getElementById('statusApi');
   try {
     await API.saude();
-    box.innerHTML = '<span class="badge badge--success"><i class="ti ti-cloud-check"></i> API conectada</span>';
+    box.innerHTML = API.naNuvem
+      ? '<span class="badge badge--success"><i class="ti ti-cloud-check"></i> API na nuvem (Azure)</span>'
+      : '<span class="badge badge--success"><i class="ti ti-server"></i> API local conectada</span>';
   } catch (e) {
+    // A instrução depende de qual API está configurada: no Azure não há
+    // nada para iniciar no Visual Studio, e mandar o usuário fazer isso
+    // seria um diagnóstico errado.
+    const ajuda = API.naNuvem
+      ? 'A API publicada não respondeu. Pode estar hibernando (o primeiro acesso ' +
+        'do dia demora) ou fora do ar. Abra <a href="' + API.base + '/swagger" ' +
+        'target="_blank" class="form-link">o Swagger</a> para confirmar e tente de novo.'
+      : 'Inicie a API no Visual Studio e aceite o certificado abrindo ' +
+        '<a href="' + API.base + '/swagger" target="_blank" class="form-link">' +
+        API.base + '</a> no navegador.';
+
     box.innerHTML = '<span class="badge badge--danger"><i class="ti ti-cloud-off"></i> API offline</span>' +
-      '<p class="text-xs text-muted mt-sm">Inicie a API no Visual Studio e aceite o certificado abrindo ' +
-      '<a href="' + API.base + '/swagger" target="_blank" class="form-link">' + API.base + '</a> no navegador.</p>';
+      '<p class="text-xs text-muted mt-sm">' + ajuda + '</p>';
   }
 }
 

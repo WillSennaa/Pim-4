@@ -140,86 +140,90 @@
 <script>
 let filtroTipo = 'todos';
 
-function filtrarTipo(t) {
-  filtroTipo = t;
-  document.querySelectorAll('#filtrosTipo .tab').forEach(tab => tab.classList.remove('active'));
-  const tab = document.querySelector(`#filtrosTipo .tab[data-tipo="${t}"]`);
+function filtrarTipo(tp) {
+  filtroTipo = tp;
+  document.querySelectorAll('#filtrosTipo .tab').forEach(x => x.classList.remove('active'));
+  const tab = document.querySelector(`#filtrosTipo .tab[data-tipo="${tp}"]`);
   if (tab) tab.classList.add('active');
   renderUsuarios();
 }
 
 function renderUsuarios() {
-  if (!TQ.data) return;
-  const busca = (document.getElementById('buscaUsuario').value || '').toLowerCase().trim();
-  const status = document.getElementById('filtroStatus').value;
-  let usrs = TQ.data.admin_usuarios;
-  if (filtroTipo !== 'todos') usrs = usrs.filter(u => u.tipo === filtroTipo);
-  if (status !== 'todos') usrs = usrs.filter(u => u.status === status);
-  if (busca) usrs = usrs.filter(u =>
-    u.nome.toLowerCase().includes(busca) ||
-    u.email.toLowerCase().includes(busca)
-  );
+  const corpo = document.getElementById('usuariosTableBody');
+  if (!corpo) return;
 
-  const tbody = document.getElementById('usuariosTableBody');
-  const empty = document.getElementById('emptyState');
-  document.getElementById('contagemTotal').textContent = usrs.length;
+  let usuarios = (TQ.data && TQ.data.admin_usuarios) || [];
 
-  if (usrs.length === 0) {
-    tbody.innerHTML = '';
-    empty.style.display = '';
+  if (filtroTipo !== 'todos') usuarios = usuarios.filter(u => u.tipo === filtroTipo);
+
+  const status = document.getElementById('filtroStatus');
+  if (status && status.value && status.value !== 'todos') {
+    usuarios = usuarios.filter(u => u.status === status.value);
+  }
+
+  const busca = document.getElementById('buscaUsuario');
+  if (busca && busca.value.trim()) {
+    const termo = busca.value.trim().toLowerCase();
+    usuarios = usuarios.filter(u =>
+      (u.nome || '').toLowerCase().includes(termo) ||
+      (u.email || '').toLowerCase().includes(termo));
+  }
+
+  const todos = (TQ.data && TQ.data.admin_usuarios) || [];
+  const kpi = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
+  kpi('kpiEstudantes', todos.filter(u => u.tipo === 'estudante').length);
+  kpi('kpiTutores', todos.filter(u => u.tipo === 'tutor').length);
+  kpi('kpiAdmins', todos.filter(u => u.tipo === 'admin').length);
+  kpi('kpiAtivos', todos.filter(u => u.status === 'ativo').length);
+  kpi('contagemTotal', usuarios.length + ' de ' + todos.length);
+
+  const vazio = document.getElementById('emptyState');
+  if (!usuarios.length) {
+    corpo.innerHTML = '';
+    if (vazio) vazio.style.display = '';
     return;
   }
-  empty.style.display = 'none';
+  if (vazio) vazio.style.display = 'none';
 
-  const tipoBadge = {
-    'Estudante': 'primary',
-    'Tutor': 'warning',
-    'Admin': 'neutral'
-  };
-  const statusBadge = {
-    'Ativo': 'success',
-    'Inativo': 'neutral',
-    'Suspenso': 'danger'
-  };
+  /* O proprio administrador logado nao recebe botao de desativar: o servidor
+     recusa a operacao, e oferecer um botao que sempre falha e so frustracao. */
+  const eu = API.usuario ? API.usuario.id : null;
 
-  tbody.innerHTML = usrs.map(u => `
-    <tr style="cursor:pointer;" onclick="window.location.href='usuario-detalhe.html?id=${u.id}'">
+  corpo.innerHTML = usuarios.map(u => {
+    const ativo = u.status === 'ativo';
+    const souEu = u.id === eu;
+    return `
+    <tr>
       <td>
-        <div class="flex items-center gap-md">
-          <div class="avatar avatar--sm">${u.nome.split(' ').map(n=>n[0]).join('').substring(0,2)}</div>
+        <div class="flex items-center gap-sm">
+          <div class="avatar avatar--sm">${FMT.iniciais(u.nome)}</div>
           <div>
-            <div class="font-medium">${u.nome}</div>
-            <div class="text-xs text-muted">${u.email}</div>
+            <div class="font-medium">
+              <a href="usuario-detalhe.html?id=${u.id}" class="form-link">${u.nome}</a>${souEu ? ' <span class="text-xs text-muted">(voce)</span>' : ''}</div>
+            <div class="text-xs text-muted">${u.email || ''}</div>
           </div>
         </div>
       </td>
-      <td><span class="badge badge--${tipoBadge[u.tipo]}">${u.tipo}</span></td>
-      <td><span class="badge badge--${statusBadge[u.status]}">${u.status}</span></td>
-      <td class="text-sm text-muted">${u.data_cadastro}</td>
-      <td class="text-sm text-muted">${u.ultimo_acesso}</td>
-      <td onclick="event.stopPropagation();">
-        <div class="flex gap-sm">
-          <a href="usuario-detalhe.html?id=${u.id}" class="btn btn--ghost btn--sm" style="padding:6px;" title="Ver detalhes"><i class="ti ti-eye"></i></a>
-        </div>
+      <td><span class="badge badge--neutral">${(u.tipo || '').toUpperCase()}</span></td>
+      <td><span class="badge badge--${ativo ? 'success' : 'danger'}">${ativo ? 'ATIVO' : 'INATIVO'}</span></td>
+      <td class="text-sm text-muted">${u.data_cadastro || '-'}</td>
+      <td>
+        ${souEu
+          ? '<span class="text-xs text-muted">-</span>'
+          : `<button class="btn btn--ghost btn--sm"
+                     style="color:var(--color-${ativo ? 'danger' : 'success'}); border-color:var(--color-${ativo ? 'danger' : 'success'});"
+                     onclick="alterarStatusUsuario(${u.id}, ${!ativo}, this)">
+               <i class="ti ti-${ativo ? 'user-off' : 'user-check'}"></i> ${ativo ? 'Desativar' : 'Ativar'}
+             </button>`}
       </td>
-    </tr>
-  `).join('');
+    </tr>`;
+  }).join('');
 }
 
-document.addEventListener('click', e => {
-  if (e.target.closest('#filtrosTipo .tab')) {
-    filtrarTipo(e.target.closest('.tab').dataset.tipo);
-  }
-});
-
 function onPageLoad() {
-  if (!TQ.data) return;
-  const u = TQ.data.admin_usuarios;
-  document.getElementById('kpiEstudantes').textContent = u.filter(x => x.tipo === 'Estudante').length;
-  document.getElementById('kpiTutores').textContent = u.filter(x => x.tipo === 'Tutor').length;
-  document.getElementById('kpiAdmins').textContent = u.filter(x => x.tipo === 'Admin').length;
-  document.getElementById('kpiAtivos').textContent = u.filter(x => x.status === 'Ativo').length;
   renderUsuarios();
+  const busca = document.getElementById('buscaUsuario');
+  if (busca) busca.addEventListener('input', renderUsuarios);
 }
 </script>
 </body>

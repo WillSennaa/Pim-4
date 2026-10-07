@@ -25,14 +25,13 @@
     <!-- Header do perfil -->
     <div class="profile-header animate-in">
       <div class="profile-header__avatar-wrapper">
-        <div class="profile-header__avatar" style="background:linear-gradient(135deg,#475569,#1E293B); display:flex; align-items:center; justify-content:center; color:white; font-size:36px; font-weight:700;">F</div>
+        <div class="profile-header__avatar" style="background:linear-gradient(135deg,#475569,#1E293B); display:flex; align-items:center; justify-content:center; color:white; font-size:36px; font-weight:700;" id="perfilIniciais">F</div>
         <div class="profile-header__avatar-edit"><i class="ti ti-camera"></i></div>
       </div>
-      <div class="profile-header__name">Felipe Almeida</div>
-      <div class="profile-header__email">felipe.almeida@email.com</div>
+      <div class="profile-header__name" id="perfilNomeTopo">Felipe Almeida</div>
+      <div class="profile-header__email" id="perfilEmailTopo">felipe.almeida@email.com</div>
       <div class="profile-header__level-badge">
-        <i class="ti ti-trophy"></i> Nível 7 · 2.450 XP
-      </div>
+        <i class="ti ti-trophy"></i> <span id="perfilNivelXp">carregando...</span></div>
       <div class="text-xs text-center mt-md" style="opacity:0.85;">PROGRESSO DO NÍVEL <span style="float:right;">75%</span></div>
       <div class="progress mt-sm" style="background:rgba(255,255,255,0.2);">
         <div class="progress__fill" style="width:75%; background:white;"></div>
@@ -47,7 +46,7 @@
             <i class="ti ti-clipboard-list"></i>
           </div>
           <div>
-            <div class="stat-card__value">12</div>
+            <div class="stat-card__value" id="statProvas">0</div>
             <div class="stat-card__label">Provas</div>
           </div>
         </div>
@@ -58,7 +57,7 @@
             <i class="ti ti-medal"></i>
           </div>
           <div>
-            <div class="stat-card__value">5</div>
+            <div class="stat-card__value" id="statMedalhas">0</div>
             <div class="stat-card__label">Medalhas</div>
           </div>
         </div>
@@ -69,7 +68,7 @@
             <i class="ti ti-certificate"></i>
           </div>
           <div>
-            <div class="stat-card__value">1</div>
+            <div class="stat-card__value" id="statCertificados">0</div>
             <div class="stat-card__label">Certificado</div>
           </div>
         </div>
@@ -80,8 +79,8 @@
             <i class="ti ti-flame"></i>
           </div>
           <div>
-            <div class="stat-card__value">7 dias</div>
-            <div class="stat-card__label">Ofensiva</div>
+            <div class="stat-card__value" id="statAulas">0</div>
+            <div class="stat-card__label">Aulas</div>
           </div>
         </div>
       </div>
@@ -118,29 +117,29 @@
     <div class="card animate-in animate-in-delay-2">
       <div class="mb-md">
         <div class="text-xs text-muted font-semibold" style="letter-spacing:1px;">NOME</div>
-        <div class="font-medium">Felipe Almeida</div>
+        <div class="font-medium" id="perfilNomeDados">-</div>
       </div>
       <div class="mb-md">
         <div class="text-xs text-muted font-semibold" style="letter-spacing:1px;">E-MAIL</div>
-        <div class="font-medium">felipe.almeida@email.com</div>
+        <div class="font-medium" id="perfilEmailDados">-</div>
       </div>
       <div class="mb-md">
         <div class="text-xs text-muted font-semibold" style="letter-spacing:1px;">SENHA</div>
-        <div class="font-medium">••••••••••••</div>
+        <div class="font-medium" id="perfilSenhaDados">••••••••••••</div>
       </div>
       <div class="flex gap-lg mb-md">
         <div style="flex:1;">
           <div class="text-xs text-muted font-semibold" style="letter-spacing:1px;">TELEFONE</div>
-          <div class="font-medium">(11) 98888-7777</div>
+          <div class="font-medium" id="perfilTelefoneDados">-</div>
         </div>
         <div style="flex:1;">
           <div class="text-xs text-muted font-semibold" style="letter-spacing:1px;">NASCIMENTO</div>
-          <div class="font-medium">15/05/1998</div>
+          <div class="font-medium" id="perfilNascimentoDados">-</div>
         </div>
       </div>
       <div class="mb-lg">
         <div class="text-xs text-muted font-semibold" style="letter-spacing:1px;">CIDADE</div>
-        <div class="font-medium">São Paulo - SP</div>
+        <div class="font-medium" id="perfilCidadeDados">-</div>
       </div>
       <a href="editar-perfil.html" class="btn btn--secondary btn--full">Editar dados</a>
     </div>
@@ -227,12 +226,12 @@
 <div class="modal-overlay" id="modalExcluir">
   <div class="modal">
     <div class="modal__icon modal__icon--danger"><i class="ti ti-alert-triangle"></i></div>
-    <h3 class="modal__title">Excluir conta permanentemente?</h3>
-    <p class="modal__text">Esta ação é irreversível. Ao confirmar, todos os seus dados pessoais, histórico de cursos e certificados serão removidos conforme as diretrizes da LGPD. Você perderá o acesso imediato à plataforma.</p>
-    <div class="text-xs text-muted text-center mb-sm" style="letter-spacing:1px;">DIGITE EXCLUIR PARA CONFIRMAR</div>
-    <input type="text" id="confirmDelete" class="form-input mb-md text-center" placeholder="EXCLUIR" style="text-transform:uppercase;">
+    <h3 class="modal__title">Encerrar sua conta?</h3>
+    <p class="modal__text">Seu acesso e encerrado imediatamente e voce nao conseguira mais entrar. O registro academico — historico, notas e certificados ja emitidos — e preservado, porque certificados sao validados por terceiros pelo codigo publico. Para apagar os dados em definitivo, e preciso solicitar a um administrador.</p>
+    <div class="text-xs text-muted text-center mb-sm" style="letter-spacing:1px;">CONFIRME COM SUA SENHA</div>
+    <input type="password" id="senhaExclusao" class="form-input mb-md text-center" placeholder="Sua senha">
     <div class="modal__actions">
-      <button class="btn btn--danger btn--full" onclick="excluirConta()">Excluir minha conta</button>
+      <button class="btn btn--danger btn--full" onclick="excluirConta(this)">Encerrar minha conta</button>
       <button class="btn btn--secondary btn--full" onclick="fecharModal('modalExcluir')">Cancelar</button>
     </div>
     <p class="text-center text-xs text-muted mt-md"><i class="ti ti-lock"></i> Processamento de dados seguro</p>
@@ -254,23 +253,9 @@
 <script src="../../js/api.js"></script>
 <script src="../../js/app.js"></script>
 <script>
-function excluirConta() {
-  const valor = document.getElementById('confirmDelete').value.trim().toUpperCase();
-  if (valor !== 'EXCLUIR') {
-    alert('Digite EXCLUIR para confirmar a exclusão da conta.');
-    return;
-  }
-  fecharModal('modalExcluir');
-  // Limpa storage simulando exclusão real dos dados
-  localStorage.removeItem('tq_persona');
-  sessionStorage.clear();
-  // Mostra confirmação e em 2s redireciona
-  abrirModal('modalContaExcluida');
-  setTimeout(function() {
-    window.location.href = '../../index.html';
-  }, 2500);
-}
+function onPageLoad() { carregarPerfilEstudante(); }
 </script>
+
 </body>
 </html>
 

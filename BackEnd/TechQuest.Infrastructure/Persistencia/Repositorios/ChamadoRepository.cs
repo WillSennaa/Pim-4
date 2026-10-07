@@ -26,6 +26,4 @@ public class ChamadoRepository : IChamadoRepository
 
     public void Adicionar(Chamado chamado) => _db.Chamados.Add(chamado);
 
-    public Task<int> ContarAbertosAsync(CancellationToken ct = default)
-        => _db.Chamados.CountAsync(c => c.Status == "Aberto", ct);
 }
