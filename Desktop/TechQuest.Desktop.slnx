@@ -1,0 +1,8 @@
+<Solution>
+  <Project Path="TechQuest.Desktop.Modelos/TechQuest.Desktop.Modelos.csproj" />
+  <Project Path="TechQuest.Desktop.Aplicacao/TechQuest.Desktop.Aplicacao.csproj" />
+  <Project Path="TechQuest.Desktop.Integracao/TechQuest.Desktop.Integracao.csproj" />
+  <Project Path="TechQuest.Desktop.Apresentacao/TechQuest.Desktop.Apresentacao.csproj" />
+  <Project Path="TechQuest.Desktop.UI/TechQuest.Desktop.UI.csproj" />
+  <Project Path="TechQuest.Desktop.Tests/TechQuest.Desktop.Tests.csproj" />
+</Solution>

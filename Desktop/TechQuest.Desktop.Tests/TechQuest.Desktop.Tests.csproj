@@ -1,0 +1,32 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
+  </PropertyGroup>
+
+  <!-- Mesmas versoes do TechQuest.Tests do back-end. -->
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.11.1" />
+    <PackageReference Include="xunit" Version="2.9.2" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.8.2" />
+  </ItemGroup>
+
+  <!--
+    SEM REFERENCIA AO PROJETO UI, e isso e o ponto. Os presenters sao
+    exercitados com telas falsas que implementam as interfaces de view, e o
+    ApiCliente com um HttpMessageHandler falso. Nenhum teste abre janela nem
+    faz chamada de rede; a suite roda em qualquer sistema operacional.
+    E a prova pratica de que a logica de tela saiu do Windows Forms.
+  -->
+  <ItemGroup>
+    <ProjectReference Include="..\TechQuest.Desktop.Modelos\TechQuest.Desktop.Modelos.csproj" />
+    <ProjectReference Include="..\TechQuest.Desktop.Aplicacao\TechQuest.Desktop.Aplicacao.csproj" />
+    <ProjectReference Include="..\TechQuest.Desktop.Integracao\TechQuest.Desktop.Integracao.csproj" />
+    <ProjectReference Include="..\TechQuest.Desktop.Apresentacao\TechQuest.Desktop.Apresentacao.csproj" />
+  </ItemGroup>
+
+</Project>

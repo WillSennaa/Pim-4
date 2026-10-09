@@ -1,0 +1,33 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    Unico projeto que depende do Windows. As outras quatro camadas sao
+    net8.0 puro: compilam em qualquer sistema e nao conhecem Windows Forms.
+    Este projeto e tambem a RAIZ DE COMPOSICAO: e o unico que referencia
+    todas as camadas, porque e em Program.cs que cada contrato recebe sua
+    implementacao concreta (mesmo papel do Program.cs da API).
+  -->
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <RootNamespace>TechQuest.Desktop.UI</RootNamespace>
+    <AssemblyName>TechQuestAdmin</AssemblyName>
+    <ApplicationHighDpiMode>SystemAware</ApplicationHighDpiMode>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\TechQuest.Desktop.Modelos\TechQuest.Desktop.Modelos.csproj" />
+    <ProjectReference Include="..\TechQuest.Desktop.Aplicacao\TechQuest.Desktop.Aplicacao.csproj" />
+    <ProjectReference Include="..\TechQuest.Desktop.Integracao\TechQuest.Desktop.Integracao.csproj" />
+    <ProjectReference Include="..\TechQuest.Desktop.Apresentacao\TechQuest.Desktop.Apresentacao.csproj" />
+  </ItemGroup>
+
+  <!-- Copiado ao lado do .exe: trocar a URL da API nao exige recompilar. -->
+  <ItemGroup>
+    <None Update="appsettings.json" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
+</Project>
