@@ -32,14 +32,24 @@
       <a href="alterar-senha.html" class="list-item" style="border-top:1.5px dashed var(--color-border);">
         <span style="flex:1;">Alterar senha</span><i class="ti ti-chevron-right text-muted"></i>
       </a>
-      <div class="list-item" style="border-top:1.5px dashed var(--color-border);">
-        <span style="flex:1;">Métodos de login</span><i class="ti ti-chevron-right text-muted"></i>
-      </div>
+      <!-- "Metodos de login" nao levava a lugar algum: existe um metodo so
+           (e-mail e senha), e nao ha login social nem 2FA implementados. -->
     </div>
 
     <!-- Notificações -->
     <div class="card animate-in animate-in-delay-1">
       <h3 class="text-sm font-semibold mb-md text-primary"><i class="ti ti-bell" style="vertical-align:-2px;"></i> Notificações</h3>
+      <!-- As chaves nao salvam: nao existe tabela de preferencia de
+           notificacao no modelo, nem servico de envio de e-mail ou push
+           configurado. Em vez de remover a secao (o que esconderia a
+           limitacao da banca), o aviso declara o que falta. -->
+      <p class="text-xs text-muted mb-md" style="background:var(--color-warning-light);
+         padding:8px 10px; border-radius:6px;">
+        <i class="ti ti-info-circle"></i> Preferências de notificação ainda não são salvas:
+        o modelo de dados não tem tabela para elas e não há serviço de e-mail configurado.
+        As mensagens do tutor e do suporte aparecem em
+        <a href="notificacoes.html" class="form-link">Notificações</a>.
+      </p>
       <div class="flex justify-between items-center mb-md">
         <span class="text-sm">Notificações push</span>
         <div class="toggle active" onclick="toggleSwitch(this)"></div>
@@ -89,7 +99,7 @@
       <h3 class="text-sm font-semibold mb-md text-primary"><i class="ti ti-info-circle" style="vertical-align:-2px;"></i> Sobre</h3>
       <div class="flex justify-between items-center mb-md text-sm">
         <span>Versão do app</span>
-        <span class="text-muted">2.4.1 Build 105</span>
+        <span class="text-muted" id="versaoApp">-</span>
       </div>
       <div class="list-item" style="cursor:pointer;" onclick="alert('Obrigado pelo carinho! 🌟');">
         <i class="ti ti-star-filled text-warning"></i>
@@ -121,6 +131,7 @@
     <a href="home.html" class="bottom-nav__item"><i class="ti ti-home"></i><span>Home</span></a>
     <a href="cursos.html" class="bottom-nav__item"><i class="ti ti-book-2"></i><span>Cursos</span></a>
     <a href="conquistas.html" class="bottom-nav__item"><i class="ti ti-trophy"></i><span>Conquistas</span></a>
+    <a href="ajuda.html" class="bottom-nav__item"><i class="ti ti-help-circle"></i><span>Ajuda</span></a>
     <a href="perfil.html" class="bottom-nav__item active"><i class="ti ti-user"></i><span>Perfil</span></a>
   </nav>
 

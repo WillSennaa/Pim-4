@@ -19,7 +19,7 @@
     </div>
     <div class="sidebar-nav__item active"><i class="ti ti-layout-dashboard"></i> Painel</div>
     <a href="alunos.html" class="sidebar-nav__item"><i class="ti ti-users"></i> Meus Alunos</a>
-    <a href="duvidas.html" class="sidebar-nav__item"><i class="ti ti-message-circle"></i> Dúvidas <span class="badge badge--danger" style="margin-left:auto;">2</span></a>
+    <a href="duvidas.html" class="sidebar-nav__item"><i class="ti ti-message-circle"></i> Dúvidas <span class="js-selo-duvidas badge badge--danger" style="margin-left:auto;">-</span></a>
     <a href="cursos.html" class="sidebar-nav__item"><i class="ti ti-book"></i> Meus Cursos</a>
     <div style="flex:1;"></div>
 <a href="../../index.html" class="sidebar-nav__item" onclick="return confirmarSaida(event)"><i class="ti ti-logout"></i> Sair</a>
@@ -32,7 +32,7 @@
       <div class="top-bar__brand"><span>Painel do Tutor</span></div>
       <div class="top-bar__actions">
         <button class="top-bar__icon-btn"><i class="ti ti-bell"></i></button>
-        <div class="top-bar__avatar" style="background:#FDA4AF; color:#9F1239;">AS</div>
+        <a href="../conta/perfil.html" class="top-bar__avatar" style="background:#FDA4AF; color:#9F1239;" title="Meu perfil">AS</a>
       </div>
     </header>
 
@@ -45,23 +45,23 @@
       <div class="dashboard-grid mb-lg animate-in animate-in-delay-1">
         <div class="card" style="margin:0; border-top:3px solid var(--color-primary);">
           <div class="text-xs text-muted font-semibold" style="letter-spacing:1px;">ALUNOS ATIVOS</div>
-          <div class="font-bold" style="font-size:32px;">145</div>
-          <div class="text-xs text-success"><i class="ti ti-trending-up"></i> +12 esta semana</div>
+          <div class="font-bold" style="font-size:32px;" id="kpiAlunos">0</div>
+          <div class="text-xs text-muted" id="kpiAlunosDetalhe">matriculados nos seus cursos</div>
         </div>
         <div class="card" style="margin:0; border-top:3px solid var(--color-danger);">
           <div class="text-xs text-muted font-semibold" style="letter-spacing:1px;">DÚVIDAS PENDENTES</div>
-          <div class="font-bold" style="font-size:32px;">8</div>
-          <div class="text-xs text-danger"><i class="ti ti-clock"></i> 2 urgentes</div>
+          <div class="font-bold" style="font-size:32px;" id="kpiDuvidas">0</div>
+          <div class="text-xs text-muted" id="kpiDuvidasDetalhe">aguardando resposta</div>
         </div>
         <a href="cursos.html" class="card" style="margin:0; border-top:3px solid var(--color-success); text-decoration:none; cursor:pointer;">
           <div class="text-xs text-muted font-semibold" style="letter-spacing:1px;">CURSOS PUBLICADOS</div>
-          <div class="font-bold" style="font-size:32px;">3</div>
-          <div class="text-xs text-muted">2 publicados, 1 rascunho</div>
+          <div class="font-bold" style="font-size:32px;" id="kpiCursos">0</div>
+          <div class="text-xs text-muted" id="kpiCursosDetalhe">--</div>
         </a>
         <div class="card" style="margin:0; border-top:3px solid var(--color-warning);">
-          <div class="text-xs text-muted font-semibold" style="letter-spacing:1px;">AVALIAÇÃO MÉDIA</div>
-          <div class="font-bold" style="font-size:32px;">4.8 <i class="ti ti-star-filled text-warning" style="font-size:20px;"></i></div>
-          <div class="text-xs text-muted">de 247 reviews</div>
+          <div class="text-xs text-muted font-semibold" style="letter-spacing:1px;">MATERIAIS PUBLICADOS</div>
+          <div class="font-bold" style="font-size:32px;" id="kpiMateriais">0</div>
+          <div class="text-xs text-muted">em todos os seus cursos</div>
         </div>
       </div>
 
@@ -102,32 +102,58 @@
 <script src="../../js/api.js"></script>
 <script src="../../js/app.js"></script>
 <script>
+/* Os quatro indicadores eram numeros escritos no HTML (145 alunos, 8 duvidas,
+   3 cursos, 4.8 de avaliacao) e nunca tocaram o banco. Agora saem dos mesmos
+   dados que as telas de detalhe usam, entao nao ha como divergirem.
+
+   "Avaliacao media" saiu: nao existe tabela de avaliacao de curso no modelo.
+   Foi trocada por materiais publicados, que o banco sabe responder. */
 function onPageLoad() {
-  if (!TQ.data) return;
+  const t = (TQ.data && TQ.data.personas && TQ.data.personas.tutor) || {};
+  const alunos = (TQ.data && TQ.data.tutor_alunos) || [];
+  const duvidas = (TQ.data && TQ.data.tutor_duvidas) || [];
 
-  const alunos = TQ.data.tutor_alunos.slice(0, 5);
-  document.getElementById('alunosList').innerHTML = alunos.map(a => `
-    <div class="list-item">
-      <div class="avatar avatar--sm">${a.nome.split(' ').map(n=>n[0]).join('').substring(0,2)}</div>
-      <div class="list-item__body">
-        <div class="list-item__title">${a.nome}</div>
-        <div class="list-item__subtitle">${a.curso} · ${a.progresso}% concluído</div>
-      </div>
-      <div class="text-xs text-muted">${a.ultima_atividade}</div>
-    </div>
-  `).join('');
+  const texto = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
+  texto('kpiAlunos', t.alunos_ativos || 0);
+  /* Contava TODAS as duvidas, inclusive as ja resolvidas, sob o rotulo
+     "aguardando resposta". A lista abaixo mostra as pendentes: dois numeros
+     com o mesmo nome e significados diferentes. */
+  const pendentes = duvidas.filter(d => d.pendente);
+  texto('kpiDuvidas', pendentes.length);
+  texto('kpiCursos', t.total_cursos || 0);
+  texto('kpiCursosDetalhe',
+    `${t.cursos_publicados || 0} publicados, ${t.cursos_rascunho || 0} rascunho, ${t.cursos_pendentes || 0} em avaliacao`);
+  texto('kpiMateriais', t.total_materiais || 0);
 
-  const duvidas = TQ.data.tutor_duvidas.filter(d => d.status === 'pendente');
-  document.getElementById('duvidasList').innerHTML = duvidas.map(d => `
-    <div class="list-item">
-      <div class="avatar avatar--sm" style="background:var(--color-warning-light); color:var(--color-warning-dark);">${d.iniciais}</div>
-      <div class="list-item__body">
-        <div class="list-item__title">${d.pergunta}</div>
-        <div class="list-item__subtitle">${d.aluno} · ${d.tempo}</div>
-      </div>
-      <span class="badge badge--danger">PENDENTE</span>
-    </div>
-  `).join('');
+  const listaAlunos = document.getElementById('alunosList');
+  if (listaAlunos) {
+    listaAlunos.innerHTML = alunos.length
+      ? alunos.slice(0, 5).map(a => `
+        <a href="aluno-detalhe.html?id=${a.id_estudante}" class="list-item">
+          <div class="avatar avatar--sm">${FMT.iniciais(a.nome)}</div>
+          <div class="list-item__body">
+            <div class="list-item__title">${a.nome}</div>
+            <div class="list-item__subtitle">${a.curso} - ${a.progresso}% concluido</div>
+          </div>
+          <div class="text-xs text-muted">${a.ultima_atividade || ''}</div>
+        </a>`).join('')
+      : '<p class="text-sm text-muted">Nenhum aluno matriculado nos seus cursos ainda.</p>';
+  }
+
+  const listaDuvidas = document.getElementById('duvidasList');
+  if (listaDuvidas) {
+    listaDuvidas.innerHTML = pendentes.length
+      ? pendentes.slice(0, 5).map(d => `
+        <a href="duvidas.html" class="list-item">
+          <div class="avatar avatar--sm" style="background:var(--color-warning-light); color:var(--color-warning-dark);">${d.iniciais}</div>
+          <div class="list-item__body">
+            <div class="list-item__title">${(d.pergunta || '').slice(0, 70)}</div>
+            <div class="list-item__subtitle">${d.aluno} - ${d.tempo}</div>
+          </div>
+          <span class="badge badge--danger">PENDENTE</span>
+        </a>`).join('')
+      : '<p class="text-sm text-muted">Nenhuma duvida aguardando resposta.</p>';
+  }
 }
 </script>
 </body>

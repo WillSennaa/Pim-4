@@ -17,7 +17,8 @@
     <a href="home.html" class="sidebar-nav__item"><i class="ti ti-layout-dashboard"></i> Dashboard</a>
     <a href="usuarios.html" class="sidebar-nav__item"><i class="ti ti-users"></i> Usuários</a>
     <div class="sidebar-nav__item active"><i class="ti ti-book"></i> Cursos</div>
-    <a href="aprovacoes.html" class="sidebar-nav__item"><i class="ti ti-checks"></i> Aprovações <span class="badge badge--danger" style="margin-left:auto;">4</span></a>
+    <a href="aprovacoes.html" class="sidebar-nav__item"><i class="ti ti-checks"></i> Aprovações <span class="js-selo-aprovacoes badge badge--danger" style="margin-left:auto;">-</span></a>
+    <a href="chamados.html" class="sidebar-nav__item"><i class="ti ti-lifebuoy"></i> Suporte</a>
     <a href="relatorios.html" class="sidebar-nav__item"><i class="ti ti-chart-pie"></i> Relatórios</a>
     <a href="configuracoes.html" class="sidebar-nav__item"><i class="ti ti-settings"></i> Configurações</a>
     <div style="flex:1;"></div>
@@ -29,7 +30,7 @@
     <header class="top-bar">
       <a href="home.html" class="top-bar__back"><i class="ti ti-arrow-left"></i></a>
       <span class="top-bar__title">Cursos</span>
-      <div class="top-bar__avatar" style="background:#1E293B;">CM</div>
+      <div class="js-iniciais top-bar__avatar" style="background:#1E293B;">-</div>
     </header>
 
     <main class="main-content">
@@ -40,7 +41,7 @@
           <p class="page-subtitle" style="margin-bottom:0;">Todos os cursos da plataforma, com filtros por status e categoria.</p>
         </div>
         <a href="aprovacoes.html" class="btn btn--warning">
-          <i class="ti ti-clock"></i> <span id="totalAguardando">3</span> aguardando aprovação
+          <i class="ti ti-clock"></i> <span id="totalAguardando">-</span> aguardando aprovação
         </a>
       </div>
 
@@ -48,19 +49,19 @@
       <div class="dashboard-grid mb-lg animate-in animate-in-delay-1">
         <div class="card" style="margin:0; border-top:3px solid var(--color-success); cursor:pointer;" onclick="filtrarStatus('publicado')">
           <div class="text-xs text-muted font-semibold" style="letter-spacing:1px;">PUBLICADOS</div>
-          <div class="font-bold" style="font-size:28px;" id="kpiPublicados">5</div>
+          <div class="font-bold" style="font-size:28px;" id="kpiPublicados">-</div>
         </div>
-        <div class="card" style="margin:0; border-top:3px solid var(--color-warning); cursor:pointer;" onclick="filtrarStatus('aguardando')">
-          <div class="text-xs text-muted font-semibold" style="letter-spacing:1px;">AGUARDANDO</div>
-          <div class="font-bold" style="font-size:28px;" id="kpiAguardando">3</div>
+        <div class="card" style="margin:0; border-top:3px solid var(--color-warning); cursor:pointer;" onclick="filtrarStatus('pendente')">
+          <div class="text-xs text-muted font-semibold" style="letter-spacing:1px;">PENDENTES</div>
+          <div class="font-bold" style="font-size:28px;" id="kpiAguardando">-</div>
         </div>
-        <div class="card" style="margin:0; border-top:3px solid var(--color-danger); cursor:pointer;" onclick="filtrarStatus('exclusao_solicitada')">
-          <div class="text-xs text-muted font-semibold" style="letter-spacing:1px;">EXCLUSÃO PEDIDA</div>
-          <div class="font-bold" style="font-size:28px;" id="kpiExclusao">1</div>
+        <div class="card" style="margin:0; border-top:3px solid var(--color-danger); cursor:pointer;" onclick="filtrarStatus('rejeitado')">
+          <div class="text-xs text-muted font-semibold" style="letter-spacing:1px;">REJEITADOS</div>
+          <div class="font-bold" style="font-size:28px;" id="kpiExclusao">-</div>
         </div>
         <div class="card" style="margin:0; border-top:3px solid var(--color-text-muted); cursor:pointer;" onclick="filtrarStatus('rascunho')">
           <div class="text-xs text-muted font-semibold" style="letter-spacing:1px;">RASCUNHOS</div>
-          <div class="font-bold" style="font-size:28px;" id="kpiRascunhos">1</div>
+          <div class="font-bold" style="font-size:28px;" id="kpiRascunhos">-</div>
         </div>
       </div>
 
@@ -68,8 +69,8 @@
       <div class="tabs tabs--pills mb-md animate-in animate-in-delay-1" id="filtrosStatus">
         <button class="tab active" data-status="todos">Todos</button>
         <button class="tab" data-status="publicado">Publicados</button>
-        <button class="tab" data-status="aguardando">Aguardando</button>
-        <button class="tab" data-status="exclusao_solicitada">Exclusão pedida</button>
+        <button class="tab" data-status="pendente">Pendentes</button>
+        <button class="tab" data-status="rejeitado">Rejeitados</button>
         <button class="tab" data-status="rascunho">Rascunho</button>
       </div>
 
@@ -99,8 +100,15 @@
                 <th>Curso</th>
                 <th>Tutor</th>
                 <th>Categoria</th>
-                <th>Alunos</th>
-                <th>Rating</th>
+                <!-- "Alunos" e "Rating" sairam.
+                      A contagem de matriculados por curso nao vem no DTO de
+                      /api/admin/cursos, e avaliacao de curso nao existe em
+                      tabela alguma. O adaptador preenchia os dois com null,
+                      e c.alunos.toLocaleString() estourava TypeError: a
+                      tabela inteira ficava em branco, sem mensagem. Entraram
+                      duas colunas que o DTO realmente traz. -->
+                <th>Materiais</th>
+                <th>Prova</th>
                 <th>Status</th>
                 <th>Ações</th>
               </tr>
@@ -114,7 +122,7 @@
         </div>
       </div>
 
-      <p class="text-xs text-muted text-center mt-md">Mostrando <span id="contagemTotal">10</span> cursos · Clique em uma linha para ver detalhes</p>
+      <p class="text-xs text-muted text-center mt-md">Mostrando <span id="contagemTotal">-</span> cursos · Clique em uma linha para ver detalhes</p>
 
     </main>
 
@@ -165,24 +173,35 @@ function renderCursos() {
   }
   empty.style.display = 'none';
 
+  /* Os rotulos eram 'aguardando' e 'exclusao_solicitada'; o servidor chama
+     esses estados de 'Pendente' e 'Rejeitado' (FluxoPublicacaoCurso). Como a
+     comparacao nunca casava, os cartoes e as abas mostravam zero sempre.
+     'exclusao_solicitada' nao existe no modelo: nao ha fluxo de exclusao de
+     curso -- curso com aluno matriculado nao pode ser apagado, por chave
+     estrangeira. Foi trocado por 'rejeitado', que e um estado real. */
   const statusInfo = {
     'publicado': { class: 'success', label: 'PUBLICADO' },
-    'aguardando': { class: 'warning', label: 'AGUARDANDO' },
-    'exclusao_solicitada': { class: 'danger', label: 'EXCLUSÃO PEDIDA' },
+    'pendente': { class: 'warning', label: 'PENDENTE' },
+    'rejeitado': { class: 'danger', label: 'REJEITADO' },
     'rascunho': { class: 'neutral', label: 'RASCUNHO' }
   };
 
   tbody.innerHTML = cursos.map(c => {
-    const s = statusInfo[c.status];
+    /* Fallback obrigatorio: statusInfo[c.status] devolvia undefined para
+       qualquer estado fora do mapa e a linha seguinte estourava
+       TypeError, deixando a tabela inteira em branco. Um estado novo no
+       servidor nao pode derrubar a tela do administrador. */
+    const s = statusInfo[c.status]
+      || { class: 'neutral', label: (c.status || 'sem estado').toUpperCase() };
     return `<tr style="cursor:pointer;" onclick="window.location.href='curso-detalhe.html?id=${c.id}'">
       <td>
         <div class="font-medium">${c.titulo}</div>
-        <div class="text-xs text-muted">Criado em ${c.criado_em}</div>
+        <div class="text-xs text-muted">${(c.descricao || '').slice(0, 70)}</div>
       </td>
-      <td class="text-sm">${c.tutor}</td>
-      <td><span class="badge badge--neutral">${c.categoria}</span></td>
-      <td class="text-sm">${c.alunos.toLocaleString('pt-BR')}</td>
-      <td class="text-sm">${c.rating > 0 ? '⭐ ' + c.rating : '—'}</td>
+      <td class="text-sm">${c.tutor || 'sem tutor'}</td>
+      <td><span class="badge badge--neutral">${c.categoria || 'sem categoria'}</span></td>
+      <td class="text-sm">${c.modulos || 0}</td>
+      <td class="text-sm">${c.tem_prova ? 'sim' : 'não'}</td>
       <td><span class="badge badge--${s.class}">${s.label}</span></td>
       <td onclick="event.stopPropagation();">
         <div class="flex gap-sm">
@@ -204,10 +223,10 @@ function onPageLoad() {
   // Atualiza KPIs
   const c = TQ.data.admin_cursos;
   document.getElementById('kpiPublicados').textContent = c.filter(x => x.status === 'publicado').length;
-  document.getElementById('kpiAguardando').textContent = c.filter(x => x.status === 'aguardando').length;
-  document.getElementById('kpiExclusao').textContent = c.filter(x => x.status === 'exclusao_solicitada').length;
+  document.getElementById('kpiAguardando').textContent = c.filter(x => x.status === 'pendente').length;
+  document.getElementById('kpiExclusao').textContent = c.filter(x => x.status === 'rejeitado').length;
   document.getElementById('kpiRascunhos').textContent = c.filter(x => x.status === 'rascunho').length;
-  document.getElementById('totalAguardando').textContent = c.filter(x => x.status === 'aguardando').length;
+  document.getElementById('totalAguardando').textContent = c.filter(x => x.status === 'pendente').length;
   renderCursos();
 }
 </script>

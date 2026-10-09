@@ -27,6 +27,13 @@ public class CursoRepository : ICursoRepository
     public Task<Material?> ObterMaterialAsync(int idMaterial, CancellationToken ct = default)
         => _db.Materiais.AsNoTracking().FirstOrDefaultAsync(m => m.IdMaterial == idMaterial, ct);
 
+    public async Task<int?> ObterIdCursoPorProvaAsync(int idProva, CancellationToken ct = default)
+        => await _db.Cursos
+                    .AsNoTracking()
+                    .Where(c => c.IdProva == idProva)
+                    .Select(c => (int?)c.IdCurso)
+                    .FirstOrDefaultAsync(ct);
+
     public Task<int> ContarPublicadosAsync(CancellationToken ct = default)
         => _db.Cursos.CountAsync(c => c.Status == "Publicado", ct);
 
@@ -68,4 +75,10 @@ public class CursoRepository : ICursoRepository
 
     public Task<bool> MaterialTemProgressoAsync(int idMaterial, CancellationToken ct = default)
         => _db.Progressos.AnyAsync(p => p.IdMaterial == idMaterial, ct);
+
+    public Task<int?> ObterUsuarioDoTutorDoCursoAsync(int idCurso, CancellationToken ct = default)
+        => _db.Cursos
+              .Where(c => c.IdCurso == idCurso && c.TutorCriou != null)
+              .Select(c => (int?)c.TutorCriou!.Usuario.IdUsuario)
+              .FirstOrDefaultAsync(ct);
 }

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Suporte Técnico — Admin — Tech Quest</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.47.0/tabler-icons.min.css">
+  <link rel="stylesheet" href="../../css/style.css">
+</head>
+<body>
+<!--
+  Fila de suporte técnico.
+
+  Chamados do tipo Tecnico nascem SEM destinatário: qualquer administrador
+  assume. Travar num administrador específico deixaria o chamado parado se
+  ele estivesse ausente. Dúvidas de conteúdo não aparecem aqui — vão direto
+  ao tutor do curso.
+-->
+<div class="app-container app-container--wide">
+
+  <aside class="sidebar-nav">
+    <div class="sidebar-nav__brand"><i class="ti ti-terminal-2"></i> Tech Quest</div>
+    <a href="home.html" class="sidebar-nav__item"><i class="ti ti-layout-dashboard"></i> Painel</a>
+    <a href="usuarios.html" class="sidebar-nav__item"><i class="ti ti-users"></i> Usuários</a>
+    <a href="cursos.html" class="sidebar-nav__item"><i class="ti ti-book"></i> Cursos</a>
+    <a href="aprovacoes.html" class="sidebar-nav__item"><i class="ti ti-checkbox"></i> Aprovações</a>
+    <a href="chamados.html" class="sidebar-nav__item active"><i class="ti ti-lifebuoy"></i> Suporte</a>
+    <a href="relatorios.html" class="sidebar-nav__item"><i class="ti ti-chart-bar"></i> Relatórios</a>
+    <div style="flex:1;"></div>
+    <a href="../../index.html" class="sidebar-nav__item" onclick="return confirmarSaida(event)"><i class="ti ti-logout"></i> Sair</a>
+  </aside>
+
+  <div style="flex:1; display:flex; flex-direction:column;">
+
+    <header class="top-bar">
+      <span class="top-bar__title">Suporte Técnico</span>
+      <a href="../conta/perfil.html" class="top-bar__avatar" title="Minha conta">CM</a>
+    </header>
+
+    <main class="main-content">
+
+      <h1 class="page-title animate-in">Chamados técnicos</h1>
+      <p class="page-subtitle">
+        Problemas de plataforma relatados pelos usuários.
+        Dúvidas sobre conteúdo vão direto ao tutor do curso e não aparecem aqui.
+      </p>
+
+      <div class="tabs tabs--pills mb-lg animate-in animate-in-delay-1">
+        <button class="tab active" data-filtro="abertos" onclick="filtrarChamadosAdmin('abertos', this)">Em aberto</button>
+        <button class="tab" data-filtro="resolvidos" onclick="filtrarChamadosAdmin('resolvidos', this)">Resolvidos</button>
+        <button class="tab" data-filtro="todos" onclick="filtrarChamadosAdmin('todos', this)">Todos</button>
+      </div>
+
+      <div id="chamadosList" class="animate-in animate-in-delay-2">
+        <p class="text-sm text-muted">Carregando...</p>
+      </div>
+      <div id="chamadosVazio" style="display:none;">
+        <div class="card"><p class="text-sm text-muted">Nenhum chamado nesta situação.</p></div>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<!-- Responder e resolver -->
+<div class="modal-overlay" id="modalResolver">
+  <div class="modal">
+    <h3 class="modal__title">Responder chamado</h3>
+    <div id="chamadoOriginal" class="card mb-md" style="background:var(--color-surface-2);"></div>
+    <div class="form-group">
+      <label class="form-label" for="respostaChamado">Resolução</label>
+      <textarea class="form-input" id="respostaChamado" rows="5"
+                placeholder="Explique o que foi feito para resolver. O usuário recebe este texto na caixa dele."></textarea>
+    </div>
+    <div class="modal__actions">
+      <button class="btn btn--primary btn--full" onclick="responderChamadoTecnico(this)">
+        <i class="ti ti-send"></i> Enviar e resolver
+      </button>
+      <button class="btn btn--secondary btn--full" onclick="fecharModal('modalResolver')">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+<script src="../../js/api.js"></script>
+<script src="../../js/app.js"></script>
+<script>
+function onPageLoad() { carregarChamadosAdmin(); }
+</script>
+</body>
+</html>

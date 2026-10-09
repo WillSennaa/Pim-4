@@ -9,21 +9,20 @@ public class ProgressoService
     private readonly IProgressoRepository _progressos;
     private readonly ICursoRepository _cursos;
     private readonly IHistoricoRepository _historicos;
-    private readonly ICertificadoRepository _certificados;
-    private readonly IDesempenhoRepository _desempenhos;
     private readonly ConquistaService _conquistas;
     private readonly GamificacaoService _gamificacao;
+    private readonly ConclusaoCursoService _conclusao;
     private readonly IUnidadeDeTrabalho _uow;
 
     public ProgressoService(
         IProgressoRepository progressos, ICursoRepository cursos,
-        IHistoricoRepository historicos, ICertificadoRepository certificados,
-        IDesempenhoRepository desempenhos, ConquistaService conquistas,
-        GamificacaoService gamificacao, IUnidadeDeTrabalho uow)
+        IHistoricoRepository historicos, ConquistaService conquistas,
+        GamificacaoService gamificacao, ConclusaoCursoService conclusao,
+        IUnidadeDeTrabalho uow)
     {
         _progressos = progressos; _cursos = cursos; _historicos = historicos;
-        _certificados = certificados; _desempenhos = desempenhos;
-        _conquistas = conquistas; _gamificacao = gamificacao; _uow = uow;
+        _conquistas = conquistas; _gamificacao = gamificacao;
+        _conclusao = conclusao; _uow = uow;
     }
 
     /// <summary>
@@ -101,7 +100,10 @@ public class ProgressoService
             var (total, concluidas) = await _progressos.ContarAulasDoCursoAsync(
                 idEstudante, material.IdCurso, ct);
 
-            var cursoConcluido = await AvaliarConclusaoAsync(
+            // A regra de conclusao saiu daqui para ConclusaoCursoService: ela
+            // tem dois gatilhos (ultimo material / prova aprovada) e precisa de
+            // uma definicao so. Ver o comentario daquele arquivo.
+            var cursoConcluido = await _conclusao.AvaliarAsync(
                 idEstudante, material.IdCurso, total, concluidas, ct);
 
             var novas = await _conquistas.AvaliarAsync(idEstudante, ct);
@@ -119,45 +121,4 @@ public class ProgressoService
         return resultado;
     }
 
-    /// <summary>
-    /// Regra de conclusao: todas as aulas concluidas E, se o curso tiver prova,
-    /// a prova aprovada. Ao concluir, emite o certificado.
-    /// </summary>
-    private async Task<bool> AvaliarConclusaoAsync(
-        int idEstudante, int idCurso, int totalAulas, int aulasConcluidas, CancellationToken ct)
-    {
-        if (totalAulas == 0 || aulasConcluidas < totalAulas) return false;
-
-        var curso = await _cursos.ObterComMateriaisAsync(idCurso, ct);
-        if (curso is null) return false;
-
-        if (curso.IdProva is not null)
-        {
-            var aprovado = await _desempenhos.AprovadoNaProvaAsync(idEstudante, curso.IdProva.Value, ct);
-            if (!aprovado) return false;
-        }
-
-        var historico = await _historicos.ObterAsync(idEstudante, idCurso, ct);
-        if (historico is null)
-        {
-            historico = new Historico { IdEstudante = idEstudante, IdCurso = idCurso };
-            _historicos.Adicionar(historico);
-        }
-
-        if (historico.StatusConclusao == "Concluido") return true;
-
-        historico.StatusConclusao = "Concluido";
-        historico.DataConclusao = DateOnly.FromDateTime(DateTime.Today);
-        await _uow.SalvarAsync(ct);
-
-        // O codigo de autenticacao nao e informado: quem gera e o banco,
-        // pelo DEFAULT NEWID() da coluna.
-        _certificados.Adicionar(new Certificado
-        {
-            IdHistorico = historico.IdHistorico,
-            DataEmissao = DateTime.UtcNow
-        });
-
-        return true;
-    }
 }

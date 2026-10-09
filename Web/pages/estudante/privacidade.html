@@ -15,7 +15,7 @@
   <header class="top-bar">
     <a href="perfil.html" class="top-bar__back"><i class="ti ti-arrow-left"></i></a>
     <span class="top-bar__title">Política de Privacidade</span>
-    <a href="perfil.html" class="top-bar__avatar">FA</a>
+    <a href="perfil.html" class="js-iniciais top-bar__avatar">-</a>
   </header>
 
   <main class="main-content">
@@ -46,7 +46,13 @@
       <p class="text-sm mb-md">Utilizamos seus dados para: personalizar sua experiência de aprendizado; emitir certificados; enviar comunicações relevantes; melhorar nossos serviços; cumprir obrigações legais.</p>
 
       <h3 class="font-bold mb-sm">3. Compartilhamento</h3>
-      <p class="text-sm mb-md">Não vendemos seus dados. Compartilhamos apenas com: prestadores de serviço essenciais (hospedagem, processamento de pagamento); empresas parceiras de recrutamento (somente com seu consentimento explícito); autoridades quando exigido por lei.</p>
+      <!-- "processamento de pagamento" e "empresas parceiras de recrutamento"
+           sairam: a plataforma é gratuita e não há integração de recrutamento
+           nenhuma. Declarar compartilhamento com terceiros que não existem é
+           o inverso do que uma política de privacidade deve fazer. -->
+      <p class="text-sm mb-md">Não vendemos seus dados. O compartilhamento se limita a: o provedor de
+        hospedagem e banco de dados (Microsoft Azure, região Brasil Sul), necessário para o
+        sistema funcionar; e autoridades, quando exigido por lei.</p>
 
       <h3 class="font-bold mb-sm">4. Seus direitos (LGPD)</h3>
       <p class="text-sm mb-md">Você tem direito a:</p>
@@ -66,7 +72,15 @@
       <p class="text-sm mb-md">Adotamos medidas técnicas e organizacionais para proteger seus dados: criptografia em trânsito (HTTPS), criptografia de senhas (bcrypt), backups regulares e controle de acesso baseado em funções.</p>
 
       <h3 class="font-bold mb-sm">7. Retenção</h3>
-      <p class="text-sm mb-md">Mantemos seus dados enquanto sua conta estiver ativa. Após exclusão, dados pessoais são removidos em até 30 dias. Registros de pagamento e fiscais são mantidos por 5 anos conforme legislação.</p>
+      <!-- Registro fiscal de 5 anos saiu: não há cobrança, logo não há nota a
+           guardar. O histórico acadêmico fica, e por um motivo técnico que vale
+           declarar: a conta é DESATIVADA, não apagada -- certificado emitido e
+           nota de prova continuam verificáveis, e apagar o usuário quebraria a
+           chave estrangeira de Historico, Progresso e Desempenho. -->
+      <p class="text-sm mb-md">A plataforma é gratuita e não registra dados de pagamento. Ao encerrar a
+        conta, ela é desativada e deixa de permitir acesso; o histórico acadêmico (cursos,
+        notas e certificados emitidos) é preservado, para que certificados já emitidos
+        continuem verificáveis pelo código de autenticação.</p>
 
       <h3 class="font-bold mb-sm">8. Encarregado de dados (DPO)</h3>
       <p class="text-sm mb-md">Para exercer seus direitos ou esclarecer dúvidas: <strong>dpo@techquest.com</strong></p>
@@ -98,6 +112,7 @@
     <a href="home.html" class="bottom-nav__item"><i class="ti ti-home"></i><span>Home</span></a>
     <a href="cursos.html" class="bottom-nav__item"><i class="ti ti-book-2"></i><span>Cursos</span></a>
     <a href="conquistas.html" class="bottom-nav__item"><i class="ti ti-trophy"></i><span>Conquistas</span></a>
+    <a href="ajuda.html" class="bottom-nav__item"><i class="ti ti-help-circle"></i><span>Ajuda</span></a>
     <a href="perfil.html" class="bottom-nav__item active"><i class="ti ti-user"></i><span>Perfil</span></a>
   </nav>
 

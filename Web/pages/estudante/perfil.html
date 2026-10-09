@@ -14,7 +14,7 @@
 
   <header class="top-bar">
     <div class="flex items-center gap-sm">
-      <div class="avatar avatar--sm" style="background:#475569;">F</div>
+      <div class="avatar avatar--sm js-iniciais" style="background:#475569;">-</div>
       <span class="font-semibold text-primary">Perfil</span>
     </div>
     <a href="configuracoes.html" class="top-bar__icon-btn"><i class="ti ti-settings" style="font-size:22px;"></i></a>
@@ -28,13 +28,16 @@
         <div class="profile-header__avatar" style="background:linear-gradient(135deg,#475569,#1E293B); display:flex; align-items:center; justify-content:center; color:white; font-size:36px; font-weight:700;" id="perfilIniciais">F</div>
         <div class="profile-header__avatar-edit"><i class="ti ti-camera"></i></div>
       </div>
-      <div class="profile-header__name" id="perfilNomeTopo">Felipe Almeida</div>
-      <div class="profile-header__email" id="perfilEmailTopo">felipe.almeida@email.com</div>
+      <div class="profile-header__name" id="perfilNomeTopo">carregando...</div>
+      <div class="profile-header__email" id="perfilEmailTopo"></div>
       <div class="profile-header__level-badge">
         <i class="ti ti-trophy"></i> <span id="perfilNivelXp">carregando...</span></div>
-      <div class="text-xs text-center mt-md" style="opacity:0.85;">PROGRESSO DO NÍVEL <span style="float:right;">75%</span></div>
+      <!-- Era width:75% fixo no style e "75%" no texto: numero que nao vinha
+           de parte alguma e discordava do mostrado na home para o mesmo XP. -->
+      <div class="text-xs text-center mt-md" style="opacity:0.85;">PROGRESSO DO NÍVEL
+        <span style="float:right;" id="perfilProgressoLabel">-</span></div>
       <div class="progress mt-sm" style="background:rgba(255,255,255,0.2);">
-        <div class="progress__fill" style="width:75%; background:white;"></div>
+        <div class="progress__fill" id="perfilProgressoBarra" style="width:0%; background:white;"></div>
       </div>
     </div>
 
@@ -196,7 +199,7 @@
     <button class="btn btn--ghost btn--full mt-lg" style="border-color:var(--color-danger); color:var(--color-danger);" onclick="abrirModal('modalSair')">
       <i class="ti ti-logout"></i> Sair da conta
     </button>
-    <p class="text-center text-xs text-muted mt-md">Versão 2.4.1 (Build 105)</p>
+    <p class="text-center text-xs text-muted mt-md" id="versaoApp">-</p>
 
   </main>
 
@@ -204,6 +207,7 @@
     <a href="home.html" class="bottom-nav__item"><i class="ti ti-home"></i><span>Início</span></a>
     <a href="cursos.html" class="bottom-nav__item"><i class="ti ti-book-2"></i><span>Cursos</span></a>
     <a href="conquistas.html" class="bottom-nav__item"><i class="ti ti-trophy"></i><span>Conquistas</span></a>
+    <a href="ajuda.html" class="bottom-nav__item"><i class="ti ti-help-circle"></i><span>Ajuda</span></a>
     <a href="perfil.html" class="bottom-nav__item active"><i class="ti ti-user"></i><span>Perfil</span></a>
   </nav>
 

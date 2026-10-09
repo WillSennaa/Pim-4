@@ -170,8 +170,11 @@ const API = {
 
   // chamados (dúvidas)
   chamados: () => API.get('/api/chamados'),
-  abrirChamado: (tipo, assunto, descricao, idDestinatario) =>
-    API.post('/api/chamados', { tipo, assunto, descricao, idDestinatario }),
+  abrirChamado: (tipo, assunto, descricao, idDestinatario, idCurso) =>
+    API.post('/api/chamados', { tipo, assunto, descricao, idDestinatario, idCurso }),
+  chamadosRecebidos: () => API.get('/api/chamados/recebidos'),
+  responderChamado: (id, descricao) => API.post('/api/chamados/' + id + '/responder', { descricao }),
+  statusChamado: (id, status) => API.patch('/api/chamados/' + id + '/status', { status }),
   fecharChamado: (id) => API.post('/api/chamados/' + id + '/fechar'),
 
   // tutor
@@ -179,8 +182,10 @@ const API = {
   tutorCriarCurso: (dados) => API.post('/api/tutor/cursos', dados),
   tutorAtualizarCurso: (id, dados) => API.put('/api/tutor/cursos/' + id, dados),
   tutorSubmeterCurso: (id) => API.post('/api/tutor/cursos/' + id + '/submeter'),
-  tutorAdicionarAula: (idCurso, titulo, tipo) =>
-    API.post('/api/tutor/cursos/' + idCurso + '/aulas', { titulo, tipo }),
+  tutorAdicionarAula: (idCurso, titulo, tipo, conteudo) =>
+    API.post('/api/tutor/cursos/' + idCurso + '/aulas', { titulo, tipo, conteudo }),
+  tutorAtualizarAula: (idMaterial, titulo, tipo, conteudo) =>
+    API.put('/api/tutor/aulas/' + idMaterial, { titulo, tipo, conteudo }),
   tutorRemoverAula: (idMaterial) => API.del('/api/tutor/aulas/' + idMaterial),
   tutorCriarProva: (idCurso, dados) => API.post('/api/tutor/cursos/' + idCurso + '/prova', dados),
   tutorAdicionarQuestao: (idProva, dados) => API.post('/api/tutor/provas/' + idProva + '/questoes', dados),
@@ -193,12 +198,15 @@ const API = {
   // admin
   adminResumo: () => API.get('/api/admin/resumo'),
   adminCursos: (status) => API.get('/api/admin/cursos' + (status ? '?status=' + status : '')),
+  // Curso completo para avaliacao: materiais com texto e prova com gabarito.
+  adminCurso: (id) => API.get('/api/admin/cursos/' + id),
   adminAprovar: (id) => API.post('/api/admin/cursos/' + id + '/aprovar'),
   adminRejeitar: (id, motivo) => API.post('/api/admin/cursos/' + id + '/rejeitar', { motivo }),
   adminUsuarios: () => API.get('/api/admin/usuarios'),
   adminCriarUsuario: (dados) => API.post('/api/admin/usuarios', dados),
   adminAlterarStatus: (id, ativo) => API.patch('/api/admin/usuarios/' + id + '/status', { ativo }),
   adminLogs: (limite) => API.get('/api/admin/logs?limite=' + (limite || 100)),
+  adminChamados: () => API.get('/api/admin/chamados'),
   adminMedalhas: () => API.get('/api/admin/medalhas'),
   adminCriarMedalha: (dados) => API.post('/api/admin/medalhas', dados),
   adminAtualizarMedalha: (id, dados) => API.put('/api/admin/medalhas/' + id, dados)

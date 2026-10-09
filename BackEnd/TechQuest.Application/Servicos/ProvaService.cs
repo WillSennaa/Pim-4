@@ -10,14 +10,16 @@ public class ProvaService
     private readonly IProvaRepository _provas;
     private readonly IDesempenhoRepository _desempenhos;
     private readonly ConquistaService _conquistas;
+    private readonly ConclusaoCursoService _conclusao;
     private readonly IUnidadeDeTrabalho _uow;
 
     public ProvaService(
         IProvaRepository provas, IDesempenhoRepository desempenhos,
-        ConquistaService conquistas, IUnidadeDeTrabalho uow)
+        ConquistaService conquistas, ConclusaoCursoService conclusao,
+        IUnidadeDeTrabalho uow)
     {
         _provas = provas; _desempenhos = desempenhos;
-        _conquistas = conquistas; _uow = uow;
+        _conquistas = conquistas; _conclusao = conclusao; _uow = uow;
     }
 
     /// <summary>Prova para responder: sem gabarito em nenhum nivel do JSON.</summary>
@@ -92,6 +94,18 @@ public class ProvaService
             // Medalhas so depois da tentativa gravada: as regras contam o que
             // esta no banco, nao o que esta em memoria.
             medalhasNovas = await _conquistas.AvaliarAsync(idEstudante, ct);
+            await _uow.SalvarAsync(ct);
+
+            // SEGUNDO GATILHO DA CONCLUSAO DO CURSO.
+            // Passar na prova pode ter sido a ultima condicao que faltava --
+            // o aluno que conclui todos os materiais ANTES de fazer a prova
+            // chega aqui com tudo pronto menos a aprovacao. Sem esta chamada o
+            // certificado nunca era emitido nessa ordem, que e a ordem natural
+            // de quem estuda antes de ser avaliado.
+            //
+            // Dentro da mesma transacao de proposito: tentativa, medalhas,
+            // conclusao e certificado valem juntos ou nao valem.
+            if (aprovado) await _conclusao.AvaliarPorProvaAsync(idEstudante, idProva, ct);
             await _uow.SalvarAsync(ct);
         }, ct);
 

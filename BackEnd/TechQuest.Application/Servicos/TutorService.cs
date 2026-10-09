@@ -111,12 +111,49 @@ public class TutorService
         if (string.IsNullOrWhiteSpace(req.Titulo))
             return Resultado<MaterialTutorDto>.Invalido("O titulo da aula e obrigatorio.");
 
-        var material = new Material { IdCurso = curso!.IdCurso, Titulo = req.Titulo.Trim(), Tipo = req.Tipo };
+        var material = new Material
+        {
+            IdCurso = curso!.IdCurso,
+            Titulo = req.Titulo.Trim(),
+            Tipo = req.Tipo,
+            Conteudo = string.IsNullOrWhiteSpace(req.Conteudo) ? null : req.Conteudo.Trim()
+        };
         _cursos.AdicionarMaterial(material);
         await _uow.SalvarAsync(ct);
 
-        return Resultado<MaterialTutorDto>.Ok(
-            new MaterialTutorDto(material.IdMaterial, material.Titulo, material.Tipo));
+        return Resultado<MaterialTutorDto>.Ok(new MaterialTutorDto(
+            material.IdMaterial, material.Titulo, material.Tipo, material.Conteudo));
+    }
+
+    /// <summary>
+    /// Edita titulo, tipo e conteudo de um material.
+    ///
+    /// POR QUE PODE EDITAR MATERIAL JA ASSISTIDO (diferente de remover):
+    /// corrigir o texto de uma aula nao invalida nada. O progresso aponta
+    /// para o material, nao para uma versao dele, e a nota da prova nao
+    /// depende do conteudo. Remover e que quebraria a chave estrangeira.
+    /// </summary>
+    public async Task<Resultado<MaterialTutorDto>> AtualizarAulaAsync(
+        int idTutor, int idMaterial, MaterialRequest req, CancellationToken ct = default)
+    {
+        var material = await _cursos.ObterMaterialParaEdicaoAsync(idMaterial, ct);
+        if (material is null)
+            return Resultado<MaterialTutorDto>.NaoEncontrado("Material nao encontrado.");
+
+        var (_, erro) = await ObterProprioAsync<MaterialTutorDto>(idTutor, material.IdCurso, true, ct);
+        if (erro is not null) return erro;
+
+        if (string.IsNullOrWhiteSpace(req.Titulo))
+            return Resultado<MaterialTutorDto>.Invalido("O titulo do material e obrigatorio.");
+
+        material.Titulo = req.Titulo.Trim();
+        if (!string.IsNullOrWhiteSpace(req.Tipo)) material.Tipo = req.Tipo.Trim();
+        material.Conteudo = string.IsNullOrWhiteSpace(req.Conteudo) ? null : req.Conteudo.Trim();
+
+        await _uow.SalvarAsync(ct);
+
+        return Resultado<MaterialTutorDto>.Ok(new MaterialTutorDto(
+            material.IdMaterial, material.Titulo, material.Tipo, material.Conteudo));
     }
 
     public async Task<Resultado<bool>> RemoverAulaAsync(

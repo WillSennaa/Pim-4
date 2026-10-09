@@ -47,6 +47,19 @@ public interface ICursoRepository
     void RemoverMaterial(Material material);
     Task<Material?> ObterMaterialParaEdicaoAsync(int idMaterial, CancellationToken ct = default);
     Task<bool> MaterialTemProgressoAsync(int idMaterial, CancellationToken ct = default);
+
+    /// <summary>
+    /// ID_Usuario do tutor que criou o curso. O roteamento da duvida precisa
+    /// do usuario (a pessoa), nao do ID_Tutor (a especializacao).
+    /// </summary>
+    Task<int?> ObterUsuarioDoTutorDoCursoAsync(int idCurso, CancellationToken ct = default);
+
+    /// <summary>
+    /// Curso ao qual a prova pertence. A chave estrangeira esta em
+    /// Curso.ID_Prova, entao a prova nao sabe de quem e -- e a submissao da
+    /// prova precisa do curso para reavaliar a conclusao.
+    /// </summary>
+    Task<int?> ObterIdCursoPorProvaAsync(int idProva, CancellationToken ct = default);
 }
 
 public interface IProvaRepository
@@ -121,6 +134,13 @@ public interface IChamadoRepository
     Task<IReadOnlyList<Chamado>> ListarDoUsuarioAsync(int idUsuario, CancellationToken ct = default);
     Task<Chamado?> ObterAsync(int idChamado, CancellationToken ct = default);
     void Adicionar(Chamado chamado);
+
+    /// <summary>Chamados de um tipo, para a fila dos administradores.</summary>
+    Task<IReadOnlyList<Chamado>> ListarPorTipoAsync(string tipo, CancellationToken ct = default);
+
+    /// <summary>Duvidas enderecadas ao tutor, abertas e ja respondidas.</summary>
+    Task<IReadOnlyList<Chamado>> ListarDoDestinatarioAsync(
+        int idUsuario, CancellationToken ct = default);
 }
 
 public interface IRelatorioRepository

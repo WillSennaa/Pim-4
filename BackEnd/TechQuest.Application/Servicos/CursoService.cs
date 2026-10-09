@@ -8,11 +8,15 @@ public class CursoService
 {
     private readonly ICursoRepository _cursos;
     private readonly IProgressoRepository _progressos;
+    private readonly IHistoricoRepository _historicos;
 
-    public CursoService(ICursoRepository cursos, IProgressoRepository progressos)
+    public CursoService(
+        ICursoRepository cursos, IProgressoRepository progressos,
+        IHistoricoRepository historicos)
     {
         _cursos = cursos;
         _progressos = progressos;
+        _historicos = historicos;
     }
 
     public async Task<IReadOnlyList<CursoResumoDto>> ListarAsync(CancellationToken ct = default)
@@ -43,17 +47,23 @@ public class CursoService
             {
                 progresso.TryGetValue(m.IdMaterial, out var p);
                 return new MaterialDto(
-                    m.IdMaterial, m.Titulo, m.Tipo,
+                    m.IdMaterial, m.Titulo, m.Tipo, m.Conteudo,
                     p?.Concluido ?? false,
                     p?.PorcentagemAssistida ?? 0);
             })
             .ToList();
+
+        // Matricula: uma consulta a mais, pela chave (ID_Estudante, ID_Curso).
+        // Sem ela a tela teria de inferir do historico completo do aluno, o que
+        // significa baixar dados de todos os cursos para responder sobre um.
+        var matriculado = idEstudante is not null
+            && await _historicos.ObterAsync(idEstudante.Value, idCurso, ct) is not null;
 
         return new CursoDetalheDto(
             curso.IdCurso, curso.Nome, curso.Descricao, curso.Categoria, curso.Nivel,
             curso.DuracaoHoras,
             curso.TutorCriou?.Usuario.Nome,
             curso.TutorCriou?.Usuario.Iniciais(),
-            curso.Status, curso.IdProva, materiais);
+            curso.Status, curso.IdProva, matriculado, materiais);
     }
 }

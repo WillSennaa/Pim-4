@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Minha conta — Tech Quest</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.47.0/tabler-icons.min.css">
+  <link rel="stylesheet" href="../../css/style.css">
+</head>
+<body>
+<!--
+  Área de conta compartilhada pelas três personas.
+
+  POR QUE FORA DE /estudante, /tutor e /admin: trocar a senha e o e-mail é a
+  mesma operação para qualquer usuário, e duplicar a tela em três pastas
+  significaria corrigir cada ajuste três vezes. A guarda de rota trata
+  /pages/conta/ como área autenticada sem papel exigido.
+-->
+<div class="app-container">
+
+  <header class="top-bar">
+    <a href="#" id="voltarArea" class="top-bar__back"><i class="ti ti-arrow-left"></i></a>
+    <span class="top-bar__title">Minha conta</span>
+    <span class="top-bar__avatar" id="contaIniciais">--</span>
+  </header>
+
+  <main class="main-content">
+
+    <div class="card animate-in">
+      <div class="flex items-center gap-md mb-md">
+        <div class="avatar" id="contaAvatar">--</div>
+        <div style="flex:1;">
+          <div class="font-semibold" id="contaNome">Carregando...</div>
+          <div class="text-sm text-muted" id="contaEmail"></div>
+        </div>
+        <span class="badge badge--neutral" id="contaPapel"></span>
+      </div>
+      <div class="flex justify-between mb-sm">
+        <span class="text-secondary">Telefone</span>
+        <span class="font-medium" id="contaTelefone">-</span>
+      </div>
+      <div class="flex justify-between mb-sm">
+        <span class="text-secondary">Cidade</span>
+        <span class="font-medium" id="contaCidade">-</span>
+      </div>
+      <div class="flex justify-between">
+        <span class="text-secondary">Membro desde</span>
+        <span class="font-medium" id="contaDesde">-</span>
+      </div>
+    </div>
+
+    <!-- Indicadores conforme o papel. A tela do estudante tem estatísticas
+         próprias e esta não tinha nenhuma: o tutor via só nome, e-mail e data
+         de cadastro. Os números dele já vinham carregados pelo adaptador —
+         faltava mostrá-los. Preenchido por renderIndicadoresDaConta(). -->
+    <div id="contaIndicadores"></div>
+
+    <h3 class="section-title mt-lg">Segurança</h3>
+
+    <div class="card">
+      <div class="list-item" style="cursor:pointer;" onclick="abrirModal('modalSenha')">
+        <div class="list-item__icon"><i class="ti ti-lock"></i></div>
+        <div class="list-item__body">
+          <div class="list-item__title">Alterar senha</div>
+          <div class="list-item__subtitle">Exige a senha atual</div>
+        </div>
+        <i class="ti ti-chevron-right text-muted"></i>
+      </div>
+      <div class="list-item" style="cursor:pointer;" onclick="abrirModal('modalEmail')">
+        <div class="list-item__icon"><i class="ti ti-mail"></i></div>
+        <div class="list-item__body">
+          <div class="list-item__title">Alterar e-mail</div>
+          <div class="list-item__subtitle">E-mail é a sua chave de login</div>
+        </div>
+        <i class="ti ti-chevron-right text-muted"></i>
+      </div>
+    </div>
+
+    <div class="card mt-lg">
+      <button class="btn btn--secondary btn--full" onclick="return confirmarSaida(event)">
+        <i class="ti ti-logout"></i> Sair da conta
+      </button>
+    </div>
+
+  </main>
+</div>
+
+<!-- Alterar senha -->
+<div class="modal-overlay" id="modalSenha">
+  <div class="modal">
+    <h3 class="modal__title">Alterar senha</h3>
+    <div class="form-group">
+      <label class="form-label" for="senhaAtual">Senha atual</label>
+      <input type="password" class="form-input" id="senhaAtual" placeholder="••••••••">
+    </div>
+    <div class="form-group">
+      <label class="form-label" for="novaSenha">Nova senha</label>
+      <input type="password" class="form-input" id="novaSenha" placeholder="mínimo 6 caracteres">
+    </div>
+    <div class="form-group">
+      <label class="form-label" for="confirmarSenha">Confirme a nova senha</label>
+      <input type="password" class="form-input" id="confirmarSenha" placeholder="••••••••">
+    </div>
+    <div class="modal__actions">
+      <button class="btn btn--primary btn--full" onclick="trocarSenha(this)">Salvar</button>
+      <button class="btn btn--secondary btn--full" onclick="fecharModal('modalSenha')">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Alterar e-mail -->
+<div class="modal-overlay" id="modalEmail">
+  <div class="modal">
+    <h3 class="modal__title">Alterar e-mail</h3>
+    <p class="modal__text">Você continuará conectado: o acesso usa o seu identificador, não o e-mail.</p>
+    <div class="form-group">
+      <label class="form-label" for="emailSenha">Sua senha</label>
+      <input type="password" class="form-input" id="emailSenha" placeholder="••••••••">
+    </div>
+    <div class="form-group">
+      <label class="form-label" for="emailNovo">Novo e-mail</label>
+      <input type="email" class="form-input" id="emailNovo" placeholder="novo@email.com">
+    </div>
+    <div class="form-group">
+      <label class="form-label" for="emailConfirmar">Confirme o novo e-mail</label>
+      <input type="email" class="form-input" id="emailConfirmar" placeholder="novo@email.com">
+    </div>
+    <div class="modal__actions">
+      <button class="btn btn--primary btn--full" onclick="trocarEmail(this)">Salvar</button>
+      <button class="btn btn--secondary btn--full" onclick="fecharModal('modalEmail')">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+<script src="../../js/api.js"></script>
+<script src="../../js/app.js"></script>
+<script>
+function onPageLoad() { carregarContaComum(); }
+</script>
+</body>
+</html>

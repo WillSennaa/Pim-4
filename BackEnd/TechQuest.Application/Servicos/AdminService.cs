@@ -9,6 +9,7 @@ namespace TechQuest.Application.Servicos;
 public class AdminService
 {
     private readonly ICursoRepository _cursos;
+    private readonly IProvaRepository _provas;
     private readonly IUsuarioRepository _usuarios;
     private readonly IAdminRepository _admin;
     private readonly IChamadoRepository _chamados;
@@ -17,12 +18,52 @@ public class AdminService
     private readonly IUnidadeDeTrabalho _uow;
 
     public AdminService(
-        ICursoRepository cursos, IUsuarioRepository usuarios, IAdminRepository admin,
-        IChamadoRepository chamados, IConquistaRepository conquistas,
-        IHashSenhaService hash, IUnidadeDeTrabalho uow)
+        ICursoRepository cursos, IProvaRepository provas, IUsuarioRepository usuarios,
+        IAdminRepository admin, IChamadoRepository chamados,
+        IConquistaRepository conquistas, IHashSenhaService hash, IUnidadeDeTrabalho uow)
     {
-        _cursos = cursos; _usuarios = usuarios; _admin = admin;
+        _cursos = cursos; _provas = provas; _usuarios = usuarios; _admin = admin;
         _chamados = chamados; _conquistas = conquistas; _hash = hash; _uow = uow;
+    }
+
+    /// <summary>
+    /// Curso completo para avaliacao: materiais com o texto e prova com o
+    /// gabarito. Sem isto o administrador aprova sem ler o que esta
+    /// publicando. Serve qualquer estado, nao so Pendente -- o administrador
+    /// tambem precisa poder auditar curso ja publicado.
+    /// </summary>
+    public async Task<CursoRevisaoDto?> ObterParaRevisaoAsync(
+        int idCurso, CancellationToken ct = default)
+    {
+        var curso = await _cursos.ObterComMateriaisAsync(idCurso, ct);
+        if (curso is null) return null;
+
+        var materiais = curso.Materiais
+            .OrderBy(m => m.IdMaterial)
+            .Select(m => new MaterialTutorDto(m.IdMaterial, m.Titulo, m.Tipo, m.Conteudo))
+            .ToList();
+
+        ProvaCompletaTutorDto? prova = null;
+        if (curso.IdProva is not null)
+        {
+            var p = await _provas.ObterComQuestoesAsync(curso.IdProva.Value, ct);
+            if (p is not null)
+            {
+                prova = new ProvaCompletaTutorDto(
+                    p.IdProva, p.Titulo, p.NotaMinima, p.TempoMinutos,
+                    p.Questoes.OrderBy(q => q.Ordem).Select(q => new QuestaoCompletaTutorDto(
+                        q.IdQuestao, q.Ordem, q.Enunciado, q.CodigoExemplo,
+                        q.Alternativas.OrderBy(a => a.Letra).Select(a =>
+                            new AlternativaCompletaDto(a.IdAlternativa, a.Letra, a.Texto, a.EhCorreta))
+                            .ToList()))
+                        .ToList());
+            }
+        }
+
+        return new CursoRevisaoDto(
+            curso.IdCurso, curso.Nome, curso.Descricao, curso.Categoria, curso.Nivel,
+            curso.DuracaoHoras, curso.TutorCriou?.Usuario.Nome, curso.Status,
+            materiais, prova);
     }
 
     public Task<ResumoAdminDto> ResumoAsync(CancellationToken ct = default)

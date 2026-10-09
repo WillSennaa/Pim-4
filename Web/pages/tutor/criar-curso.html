@@ -27,7 +27,7 @@
     <header class="top-bar">
       <a href="cursos.html" class="top-bar__back"><i class="ti ti-arrow-left"></i></a>
       <span class="top-bar__title">Solicitar Novo Curso</span>
-      <div class="top-bar__avatar" style="background:#FDA4AF; color:#9F1239;">AS</div>
+      <a href="../conta/perfil.html" class="top-bar__avatar" style="background:#FDA4AF; color:#9F1239;" title="Meu perfil">AS</a>
     </header>
 
     <main class="main-content">
@@ -113,19 +113,24 @@
         <div class="card" style="border-top:4px solid var(--color-success);">
           <h3 class="font-bold mb-md"><i class="ti ti-file-text text-success" style="vertical-align:-2px;"></i> Materiais e referências</h3>
 
-          <div class="form-group">
-            <label class="form-label">Material de apoio</label>
-            <div style="border:2px dashed var(--color-border); border-radius:var(--radius-md); padding:var(--space-lg); text-align:center; cursor:pointer;">
-              <i class="ti ti-cloud-upload" style="font-size:32px; color:var(--color-text-muted);"></i>
-              <p class="text-sm text-muted mt-sm">Arraste arquivos ou clique para selecionar</p>
-              <p class="text-xs text-muted">PDFs, slides, vídeos (máx. 100MB por arquivo)</p>
-            </div>
+          <!-- A area de upload era decorativa: nao havia envio, nem coluna
+               para guardar o arquivo, nem armazenamento configurado. O mesmo
+               caminho do anexo de chamado -- depende de conta de
+               armazenamento no Azure, que ficou para depois. E a plataforma
+               nao tem player de video: anunciar "slides, videos" prometia o
+               que o sistema nao entrega. -->
+          <div class="card" style="background:var(--color-warning-light); border-color:var(--color-warning);">
+            <p class="text-sm" style="margin:0;">
+              <i class="ti ti-info-circle"></i>
+              Os materiais do curso são cadastrados como <strong>texto</strong> depois da
+              criação, no editor de curso. Upload de arquivo não está disponível nesta versão.
+            </p>
           </div>
 
-          <div class="form-group">
-            <label class="form-label">Justificativa para criação</label>
-            <textarea class="form-input" rows="3" placeholder="Por que este curso é relevante para a plataforma? Qual público vai atender?"></textarea>
-          </div>
+          <!-- "Justificativa para criacao" saiu: o campo nao era enviado e o
+               modelo nao tem coluna para ele. O administrador avalia o curso
+               pelo conteudo (materiais e prova), que e o que a tela de
+               aprovacao mostra. -->
         </div>
 
         <!-- Ações -->
@@ -158,7 +163,11 @@
   <div class="modal">
     <div class="modal__icon modal__icon--primary"><i class="ti ti-send"></i></div>
     <h3 class="modal__title">Enviar solicitação?</h3>
-    <p class="modal__text">Sua solicitação será encaminhada para o administrador. Em até <strong>48 horas</strong> você receberá um retorno sobre a aprovação do curso. Deseja prosseguir?</p>
+    <!-- "Em ate 48 horas" era SLA escrito no HTML; nao existe prazo
+         configurado em nenhum lugar do sistema. -->
+    <p class="modal__text">O curso será enviado ao administrador para avaliação e passa ao
+      estado <strong>Pendente</strong>. Enquanto estiver pendente, ele não pode ser editado.
+      Deseja prosseguir?</p>
     <div class="modal__actions">
       <button class="btn btn--primary btn--full" onclick="fecharModal('modalConfirmar'); criarCurso(this);">Sim, enviar solicitação</button>
       <button class="btn btn--secondary btn--full" onclick="fecharModal('modalConfirmar')">Voltar e revisar</button>
@@ -171,7 +180,12 @@
   <div class="modal">
     <div class="modal__icon modal__icon--success"><i class="ti ti-check"></i></div>
     <h3 class="modal__title">Solicitação enviada!</h3>
-    <p class="modal__text">Sua solicitação foi enviada com o protocolo <strong>#TUT-2024-088</strong>. Você pode acompanhar o status na aba "Meus Cursos".</p>
+    <!-- O protocolo "#TUT-2024-088" era fixo. Nao existe tabela de
+         protocolo de solicitacao de curso: o que identifica o pedido e o
+         proprio ID_Curso, e o estado do curso e o acompanhamento. -->
+    <p class="modal__text">O curso foi enviado para avaliação. Acompanhe o estado em
+      <strong>Meus Cursos</strong>: ele aparece como Pendente até o administrador aprovar
+      ou rejeitar.</p>
     <div class="modal__actions">
       <a href="cursos.html" class="btn btn--primary btn--full">Voltar para Meus Cursos</a>
     </div>

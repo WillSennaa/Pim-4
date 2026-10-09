@@ -22,10 +22,13 @@ public class CertificadoRepository : ICertificadoRepository
     public void Adicionar(Certificado certificado) => _db.Certificados.Add(certificado);
 
     // O certificado so faz sentido com curso e estudante juntos: o nome do
-    // aluno e do curso sao impressos nele.
+    // aluno e do curso sao impressos nele. O tutor do curso entrou na consulta
+    // porque o certificado e assinado por alguem -- e esse nome estava escrito
+    // no HTML da tela, igual para todos os cursos.
     private IQueryable<Certificado> ConsultaCompleta()
         => _db.Certificados
               .Include(c => c.Historico).ThenInclude(h => h.Curso)
+                  .ThenInclude(cu => cu.TutorCriou!).ThenInclude(t => t.Usuario)
               .Include(c => c.Historico).ThenInclude(h => h.Estudante).ThenInclude(e => e.Usuario)
               .AsNoTracking();
 }

@@ -25,6 +25,17 @@ public class AdminController : ControllerBase
     public async Task<IActionResult> Cursos([FromQuery] string? status, CancellationToken ct)
         => Ok(await _admin.ListarSolicitacoesAsync(status, ct));
 
+    /// <summary>
+    /// Curso completo para avaliacao: materiais com texto e prova com
+    /// gabarito. O avaliador precisa ler o que vai publicar.
+    /// </summary>
+    [HttpGet("cursos/{idCurso:int}")]
+    public async Task<IActionResult> ObterCurso(int idCurso, CancellationToken ct)
+    {
+        var curso = await _admin.ObterParaRevisaoAsync(idCurso, ct);
+        return curso is null ? NotFound() : Ok(curso);
+    }
+
     [HttpPost("cursos/{idCurso:int}/aprovar")]
     public async Task<IActionResult> Aprovar(int idCurso, CancellationToken ct)
     {
@@ -71,6 +82,17 @@ public class AdminController : ControllerBase
         var r = await _admin.AlterarStatusAsync(idAdm.Value, idUsuario, req.Ativo, ct);
         return r.Status == StatusOperacao.Ok ? NoContent() : Traduzir(r);
     }
+
+    // ---------------- SUPORTE TECNICO ----------------
+    /// <summary>
+    /// Fila de chamados tecnicos. Sem destinatario fixo: qualquer
+    /// administrador assume, e travar num deles deixaria o chamado parado se
+    /// ele estivesse ausente.
+    /// </summary>
+    [HttpGet("chamados")]
+    public async Task<IActionResult> ChamadosTecnicos(
+        [FromServices] ChamadoService chamados, CancellationToken ct)
+        => Ok(await chamados.ListarTecnicosAsync(ct));
 
     // ---------------- MEDALHAS ----------------
     [HttpGet("medalhas")]

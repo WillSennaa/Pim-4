@@ -55,6 +55,9 @@ builder.Services.AddScoped<CursoService>();
 builder.Services.AddScoped<ProvaService>();
 builder.Services.AddScoped<GamificacaoService>();
 builder.Services.AddScoped<ConquistaService>();
+// Registrado ANTES de quem o consome so por legibilidade -- a ordem nao
+// importa para o container. ProgressoService e ProvaService dependem dele.
+builder.Services.AddScoped<ConclusaoCursoService>();
 builder.Services.AddScoped<ProgressoService>();
 builder.Services.AddScoped<EstudanteService>();
 builder.Services.AddScoped<ContaService>();

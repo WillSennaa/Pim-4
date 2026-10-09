@@ -135,6 +135,8 @@ public class TechQuestDbContext : DbContext
             e.Property(x => x.IdCurso).HasColumnName("ID_Curso");
             e.Property(x => x.Titulo).HasColumnName("Titulo_Material").HasMaxLength(150);
             e.Property(x => x.Tipo).HasColumnName("Tipo_Material").HasMaxLength(50);
+            // Sem HasMaxLength: a coluna e NVARCHAR(MAX) no banco.
+            e.Property(x => x.Conteudo).HasColumnName("Conteudo");
 
             e.HasOne(x => x.Curso).WithMany(c => c.Materiais)
              .HasForeignKey(x => x.IdCurso).OnDelete(DeleteBehavior.Cascade);
@@ -296,6 +298,7 @@ public class TechQuestDbContext : DbContext
             e.Property(x => x.IdChamado).HasColumnName("ID_Chamado");
             e.Property(x => x.IdRemetente).HasColumnName("ID_Remetente");
             e.Property(x => x.IdDestinatario).HasColumnName("ID_Destinatario");
+            e.Property(x => x.IdCurso).HasColumnName("ID_Curso");
             e.Property(x => x.Tipo).HasColumnName("Tipo_Chamado").HasMaxLength(20);
             e.Property(x => x.Assunto).HasColumnName("Assunto").HasMaxLength(100);
             e.Property(x => x.Descricao).HasColumnName("Descricao");
@@ -308,6 +311,8 @@ public class TechQuestDbContext : DbContext
              .HasForeignKey(x => x.IdRemetente).OnDelete(DeleteBehavior.Restrict);
             e.HasOne(x => x.Destinatario).WithMany()
              .HasForeignKey(x => x.IdDestinatario).OnDelete(DeleteBehavior.Restrict);
+            e.HasOne(x => x.Curso).WithMany()
+             .HasForeignKey(x => x.IdCurso).OnDelete(DeleteBehavior.Restrict);
         });
 
         mb.Entity<LogAuditoria>(e =>

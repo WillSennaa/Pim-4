@@ -15,14 +15,30 @@
   </ItemGroup>
 
   <!--
-    Referencia APENAS o Domain. Nao ha banco, nao ha HTTP, nao ha EF Core nos
-    testes: as regras de negocio sao classes sem dependencia, e e isso que
-    torna a suite instantanea e deterministica. Se fosse preciso subir um
-    banco para testar o calculo de XP, a arquitetura em camadas nao estaria
-    cumprindo o que promete.
+    DUAS REFERENCIAS, e a distincao entre elas e proposital.
+
+    Domain: regras puras (pastas Regras e Entidades). Sem duble, sem
+    configuracao, porque sao funcoes de entrada e saida.
+
+    Application: orquestracao (pasta Servicos). Precisa de dubles porque e
+    a camada que COORDENA repositorios, e foi ali que morou o defeito do
+    certificado: o criterio estava correto, mas nao era consultado depois
+    da prova. Teste de regra pura nao pega isso; so exercitando o servico.
+
+    NAO ha referencia a Infrastructure. Os dubles implementam as INTERFACES
+    declaradas em Application, entao a suite continua sem banco, sem EF Core
+    e sem HTTP. Roda em milissegundos e da o mesmo resultado em qualquer
+    maquina. Isso e consequencia da inversao de dependencia: se fosse
+    preciso subir SQL Server para testar a emissao de um certificado, a
+    arquitetura em camadas nao estaria cumprindo o que promete.
+
+    NOTA DE SINTAXE: comentario XML nao aceita dois hifens seguidos. Uma
+    versao anterior deste arquivo usava esse par como travessao e o projeto
+    deixou de carregar, com o Test Explorer aparecendo vazio.
   -->
   <ItemGroup>
     <ProjectReference Include="..\TechQuest.Domain\TechQuest.Domain.csproj" />
+    <ProjectReference Include="..\TechQuest.Application\TechQuest.Application.csproj" />
   </ItemGroup>
 
 </Project>

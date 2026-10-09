@@ -65,6 +65,16 @@ public class TutorController : ControllerBase
         return Traduzir(await _tutor.AdicionarAulaAsync(id.Value, idCurso, req, ct));
     }
 
+    /// <summary>Edita titulo, tipo e conteudo de um material do proprio curso.</summary>
+    [HttpPut("aulas/{idMaterial:int}")]
+    public async Task<IActionResult> AtualizarAula(
+        int idMaterial, [FromBody] MaterialRequest req, CancellationToken ct)
+    {
+        var id = User.IdTutor();
+        if (id is null) return Forbid();
+        return Traduzir(await _tutor.AtualizarAulaAsync(id.Value, idMaterial, req, ct));
+    }
+
     [HttpDelete("aulas/{idMaterial:int}")]
     public async Task<IActionResult> RemoverAula(int idMaterial, CancellationToken ct)
     {

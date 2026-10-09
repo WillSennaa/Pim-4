@@ -18,8 +18,8 @@
       <i class="ti ti-arrow-left"></i> Sair
     </button>
     <div style="flex:1; text-align:right;">
-      <div class="font-semibold text-sm">Prova: Arrays e Listas</div>
-      <div class="text-xs text-muted">Curso: Fundamentos de C#</div>
+      <div class="font-semibold text-sm" id="quizTitulo">Carregando prova...</div>
+      <div class="text-xs text-muted" id="quizSubtitulo"></div>
     </div>
   </header>
 
@@ -57,7 +57,7 @@
     <p class="modal__text">Seu progresso atual será perdido e você precisará começar a prova novamente. Deseja realmente interromper agora?</p>
     <div class="modal__actions">
       <button class="btn btn--ghost btn--full" onclick="fecharModal('modalSair')">Cancelar</button>
-      <a href="curso.html" class="btn btn--danger btn--full">Sim, sair da prova</a>
+      <a href="curso.html" id="linkSairProva" class="btn btn--danger btn--full">Sim, sair da prova</a>
     </div>
   </div>
 </div>

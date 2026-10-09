@@ -99,5 +99,6 @@ public class EstudanteService
         c.Historico.Estudante.Usuario.Nome,
         c.DataEmissao,
         c.Historico.DataConclusao,
-        c.Historico.Curso.DuracaoHoras);
+        c.Historico.Curso.DuracaoHoras,
+        c.Historico.Curso.TutorCriou?.Usuario.Nome);
 }

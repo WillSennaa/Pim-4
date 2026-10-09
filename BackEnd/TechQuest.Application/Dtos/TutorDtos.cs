@@ -9,9 +9,14 @@ public record CursoTutorDto(
     int? DuracaoHoras, string Status, int TotalAulas, int TotalMatriculados,
     int? IdProva, int TotalQuestoes, bool PodeEditar);
 
-// ----- Aulas -----
-public record MaterialRequest(string Titulo, string Tipo);
-public record MaterialTutorDto(int Id, string? Titulo, string? Tipo);
+// ----- Materiais (a tabela se chama Material; "aula" era o nome na tela) -----
+/// <summary>
+/// Conteudo e opcional na criacao: o tutor costuma cadastrar a trilha de
+/// materiais primeiro e escrever o texto de cada um depois.
+/// </summary>
+public record MaterialRequest(string Titulo, string Tipo, string? Conteudo = null);
+
+public record MaterialTutorDto(int Id, string? Titulo, string? Tipo, string? Conteudo);
 
 // ----- Prova e questoes -----
 public record CriarProvaRequest(string Titulo, decimal NotaMinima, int TempoMinutos);

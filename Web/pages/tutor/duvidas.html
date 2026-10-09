@@ -27,7 +27,7 @@
     <header class="top-bar">
       <a href="home.html" class="top-bar__back"><i class="ti ti-arrow-left"></i></a>
       <span class="top-bar__title">Dúvidas</span>
-      <div class="top-bar__avatar" style="background:#FDA4AF; color:#9F1239;">AS</div>
+      <a href="../conta/perfil.html" class="top-bar__avatar" style="background:#FDA4AF; color:#9F1239;" title="Meu perfil">AS</a>
     </header>
 
     <main class="main-content">
@@ -36,9 +36,9 @@
       <p class="page-subtitle">Responda as perguntas de quem precisa da sua orientação.</p>
 
       <div class="tabs tabs--pills mb-lg animate-in animate-in-delay-1">
-        <button class="tab active">Pendentes (2)</button>
-        <button class="tab">Respondidas</button>
-        <button class="tab">Todas</button>
+        <button class="tab active" data-filtro="pendentes" onclick="filtrarDuvidas('pendentes', this)">Pendentes</button>
+        <button class="tab" data-filtro="respondidas" onclick="filtrarDuvidas('respondidas', this)">Respondidas</button>
+        <button class="tab" data-filtro="todas" onclick="filtrarDuvidas('todas', this)">Todas</button>
       </div>
 
       <div id="duvidasList" class="animate-in animate-in-delay-2"></div>
@@ -72,14 +72,19 @@
 <script src="../../js/api.js"></script>
 <script src="../../js/app.js"></script>
 <script>
-/* Qual duvida o modal esta respondendo. Fica aqui porque o modal e unico e
-   reaproveitado por todos os cards da lista. */
+/* O painel mostra as duvidas ENDERECADAS a este tutor, com o curso de cada
+   uma -- o roteamento acontece no servidor: o aluno escolhe o curso e a
+   duvida chega a quem o criou. */
 let DUVIDA_ATUAL = { id: null, idRemetente: null };
 
-function abrirResposta(id, idRemetente, aluno, pergunta) {
+function abrirResposta(id, idRemetente, aluno, pergunta, curso) {
   DUVIDA_ATUAL = { id: id, idRemetente: idRemetente };
   const alvo = document.getElementById('perguntaOriginal');
-  if (alvo) alvo.innerHTML = '<strong>' + aluno + '</strong><br><span class="text-sm">' + pergunta + '</span>';
+  if (alvo) {
+    alvo.innerHTML = '<strong>' + aluno + '</strong>' +
+      '<div class="text-xs text-muted mb-sm">' + curso + '</div>' +
+      '<span class="text-sm">' + pergunta + '</span>';
+  }
   const campo = document.getElementById('respostaDuvida');
   if (campo) campo.value = '';
   abrirModal('modalResponder');
@@ -91,37 +96,60 @@ function onPageLoad() {
 
   const duvidas = (TQ.data && TQ.data.tutor_duvidas) || [];
   if (!duvidas.length) {
-    list.innerHTML = '<div class="card"><p class="text-sm text-muted">Nenhuma duvida em aberto.</p></div>';
+    list.innerHTML = '<div class="card"><p class="text-sm text-muted">' +
+      'Nenhuma duvida recebida. Quando um aluno abrir uma duvida sobre um dos ' +
+      'seus cursos, ela aparece aqui.</p></div>';
     return;
   }
+
+  const CORES = { 'Aberto': 'warning', 'Em andamento': 'primary', 'Resolvido': 'success' };
 
   list.innerHTML = duvidas.map(d => {
     const texto = (d.pergunta || '').replace(/'/g, "&#39;").replace(/"/g, '&quot;');
     const aluno = (d.aluno || '').replace(/'/g, "&#39;");
+    const curso = (d.curso || '').replace(/'/g, "&#39;");
+    const cor = CORES[d.status] || 'neutral';
+
     return `
-    <div class="card" style="border-left:3px solid var(--color-warning);">
+    <div class="card" data-situacao="${d.pendente ? 'pendentes' : 'respondidas'}"
+         style="border-left:3px solid var(--color-${cor});">
       <div class="flex items-start gap-md mb-md">
         <div class="avatar">${d.iniciais}</div>
         <div style="flex:1;">
           <div class="flex justify-between items-center">
             <strong>${d.aluno}</strong>
-            <span class="text-xs text-muted">${d.tempo}</span>
+            <span class="badge badge--${cor}">${(d.status || '').toUpperCase()}</span>
           </div>
-          <div class="text-xs text-muted mb-sm">${d.assunto || d.curso || ''}</div>
+          <div class="text-xs text-muted mb-sm">
+            <i class="ti ti-book-2"></i> ${d.curso} - ${d.tempo}
+          </div>
+          <div class="font-medium text-sm">${d.assunto || ''}</div>
           <p class="text-sm">${d.pergunta}</p>
         </div>
       </div>
+      ${d.pendente ? `
       <div class="flex gap-sm">
         <button class="btn btn--primary btn--sm" style="flex:1;"
-                onclick="abrirResposta(${d.id}, ${d.id_remetente || 'null'}, '${aluno}', '${texto}')">
+                onclick="abrirResposta(${d.id}, ${d.id_remetente || 'null'}, '${aluno}', '${texto}', '${curso}')">
           <i class="ti ti-message-reply"></i> Responder
         </button>
+        ${d.status === 'Aberto' ? `
+        <button class="btn btn--ghost btn--sm" onclick="marcarEmAndamento(${d.id}, this)">
+          Estou analisando
+        </button>` : ''}
         <button class="btn btn--ghost btn--sm" onclick="encerrarDuvida(${d.id}, this)">
-          Marcar como respondida
+          Encerrar
         </button>
-      </div>
+      </div>` : ''}
     </div>`;
   }).join('');
+
+  list.insertAdjacentHTML('afterend',
+    '<div id="duvidasVazio" style="display:none;"><div class="card">' +
+    '<p class="text-sm text-muted">Nenhuma duvida nesta situacao.</p></div></div>');
+
+  // A aba Pendentes ja vem marcada no HTML; aplica o filtro correspondente.
+  filtrarDuvidas('pendentes', document.querySelector('.tab[data-filtro="pendentes"]'));
 }
 </script>
 </body>

@@ -27,7 +27,7 @@
     <header class="top-bar">
       <a href="home.html" class="top-bar__back"><i class="ti ti-arrow-left"></i></a>
       <span class="top-bar__title">Meus Cursos</span>
-      <div class="top-bar__avatar" style="background:#FDA4AF; color:#9F1239;">AS</div>
+      <a href="../conta/perfil.html" class="top-bar__avatar" style="background:#FDA4AF; color:#9F1239;" title="Meu perfil">AS</a>
     </header>
 
     <main class="main-content">
@@ -64,10 +64,11 @@
 
       <!-- Filtros funcionais -->
       <div class="tabs tabs--pills mb-lg animate-in animate-in-delay-1" id="filtrosStatus">
-        <button class="tab active" data-status="todos">Todos</button>
-        <button class="tab" data-status="publicado">Publicados</button>
-        <button class="tab" data-status="rascunho">Rascunhos</button>
-        <button class="tab" data-status="aguardando">Aguardando aprovação</button>
+        <button class="tab active" data-status="todos" onclick="filtrarStatus(\'todos\')">Todos</button>
+        <button class="tab" data-status="publicado" onclick="filtrarStatus(\'publicado\')">Publicados</button>
+        <button class="tab" data-status="rascunho" onclick="filtrarStatus(\'rascunho\')">Rascunhos</button>
+        <button class="tab" data-status="rejeitado" onclick="filtrarStatus(\'rejeitado\')">Rejeitados</button>
+        <button class="tab" data-status="pendente" onclick="filtrarStatus(\'pendente\')">Em avaliação</button>
       </div>
 
       <div class="courses-grid animate-in animate-in-delay-2" id="cursosGrid"></div>
@@ -82,7 +83,15 @@
           <i class="ti ti-info-circle text-primary" style="font-size:24px;"></i>
           <div>
             <h4 class="font-bold mb-sm">Como funciona a criação de cursos?</h4>
-            <p class="text-sm text-secondary">Toda criação ou exclusão de cursos passa por aprovação da equipe administrativa. O prazo médio de análise é de <strong>24 a 48 horas</strong>.</p>
+            <!-- "24 a 48 horas" era prazo escrito no HTML, sem nada no
+                 sistema que o sustente. E "exclusao" nao existe: curso com
+                 aluno matriculado nao pode ser apagado (chave estrangeira
+                 com Historico), por isso o fluxo tem Rejeitado e nao
+                 exclusao. -->
+            <p class="text-sm text-secondary">Um curso novo nasce como <strong>Rascunho</strong> e
+              só fica visível aos alunos depois de ser submetido e aprovado por um administrador
+              (<strong>Rascunho → Pendente → Publicado</strong>). Se for rejeitado, volta a ser
+              editável e pode ser submetido de novo.</p>
           </div>
         </div>
       </div>

@@ -27,7 +27,7 @@
     <header class="top-bar">
       <a href="home.html" class="top-bar__back"><i class="ti ti-arrow-left"></i></a>
       <span class="top-bar__title">Meus Alunos</span>
-      <div class="top-bar__avatar" style="background:#FDA4AF; color:#9F1239;">AS</div>
+      <a href="../conta/perfil.html" class="top-bar__avatar" style="background:#FDA4AF; color:#9F1239;" title="Meu perfil">AS</a>
     </header>
 
     <main class="main-content">
@@ -39,7 +39,7 @@
       <div class="card animate-in animate-in-delay-1">
         <div class="form-input-wrapper">
           <i class="ti ti-search"></i>
-          <input type="text" class="form-input form-input--with-icon" placeholder="Buscar aluno por nome ou e-mail...">
+          <input type="text" class="form-input form-input--with-icon" id="buscaAluno" placeholder="Buscar aluno por nome ou e-mail...">
         </div>
       </div>
 
@@ -52,7 +52,7 @@
                 <th>Aluno</th>
                 <th>Curso</th>
                 <th>Progresso</th>
-                <th>Última atividade</th>
+                <th>Melhor nota</th>
                 <th></th>
               </tr>
             </thead>
@@ -75,33 +75,44 @@
 <script src="../../js/api.js"></script>
 <script src="../../js/app.js"></script>
 <script>
+/* A busca filtra as linhas ja carregadas: os alunos do tutor sao poucos e
+   estao todos na tela, entao uma ida ao servidor a cada tecla so adicionaria
+   latencia -- que com a API na nuvem e de rede. */
 function onPageLoad() {
-  if (!TQ.data) return;
-  const tbody = document.getElementById('alunosTableBody');
-  tbody.innerHTML = TQ.data.tutor_alunos.map(a => `
-    <tr>
+  const corpo = document.getElementById('alunosTableBody');
+  if (!corpo) return;
+
+  const alunos = (TQ.data && TQ.data.tutor_alunos) || [];
+  if (!alunos.length) {
+    corpo.innerHTML = '<tr><td colspan="5"><p class="text-sm text-muted">' +
+      'Nenhum aluno matriculado nos seus cursos ainda.</p></td></tr>';
+    return;
+  }
+
+  corpo.innerHTML = alunos.map(a => `
+    <tr data-busca="${((a.nome || '') + ' ' + (a.email || '')).toLowerCase()}">
       <td>
-        <div class="flex items-center gap-md">
-          <div class="avatar avatar--sm">${a.nome.split(' ').map(n=>n[0]).join('').substring(0,2)}</div>
+        <div class="flex items-center gap-sm">
+          <div class="avatar avatar--sm">${FMT.iniciais(a.nome)}</div>
           <div>
             <div class="font-medium">${a.nome}</div>
-            <div class="text-xs text-muted">${a.email}</div>
+            <div class="text-xs text-muted">${a.email || ''}</div>
           </div>
         </div>
       </td>
-      <td><span class="badge badge--primary">${a.curso}</span></td>
+      <td class="text-sm">${a.curso}</td>
       <td style="min-width:140px;">
-        <div class="flex items-center gap-sm">
-          <div class="progress" style="flex:1; max-width:100px;">
-            <div class="progress__fill" style="width:${a.progresso}%"></div>
-          </div>
-          <span class="text-sm font-semibold">${a.progresso}%</span>
+        <div class="flex justify-between text-xs mb-sm">
+          <span class="text-muted">${a.progresso}%</span>
         </div>
+        <div class="progress"><div class="progress__fill" style="width:${a.progresso}%"></div></div>
       </td>
-      <td class="text-sm text-muted">${a.ultima_atividade}</td>
+      <td class="text-sm">${a.melhor_nota != null ? a.melhor_nota.toFixed(1) : 'sem prova'}</td>
       <td><a href="aluno-detalhe.html?id=${a.id_estudante}" class="btn btn--ghost btn--sm">Ver perfil</a></td>
-    </tr>
-  `).join('');
+    </tr>`).join('');
+
+  const busca = document.getElementById('buscaAluno');
+  if (busca) busca.addEventListener('input', filtrarAlunos);
 }
 </script>
 </body>

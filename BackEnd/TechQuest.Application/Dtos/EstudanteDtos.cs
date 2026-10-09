@@ -69,7 +69,17 @@ public record CertificadoDto(
     string Estudante,
     DateTime DataEmissao,
     DateOnly? DataConclusao,
-    int? CargaHoraria);
+    int? CargaHoraria,
+    /// <summary>
+    /// Tutor responsavel pelo curso: o certificado e assinado por alguem, e
+    /// esse nome estava escrito no HTML ("Ana Souza") para qualquer curso.
+    /// </summary>
+    string? Instrutor);
+
+// NAO EXISTE "nota final do curso" NO MODELO, de proposito: Desempenho guarda
+// a nota de CADA TENTATIVA de prova, nao uma media do curso. A tela do PIM III
+// imprimia "nota final 8,5" no certificado -- numero que nenhuma tabela
+// sustenta. Quem quiser a nota consulta o historico de provas.
 
 // ----- Conta do proprio usuario -----
 /// <summary>
