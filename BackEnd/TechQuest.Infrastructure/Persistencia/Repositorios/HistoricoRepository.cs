@@ -23,12 +23,11 @@ public class HistoricoRepository : IHistoricoRepository
                     .AsNoTracking()
                     .ToListAsync(ct);
 
-    public async Task<IReadOnlyList<string>> NomesDeCursosConcluidosAsync(
+    public async Task<IReadOnlyList<int>> IdsDeCursosConcluidosAsync(
         int idEstudante, CancellationToken ct = default)
         => await _db.Historicos
                     .Where(h => h.IdEstudante == idEstudante && h.StatusConclusao == "Concluido")
-                    .Select(h => h.Curso.Nome)
-                    .AsNoTracking()
+                    .Select(h => h.IdCurso)   // projecao escalar: nada a rastrear
                     .ToListAsync(ct);
 
     public void Adicionar(Historico historico) => _db.Historicos.Add(historico);

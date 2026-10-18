@@ -91,21 +91,23 @@ public class ProvaService
             });
             await _uow.SalvarAsync(ct);
 
-            // Medalhas so depois da tentativa gravada: as regras contam o que
-            // esta no banco, nao o que esta em memoria.
-            medalhasNovas = await _conquistas.AvaliarAsync(idEstudante, ct);
-            await _uow.SalvarAsync(ct);
-
             // SEGUNDO GATILHO DA CONCLUSAO DO CURSO.
             // Passar na prova pode ter sido a ultima condicao que faltava --
             // o aluno que conclui todos os materiais ANTES de fazer a prova
             // chega aqui com tudo pronto menos a aprovacao. Sem esta chamada o
             // certificado nunca era emitido nessa ordem, que e a ordem natural
             // de quem estuda antes de ser avaliado.
-            //
-            // Dentro da mesma transacao de proposito: tentativa, medalhas,
-            // conclusao e certificado valem juntos ou nao valem.
             if (aprovado) await _conclusao.AvaliarPorProvaAsync(idEstudante, idProva, ct);
+            await _uow.SalvarAsync(ct);
+
+            // Medalhas DEPOIS da conclusao, na mesma ordem do ProgressoService:
+            // a medalha de curso depende do Historico ja estar "Concluido".
+            // Na ordem inversa, quem concluisse o curso pela prova so receberia
+            // a medalha do curso na acao seguinte.
+            //
+            // Dentro da mesma transacao de proposito: tentativa, conclusao,
+            // certificado e medalhas valem juntos ou nao valem.
+            medalhasNovas = await _conquistas.AvaliarAsync(idEstudante, ct);
             await _uow.SalvarAsync(ct);
         }, ct);
 

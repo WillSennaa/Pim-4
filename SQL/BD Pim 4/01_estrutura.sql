@@ -2,8 +2,10 @@
 -- 01_estrutura.sql  |  Tech Quest - criacao completa do banco
 --
 -- Cria o banco do zero, ja com TUDO que os scripts incrementais
--- (02_ajustes, 04_ajustes_chamado, 05_conteudo_material) acrescentaram.
+-- (02_ajustes, 04_ajustes_chamado, 05_conteudo_material) acrescentaram,
+-- mais a coluna Medalha.ID_Curso (medalha de conclusao de cada curso).
 -- Rode isto num banco NOVO; depois, 02_dados_demonstracao.sql.
+-- Para o banco que ja existe no Azure, use 03_preparar_banco_existente.sql.
 --
 -- NAO RODE ESTE ARQUIVO NO BANCO QUE JA ESTA EM PRODUCAO.
 -- Ele e para criar um banco igual do zero. O banco existente ja chegou
@@ -62,6 +64,11 @@ CREATE TABLE Medalha (
     Nome_Medalha      VARCHAR(50) NOT NULL,
     Raridade          VARCHAR(20),
     Descricao_Medalha VARCHAR(200),              -- 02
+    -- Curso a que a medalha pertence. Preenchido = medalha de conclusao
+    -- daquele curso, concedida automaticamente (RegrasMedalhas). NULL =
+    -- medalha geral. A chave estrangeira e criada depois de Curso (SECAO 4),
+    -- porque Medalha nasce antes dela.
+    ID_Curso          INT,
     CONSTRAINT PK_Medalha PRIMARY KEY (ID_Medalha)
 );
 
@@ -129,6 +136,9 @@ CREATE TABLE Curso (
     CONSTRAINT FK_Curso_ADM   FOREIGN KEY (ID_ADM_Avaliou) REFERENCES ADM (ID_ADM),
     CONSTRAINT FK_Curso_Prova FOREIGN KEY (ID_Prova)       REFERENCES Prova (ID_Prova)
 );
+
+ALTER TABLE Medalha
+    ADD CONSTRAINT FK_Medalha_Curso FOREIGN KEY (ID_Curso) REFERENCES Curso (ID_Curso);
 
 CREATE TABLE Material (
     ID_Material     INT IDENTITY(1,1) NOT NULL,
@@ -275,6 +285,10 @@ GO
 
 -- 04: "chamados deste curso", no painel do tutor.
 CREATE INDEX IX_Chamado_Curso ON Chamado (ID_Curso);
+
+-- No maximo UMA medalha de conclusao por curso. Indice unico FILTRADO: as
+-- medalhas gerais tem ID_Curso nulo e nao entram na restricao.
+CREATE UNIQUE INDEX UX_Medalha_Curso ON Medalha (ID_Curso) WHERE ID_Curso IS NOT NULL;
 GO
 
 -- =============================================================
@@ -378,7 +392,7 @@ WITH esperado(Tabela, Coluna) AS (
       ('Progresso','Status_Conclusao'),('Progresso','Data_Visualizacao'),
       ('Progresso','Porcentagem_Assistida'),
       ('Medalha','ID_Medalha'),('Medalha','Nome_Medalha'),('Medalha','Raridade'),
-      ('Medalha','Descricao_Medalha'),
+      ('Medalha','Descricao_Medalha'),('Medalha','ID_Curso'),
       ('Conquista','ID_Conquista'),('Conquista','ID_Estudante'),('Conquista','ID_Medalha'),
       ('Conquista','Data_Conquista'),
       ('Historico','ID_Historico'),('Historico','ID_Estudante'),('Historico','ID_Curso'),

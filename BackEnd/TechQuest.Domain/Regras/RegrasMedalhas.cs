@@ -3,9 +3,23 @@ namespace TechQuest.Domain.Regras;
 /// <summary>
 /// Criterios de concessao das medalhas, avaliados apos cada acao do estudante.
 ///
-/// As medalhas sao identificadas pelo NOME, porque a tabela Medalha do PIM III
-/// nao tem coluna de criterio — so nome e raridade. Mapear por nome mantem a
-/// regra em C# sem alterar o modelo entregue.
+/// Ha dois tipos de medalha automatica:
+///
+///   1. GERAIS, por contagem (materiais, provas, notas maximas, todos os
+///      cursos). Sao identificadas pelo NOME, porque a tabela Medalha nao tem
+///      coluna de criterio.
+///
+///   2. DE CURSO, uma por curso, concedida quando o estudante conclui aquele
+///      curso. O vinculo e a coluna Medalha.ID_Curso.
+///
+/// POR QUE O VINCULO DO TIPO 2 E UMA CHAVE ESTRANGEIRA, E NAO O NOME
+/// A versao anterior procurava "C#" ou "Banco de Dados" no nome do curso
+/// concluido. Funcionava para dois cursos, mas nao escala: cada curso novo
+/// exigiria mudar o codigo, e renomear um curso quebraria a concessao em
+/// silencio. Com ID_Curso, a medalha aponta para o curso; criar um curso com
+/// medalha passa a ser dado, nao codigo.
+/// ALTERNATIVA REJEITADA: tabela Medalha_Curso (N:N). Nenhum caso pede uma
+/// medalha para varios cursos, e a coluna anulavel resolve com uma FK so.
 ///
 /// LIMITE CONHECIDO: quatro medalhas do PIM III ("Mestre em Arrays",
 /// "Maratonista", "POO Master", "Arquiteto SOLID") dependem de criterios que
@@ -14,12 +28,15 @@ namespace TechQuest.Domain.Regras;
 /// </summary>
 public static class RegrasMedalhas
 {
+    /// <param name="CursosConcluidos">Ids dos cursos que o estudante concluiu.</param>
+    /// <param name="MedalhasDeCurso">Id do curso -> nome da medalha daquele curso.</param>
     public record Situacao(
         int MateriaisConcluidos,
         int ProvasAprovadas,
         int NotasMaximas,
-        IReadOnlyCollection<string> CursosConcluidos,
-        int TotalCursosPublicados);
+        IReadOnlyCollection<int> CursosConcluidos,
+        int TotalCursosPublicados,
+        IReadOnlyDictionary<int, string> MedalhasDeCurso);
 
     /// <summary>Nomes das medalhas que o estudante ja deveria possuir.</summary>
     public static IReadOnlyList<string> Merecidas(Situacao s)
@@ -32,11 +49,11 @@ public static class RegrasMedalhas
         if (s.ProvasAprovadas >= 1) nomes.Add("Quiz Champion");
         if (s.NotasMaximas >= 1) nomes.Add("Pontuação Perfeita");
 
-        if (s.CursosConcluidos.Any(c => c.Contains("C#", StringComparison.OrdinalIgnoreCase)))
-            nomes.Add("Mestre em C#");
-
-        if (s.CursosConcluidos.Any(c => c.Contains("Banco de Dados", StringComparison.OrdinalIgnoreCase)))
-            nomes.Add("DBA Iniciante");
+        foreach (var idCurso in s.CursosConcluidos)
+        {
+            if (s.MedalhasDeCurso.TryGetValue(idCurso, out var medalha))
+                nomes.Add(medalha);
+        }
 
         if (s.TotalCursosPublicados > 0 && s.CursosConcluidos.Count >= s.TotalCursosPublicados)
             nomes.Add("Lenda da Tech Quest");

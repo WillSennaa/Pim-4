@@ -22,7 +22,7 @@ Aplicação **Windows Forms em C# .NET 8**, exclusiva do perfil **Administrador*
 | **Cursos** | Catálogo completo nos quatro estados (Rascunho, Pendente, Publicado, Rejeitado) | `GET /api/admin/cursos` |
 | **Usuários** | Lista com filtros por papel e situação; criar usuário com senha gerada de forma segura e copiada para a área de transferência; ativar e desativar | `/api/admin/usuarios` |
 | **Chamados técnicos** | Fila de suporte técnico: alterar a situação (em andamento, resolvido) e responder | `/api/admin/chamados`, `/api/chamados` |
-| **Medalhas** | Catálogo de medalhas; o nome das 8 automáticas fica bloqueado | `/api/admin/medalhas` |
+| **Medalhas** | Catálogo de medalhas; renomear pede confirmação, porque as medalhas gerais automáticas são reconhecidas pelo nome | `/api/admin/medalhas` |
 | **Logs** | Registros de auditoria com limite configurável | `GET /api/admin/logs` |
 | **Minha conta** | Troca de senha e de e-mail | `/api/perfil` |
 

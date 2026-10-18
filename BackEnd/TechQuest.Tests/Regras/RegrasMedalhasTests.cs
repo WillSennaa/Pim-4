@@ -5,10 +5,15 @@ namespace TechQuest.Tests.Regras;
 
 public class RegrasMedalhasTests
 {
+    // Catalogo de exemplo: curso 1 e 2 tem medalha propria, curso 3 nao.
+    private static readonly IReadOnlyDictionary<int, string> MedalhasDeCurso =
+        new Dictionary<int, string> { [1] = "Mestre em C#", [2] = "DBA Iniciante" };
+
     private static RegrasMedalhas.Situacao Situacao(
         int aulas = 0, int provas = 0, int notasMaximas = 0,
-        string[]? cursosConcluidos = null, int totalCursos = 2)
-        => new(aulas, provas, notasMaximas, cursosConcluidos ?? Array.Empty<string>(), totalCursos);
+        int[]? cursosConcluidos = null, int totalCursos = 3)
+        => new(aulas, provas, notasMaximas,
+               cursosConcluidos ?? Array.Empty<int>(), totalCursos, MedalhasDeCurso);
 
     [Fact]
     public void Quem_nao_fez_nada_nao_ganha_medalha()
@@ -38,23 +43,31 @@ public class RegrasMedalhasTests
     }
 
     [Fact]
-    public void Curso_concluido_da_a_medalha_do_assunto()
+    public void Curso_concluido_da_a_medalha_daquele_curso()
     {
-        var medalhas = RegrasMedalhas.Merecidas(
-            Situacao(cursosConcluidos: new[] { "Fundamentos de C#" }));
+        var medalhas = RegrasMedalhas.Merecidas(Situacao(cursosConcluidos: new[] { 1 }));
 
         Assert.Contains("Mestre em C#", medalhas);
         Assert.DoesNotContain("DBA Iniciante", medalhas);
     }
 
     [Fact]
+    public void Curso_sem_medalha_vinculada_nao_concede_medalha_de_curso()
+    {
+        var medalhas = RegrasMedalhas.Merecidas(Situacao(cursosConcluidos: new[] { 3 }));
+
+        Assert.Empty(medalhas);
+    }
+
+    [Fact]
     public void Concluir_todos_os_cursos_da_a_Lenda()
     {
         var medalhas = RegrasMedalhas.Merecidas(Situacao(
-            cursosConcluidos: new[] { "Fundamentos de C#", "Banco de Dados e Modelagem de Sistemas" },
-            totalCursos: 2));
+            cursosConcluidos: new[] { 1, 2, 3 }, totalCursos: 3));
 
         Assert.Contains("Lenda da Tech Quest", medalhas);
+        Assert.Contains("Mestre em C#", medalhas);
+        Assert.Contains("DBA Iniciante", medalhas);
     }
 
     [Fact]
@@ -73,7 +86,7 @@ public class RegrasMedalhasTests
         // Dependem de dados que o modelo nao guarda; ficam para o tutor.
         var medalhas = RegrasMedalhas.Merecidas(Situacao(
             aulas: 100, provas: 50, notasMaximas: 50,
-            cursosConcluidos: new[] { "Fundamentos de C#" }, totalCursos: 1));
+            cursosConcluidos: new[] { 1, 2, 3 }, totalCursos: 3));
 
         Assert.DoesNotContain("Mestre em Arrays", medalhas);
         Assert.DoesNotContain("Maratonista", medalhas);

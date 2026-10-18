@@ -102,7 +102,7 @@ public interface IHistoricoRepository
 {
     Task<Historico?> ObterAsync(int idEstudante, int idCurso, CancellationToken ct = default);
     Task<IReadOnlyList<Historico>> ListarPorEstudanteAsync(int idEstudante, CancellationToken ct = default);
-    Task<IReadOnlyList<string>> NomesDeCursosConcluidosAsync(int idEstudante, CancellationToken ct = default);
+    Task<IReadOnlyList<int>> IdsDeCursosConcluidosAsync(int idEstudante, CancellationToken ct = default);
     void Adicionar(Historico historico);
 }
 
@@ -120,6 +120,9 @@ public interface IConquistaRepository
     Task<IReadOnlyList<Medalha>> ObterMedalhasPorNomeAsync(
         IEnumerable<string> nomes, CancellationToken ct = default);
     Task<Medalha?> ObterMedalhaAsync(int idMedalha, CancellationToken ct = default);
+
+    /// <summary>Medalhas de conclusao de curso: id do curso -> nome da medalha.</summary>
+    Task<IReadOnlyDictionary<int, string>> MedalhasPorCursoAsync(CancellationToken ct = default);
     void Adicionar(Conquista conquista);
 
     // --- catalogo de medalhas (admin) ---

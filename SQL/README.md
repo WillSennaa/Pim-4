@@ -7,7 +7,7 @@ Banco relacional **TechQuestDB**, hospedado no **Azure SQL Database** (região B
 | SGBD | Microsoft SQL Server (Azure SQL Database, PaaS, tier serverless) |
 | Banco | `TechQuestDB` |
 | Collation | `SQL_Latin1_General_CP1_CI_AS` (não diferencia maiúsculas, **diferencia acentos**) |
-| Objetos | 17 tabelas · 1 trigger · 1 stored procedure · 1 índice não clusterizado |
+| Objetos | 17 tabelas · 1 trigger · 1 stored procedure · 2 índices não clusterizados |
 | Acesso pela aplicação | Entity Framework Core 8 (`TechQuestDbContext`), com `EnableRetryOnFailure` |
 
 ---
@@ -36,8 +36,8 @@ SQL/
 ├── Base Pim 3/
 │   └── script.sql                   ← script original do PIM III (registro histórico, NÃO usar para criar o banco)
 └── BD Pim 4/
-    ├── 01_estrutura.sql             ← cria o banco completo do zero (tabelas, trigger, procedure, índice)
-    └── 02_dados_demonstracao.sql    ← carga de demonstração (usuários, medalhas, cursos, provas)
+    ├── 01_estrutura.sql                  ← cria o banco completo do zero (tabelas, trigger, procedure, índice)
+    └── 02_dados_demonstracao.sql         ← carga de demonstração (26 usuários, 15 cursos, progresso, provas, medalhas)
 ```
 
 O `01_estrutura.sql` representa o **esquema atual**. A lista de colunas dele foi extraída do mapeamento Fluent API do `TechQuestDbContext`, que é o contrato entre a aplicação e o banco.
@@ -60,9 +60,13 @@ O editor do portal não aceita `GO`, `CREATE DATABASE` nem `USE`.
 3. Cole o `01_estrutura.sql` **a partir da Seção 2**, removendo as linhas `GO`.
 4. Execute o `02_dados_demonstracao.sql`.
 
+> O `02` tem cerca de 230 KB. Se o editor do portal recusar o tamanho, use o Azure Data Studio ou o SSMS conectados ao servidor do Azure.
+
 **Conferência**
 
-O final do `01_estrutura.sql` compara as colunas do banco com as que a API espera. O resultado esperado é **nenhuma linha "FALTANDO"**, 17 tabelas, 1 trigger e 1 procedure. O `02` é idempotente (só insere em tabela vazia) e termina com uma contagem por tabela e uma checagem de acentuação.
+O final do `01_estrutura.sql` compara as colunas do banco com as que a API espera. O resultado esperado é **nenhuma linha "FALTANDO"**, 17 tabelas, 1 trigger e 1 procedure.
+
+O `02` roda numa **transação única**: se o banco não estiver vazio, ou se qualquer inserção falhar, nada é gravado. Ele termina com a contagem por tabela, **consultas de regra que devem voltar vazias** (curso concluído sem certificado, medalha de curso sem o curso concluído, prova sem 10 questões etc.), o ranking de XP calculado como a API calcula e a checagem de acentuação.
 
 > ⚠️ Não rode o `01_estrutura.sql` no banco que já está em produção: ele é para criar um banco novo.
 
@@ -105,6 +109,7 @@ erDiagram
     Prova ||--o{ Desempenho : "é respondida em"
     Estudante ||--o{ Conquista : "obtém"
     Medalha ||--o{ Conquista : "é concedida em"
+    Curso |o--o{ Medalha : "tem medalha de conclusão"
     Usuario ||--o{ Chamado : "abre (remetente)"
     Usuario |o--o{ Chamado : "recebe (destinatário)"
     Curso |o--o{ Chamado : "é assunto de"
@@ -256,9 +261,10 @@ Uma linha por estudante e material.
 | Coluna | Tipo | Restrições | Descrição |
 | :--- | :--- | :--- | :--- |
 | `ID_Medalha` | INT IDENTITY | PK, NN | Identificador |
-| `Nome_Medalha` | VARCHAR(50) | NN | Nome. **As medalhas automáticas são localizadas pelo nome** (ver [11](#11-limitações-conhecidas)) |
+| `Nome_Medalha` | VARCHAR(50) | NN | Nome. **As medalhas gerais automáticas são localizadas pelo nome** (ver [11](#11-limitações-conhecidas)) |
 | `Raridade` | VARCHAR(20) | — | `comum`, `raro`, `épico` ou `lendário` |
 | `Descricao_Medalha` | VARCHAR(200) | — | Critério exibido ao estudante |
+| `ID_Curso` | INT | FK → `Curso`, UQ quando preenchido | Preenchido: medalha de conclusão daquele curso, concedida automaticamente. Nulo: medalha geral |
 
 #### `Conquista`
 | Coluna | Tipo | Restrições | Padrão | Descrição |
@@ -279,7 +285,7 @@ Uma linha por estudante e material.
 | `ID_Remetente` | INT | FK → `Usuario`, NN | — | Quem abriu |
 | `ID_Destinatario` | INT | FK → `Usuario` | — | Quem deve responder. **Nulo nos chamados técnicos**, para qualquer administrador assumir |
 | `ID_Curso` | INT | FK → `Curso` | — | Curso da dúvida (nulo nos chamados técnicos) |
-| `Tipo_Chamado` | VARCHAR(20) | — | — | `Duvida`, `Tecnico` ou `Avaliacao` |
+| `Tipo_Chamado` | VARCHAR(20) | — | — | `Duvida`, `Tecnico`, `Resposta`, `Mensagem` ou `Avaliacao` |
 | `Assunto` | VARCHAR(100) | — | — | Assunto |
 | `Descricao` | VARCHAR(MAX) | — | — | Texto do chamado ou da resposta |
 | `Data_Abertura` | DATETIME | — | `GETDATE()` | Data de abertura |
@@ -304,7 +310,7 @@ O SQL Server não restringe estes campos (são `VARCHAR`). Os valores válidos s
 | `Curso.Status_Curso` | `Rascunho` → `Pendente` → `Publicado`; `Pendente` → `Rejeitado` → `Pendente` | `FluxoPublicacaoCurso` (Domain) |
 | `Material.Tipo_Material` | `texto`, `exercicio` | Opções do editor do tutor (Web e Mobile); a API não valida o valor |
 | `Historico.Status_Conclusao` | `Em andamento`, `Concluido` | `ProgressoService`, `ConclusaoCursoService` |
-| `Chamado.Tipo_Chamado` | `Duvida` (para o tutor), `Tecnico` (para os admins), `Avaliacao` (motivo de rejeição de curso) | `ChamadoService`, `AdminService` |
+| `Chamado.Tipo_Chamado` | `Duvida` (para o tutor), `Tecnico` (para os admins), `Resposta` (resposta a um chamado), `Mensagem` (do tutor para o aluno), `Avaliacao` (motivo de rejeição de curso) | `ChamadoService`, `AdminService` |
 | `Chamado.Status_Chamado` | `Aberto`, `Em andamento`, `Resolvido` | `ChamadoService` |
 | `Medalha.Raridade` | `comum`, `raro`, `épico`, `lendário` | Catálogo |
 | `Usuario.Status_Usuario` | `1` ativa, `0` inativa | `AdminService`, `ContaService` |
@@ -343,21 +349,35 @@ Além dos índices criados automaticamente pelas chaves primárias e pela restri
 | Índice | Tabela (coluna) | Motivo |
 | :--- | :--- | :--- |
 | `IX_Chamado_Curso` | `Chamado (ID_Curso)` | Consulta "chamados deste curso" no painel do tutor |
+| `UX_Medalha_Curso` | `Medalha (ID_Curso)`, único e filtrado (`WHERE ID_Curso IS NOT NULL`) | No máximo uma medalha de conclusão por curso; as medalhas gerais (nulas) ficam fora da restrição |
 
 ---
 
 ## 9. Dados de demonstração
 
-O `02_dados_demonstracao.sql` cria:
+O `02_dados_demonstracao.sql` foi **gerado** por um script auxiliar, e não digitado linha a linha. O script simulou a linha do tempo de cada estudante, de 24/08 a 17/10/2026, e aplicou as mesmas regras do back-end: o curso só é concluído com todos os materiais e a prova aprovada, o certificado nasce na conclusão, a prova só é feita depois de todos os materiais, as medalhas são avaliadas a cada ação e os cursos só recebem alunos depois de publicados. XP e nível não aparecem no script, porque a API os calcula.
 
 | Conteúdo | Detalhe |
 | :--- | :--- |
-| 3 usuários | Felipe Almeida (estudante) `felipe123@gmail.com` / `aluno123@` · Ana Souza (tutora) `tutor123@gmail.com` / `tutor123@` · Carlos Mendes (admin) `admin123@gmail.com` / `admin123@` |
-| 12 medalhas | 8 automáticas (Primeiro Passo, Estudante Dedicado, Bibliotecário, Quiz Champion, Pontuação Perfeita, Mestre em C#, DBA Iniciante, Lenda da Tech Quest) e 4 concedidas pelo tutor (Mestre em Arrays, Maratonista, POO Master, Arquiteto SOLID) |
-| 2 cursos publicados | Fundamentos de C# · Banco de Dados e Modelagem de Sistemas |
-| 11 materiais | Aulas de texto e exercício dos dois cursos |
-| 2 provas | Nota mínima 7,00 e 30 minutos cada |
-| 18 questões | Cada uma com alternativas e exatamente uma correta |
+| 26 usuários | 1 administrador, 5 tutores e 20 estudantes (1 deles desativado, o que dispara a trigger de auditoria) |
+| 15 cursos | 13 publicados, 1 pendente de aprovação (React para Iniciantes) e 1 rejeitado com motivo (SQL Avançado). Áreas: programação, web, dados, engenharia de software, infraestrutura e segurança |
+| 63 materiais | De 4 a 6 por curso, entre aulas de texto e listas de exercícios |
+| 15 provas, 150 questões | Exatamente 10 questões por prova, cada uma com 5 alternativas e uma correta. Nota mínima 7,00 (6,00 nos dois cursos avançados). **38 questões vêm dos Tomos de questões do ENADE** (material da CQA/UNIP indicado pelo professor), com enunciado, alternativas e gabarito oficiais e a origem no início do enunciado, como "(Enade 2017)" |
+| 25 medalhas | 12 gerais (as do PIM III) e 1 de conclusão para cada curso, ligada pelo `ID_Curso` |
+| Atividade | 102 matrículas, 394 registros de progresso, 94 tentativas de prova, 68 certificados, 137 conquistas, 22 chamados e 15 registros de auditoria |
+
+Os perfis de estudante são variados: uma aluna concluiu todos os cursos publicados e tem a medalha Lenda da Tech Quest; três alunos fortes, nove intermediários, cinco iniciantes (com reprovações e cursos parados) e uma conta desativada.
+
+**Contas de teste**
+
+| Papel | Nome | E-mail | Senha |
+| :--- | :--- | :--- | :--- |
+| Administrador | Carlos Mendes | `admin123@gmail.com` | `admin123@` |
+| Tutora | Ana Souza | `tutor123@gmail.com` | `tutor123@` |
+| Estudante | Felipe Almeida | `felipe123@gmail.com` | `aluno123@` |
+| Demais usuários | — | `nome.sobrenome@techquest.dev` | `techquest123@` |
+
+O Felipe tem 6 cursos concluídos, o curso Redes de Computadores com todos os materiais lidos e a **prova ainda não feita** e JavaScript Moderno em andamento. Fazer a prova de Redes ao vivo mostra, de uma vez, a correção no servidor, o certificado e a medalha do curso. A Ana tem duas dúvidas abertas para responder e o curso SQL Avançado rejeitado para corrigir e submeter de novo, e o administrador tem o curso de React pendente para aprovar.
 
 As senhas estão gravadas como hashes BCrypt reais (fator 11).
 
@@ -375,7 +395,7 @@ O modelo do PIM III foi **preservado**. Toda mudança entrou como acréscimo (`A
 | `Prova` | `Nota_Minima`, `Tempo_Minutos` | A nota de corte é dado do modelo, e não constante no código |
 | `Questao` | `Codigo_Exemplo`, `Ordem_Questao` | Questões com código e ordem definida |
 | `Alternativas` | `Letra_Alternativa` | Correção por letra |
-| `Medalha` | `Descricao_Medalha` | Critério exibido ao aluno |
+| `Medalha` | `Descricao_Medalha`, `ID_Curso` | Critério exibido ao aluno; vínculo da medalha de conclusão com o curso |
 | `Chamado` | `ID_Curso` + `IX_Chamado_Curso` | Encaminhar a dúvida ao tutor do curso |
 
 ---
@@ -386,6 +406,7 @@ O modelo do PIM III foi **preservado**. Toda mudança entrou como acréscimo (`A
 | :--- | :--- | :--- |
 | A trigger grava `ID_ADM = 1` fixo | O log não identifica qual administrador alterou o status | Usar `SESSION_CONTEXT`, com a API gravando o id do admin antes do `UPDATE` |
 | Status em `VARCHAR` sem `CHECK` | O banco aceitaria um valor inválido inserido manualmente | Regras garantidas na API; `CHECK constraints` como melhoria |
-| Medalhas automáticas localizadas pelo nome | Renomear uma delas (inclusive o acento) desliga a concessão | O Desktop bloqueia a renomeação das 8 automáticas |
+| Medalhas gerais automáticas localizadas pelo nome | Renomear uma das 6 gerais automáticas (inclusive o acento) desliga a concessão. As medalhas de curso não têm esse problema, porque são ligadas pelo `ID_Curso` | O Desktop pede confirmação antes de renomear qualquer medalha; uma coluna de critério resolveria de vez |
+| Vínculo medalha-curso só pelo banco | O editor de medalhas do Desktop não escolhe o curso; uma medalha de curso nova é ligada pelo script | Acrescentar o campo de curso no editor e no `AdminService` |
 | Collation sensível a acento | Busca por "Joao" não encontra "João" | Aplicar `COLLATE ... AI` nas buscas, se necessário |
 | Tier serverless com auto-pause | A primeira consulta após pausa demora dezenas de segundos | `EnableRetryOnFailure` na API e timeouts de 45 a 60 s nos clientes |

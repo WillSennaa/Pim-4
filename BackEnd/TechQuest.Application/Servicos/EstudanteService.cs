@@ -32,7 +32,7 @@ public class EstudanteService
         var xp = idEstudante is null ? null : await _gamificacao.ObterAsync(idEstudante.Value, ct);
         var concluidos = idEstudante is null
             ? 0
-            : (await _historicos.NomesDeCursosConcluidosAsync(idEstudante.Value, ct)).Count;
+            : (await _historicos.IdsDeCursosConcluidosAsync(idEstudante.Value, ct)).Count;
 
         return new PerfilDto(
             u.IdUsuario, u.Nome, u.Email, u.Iniciais(), papel,

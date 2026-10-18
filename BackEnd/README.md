@@ -8,7 +8,7 @@ API REST em **ASP.NET Core 8 (C#)** que concentra todas as regras de negócio da
 | Banco | Azure SQL Database via Entity Framework Core 8 |
 | Autenticação | JWT (HMAC-SHA256, 8 horas) + senhas com BCrypt (fator 11) |
 | Documentação | Swagger em `/swagger` |
-| Testes | xUnit (89 casos) |
+| Testes | xUnit (90 casos) |
 | Produção | Azure App Service `TQBackendAPI` — https://tqbackendapi-cpb2edg0gxcsfggz.brazilsouth-01.azurewebsites.net |
 
 ---

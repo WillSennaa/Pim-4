@@ -30,6 +30,17 @@ public class ConquistaRepository : IConquistaRepository
     public Task<Medalha?> ObterMedalhaAsync(int idMedalha, CancellationToken ct = default)
         => _db.Medalhas.AsNoTracking().FirstOrDefaultAsync(m => m.IdMedalha == idMedalha, ct);
 
+    /// <summary>
+    /// Uma medalha por curso no maximo: o banco garante com o indice unico
+    /// filtrado UX_Medalha_Curso, e por isso o dicionario nao tem chave repetida.
+    /// </summary>
+    public async Task<IReadOnlyDictionary<int, string>> MedalhasPorCursoAsync(
+        CancellationToken ct = default)
+        => await _db.Medalhas
+                    .Where(m => m.IdCurso != null)
+                    .AsNoTracking()
+                    .ToDictionaryAsync(m => m.IdCurso!.Value, m => m.Nome, ct);
+
     public void Adicionar(Conquista conquista) => _db.Conquistas.Add(conquista);
 
     // --- catalogo de medalhas ---
@@ -38,10 +49,12 @@ public class ConquistaRepository : IConquistaRepository
         => _db.Medalhas.FirstOrDefaultAsync(m => m.IdMedalha == idMedalha, ct);
 
     /// <summary>
-    /// O nome identifica a medalha para as regras de concessao
+    /// O nome identifica as medalhas gerais para as regras de concessao
     /// (RegrasMedalhas casa por nome), entao duplicar nome quebraria a
-    /// concessao automatica. ignorarId existe para a edicao nao acusar
-    /// conflito com a propria medalha.
+    /// concessao automatica. As medalhas de curso sao ligadas pelo ID_Curso,
+    /// mas a concessao tambem as entrega pelo nome, por isso a regra vale
+    /// para todas. ignorarId existe para a edicao nao acusar conflito com a
+    /// propria medalha.
     /// </summary>
     public Task<bool> NomeDeMedalhaExisteAsync(
         string nome, int? ignorarId = null, CancellationToken ct = default)

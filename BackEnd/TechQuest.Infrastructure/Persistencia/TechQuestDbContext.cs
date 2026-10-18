@@ -231,6 +231,12 @@ public class TechQuestDbContext : DbContext
             e.Property(x => x.Nome).HasColumnName("Nome_Medalha").HasMaxLength(50).IsRequired();
             e.Property(x => x.Raridade).HasColumnName("Raridade").HasMaxLength(20);
             e.Property(x => x.Descricao).HasColumnName("Descricao_Medalha").HasMaxLength(200);
+            e.Property(x => x.IdCurso).HasColumnName("ID_Curso");
+
+            // Sem colecao do lado de Curso: o curso nao precisa navegar ate a
+            // medalha, so a regra de concessao consulta esse vinculo.
+            e.HasOne(x => x.Curso).WithMany()
+             .HasForeignKey(x => x.IdCurso).OnDelete(DeleteBehavior.Restrict);
         });
 
         mb.Entity<Conquista>(e =>

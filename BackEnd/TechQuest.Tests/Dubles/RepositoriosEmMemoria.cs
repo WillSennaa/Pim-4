@@ -118,9 +118,9 @@ public class HistoricoRepositorioFalso : IHistoricoRepository
         => Task.FromResult<IReadOnlyList<Historico>>(
             Historicos.Where(h => h.IdEstudante == idEstudante).ToList());
 
-    public Task<IReadOnlyList<string>> NomesDeCursosConcluidosAsync(
+    public Task<IReadOnlyList<int>> IdsDeCursosConcluidosAsync(
         int idEstudante, CancellationToken ct = default)
-        => throw new NotSupportedException("NomesDeCursosConcluidosAsync nao e usado por estes testes.");
+        => throw new NotSupportedException("IdsDeCursosConcluidosAsync nao e usado por estes testes.");
 }
 
 public class CertificadoRepositorioFalso : ICertificadoRepository

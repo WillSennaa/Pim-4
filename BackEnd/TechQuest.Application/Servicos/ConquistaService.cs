@@ -32,15 +32,17 @@ public class ConquistaService
     public async Task<IReadOnlyList<string>> AvaliarAsync(int idEstudante, CancellationToken ct = default)
     {
         var contagens = await _gamificacao.ObterContagensAsync(idEstudante, ct);
-        var concluidos = await _historicos.NomesDeCursosConcluidosAsync(idEstudante, ct);
+        var concluidos = await _historicos.IdsDeCursosConcluidosAsync(idEstudante, ct);
         var totalCursos = await _cursos.ContarPublicadosAsync(ct);
+        var medalhasDeCurso = await _conquistas.MedalhasPorCursoAsync(ct);
 
         var merecidas = RegrasMedalhas.Merecidas(new RegrasMedalhas.Situacao(
             contagens.MateriaisConcluidos,
             contagens.ProvasAprovadas,
             contagens.NotasMaximas,
             concluidos,
-            totalCursos));
+            totalCursos,
+            medalhasDeCurso));
 
         if (merecidas.Count == 0) return Array.Empty<string>();
 

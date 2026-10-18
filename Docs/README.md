@@ -143,7 +143,7 @@ Legenda de situação: ✅ atendido · 🟡 atendido parcialmente (com justifica
 **Descrição:** conceder medalhas ao estudante ao atingir marcos (gamificação).
 **Atores:** Sistema (automáticas), Tutor (manuais), Administrador (catálogo).
 **Detalhamento:**
-- Oito medalhas são concedidas automaticamente pelas regras RN-GAM-04.
+- Seis medalhas gerais e uma medalha de conclusão por curso são concedidas automaticamente (RN-GAM-04 e RN-GAM-08).
 - Quatro medalhas são concedidas manualmente pelo tutor.
 - O administrador mantém o catálogo (nome, raridade, descrição).
 - O estudante vê as conquistas, com XP e nível calculados (RN-GAM-01 a 03).
@@ -262,10 +262,11 @@ As regras estão implementadas na API. A coluna "Onde" indica a classe responsá
 | RN-GAM-01 | XP = 50 por aula concluída + 100 por prova aprovada + 50 de bônus por nota máxima + 75 por medalha. | `RegrasGamificacao` |
 | RN-GAM-02 | Nível = 1 + XP ÷ 350 (progressão linear). | `RegrasGamificacao` |
 | RN-GAM-03 | XP e nível não são gravados: são calculados a partir de `Progresso`, `Desempenho` e `Conquista`. | `GamificacaoService` |
-| RN-GAM-04 | Medalhas automáticas: Primeiro Passo (1 aula), Estudante Dedicado (10 aulas), Bibliotecário (20 aulas), Quiz Champion (1 prova aprovada), Pontuação Perfeita (1 nota máxima), Mestre em C# (concluir curso de C#), DBA Iniciante (concluir curso de Banco de Dados), Lenda da Tech Quest (concluir todos os cursos publicados). | `RegrasMedalhas` |
+| RN-GAM-04 | Medalhas gerais automáticas: Primeiro Passo (1 aula), Estudante Dedicado (10 aulas), Bibliotecário (20 aulas), Quiz Champion (1 prova aprovada), Pontuação Perfeita (1 nota máxima), Lenda da Tech Quest (concluir todos os cursos publicados). | `RegrasMedalhas` |
 | RN-GAM-05 | Medalhas manuais, concedidas pelo tutor: Mestre em Arrays, Maratonista, POO Master, Arquiteto SOLID. | `TutorService` |
 | RN-GAM-06 | Um estudante não recebe a mesma medalha duas vezes. | `ConquistaService`, `TutorService` |
-| RN-GAM-07 | As medalhas automáticas são localizadas pelo **nome**; por isso o nome delas não pode ser alterado. | `RegrasMedalhas`, Desktop |
+| RN-GAM-07 | As medalhas gerais automáticas são localizadas pelo **nome**; por isso o nome delas não deve ser alterado (o Desktop pede confirmação antes de renomear). | `RegrasMedalhas`, Desktop |
+| RN-GAM-08 | Cada curso pode ter uma medalha de conclusão (`Medalha.ID_Curso`). Ela é concedida automaticamente quando o estudante conclui aquele curso, depois da emissão do certificado e na mesma transação. | `RegrasMedalhas`, `ConquistaService`, `ProvaService` |
 
 ### 5.6 Suporte e auditoria
 
@@ -392,16 +393,24 @@ Cada ADR segue o formato: **Contexto** (o problema), **Decisão** (o que foi fei
 - **Consequências:** os três clientes exibem mensagens consistentes; detalhes técnicos não vazam em produção.
 
 ### ADR-019 — Medalhas automáticas localizadas pelo nome
+> Parcialmente substituída pela ADR-021: continua valendo para as medalhas gerais; as medalhas de curso passaram a ser ligadas por chave estrangeira.
+
 - **Contexto:** o catálogo de medalhas é uma tabela, mas os critérios automáticos são código.
 - **Decisão:** `RegrasMedalhas` devolve os nomes das medalhas merecidas, e a concessão busca as medalhas por esses nomes.
 - **Alternativas rejeitadas:** coluna de critério na tabela (alteraria o modelo); ids fixos no código (quebram entre bancos diferentes).
-- **Consequências:** funciona em qualquer banco criado pelos scripts. Renomear uma medalha automática desliga a regra, por isso o Desktop bloqueia a renomeação dessas oito.
+- **Consequências:** funciona em qualquer banco criado pelos scripts. Renomear uma medalha automática desliga a regra, por isso o Desktop pede confirmação antes de renomear uma medalha.
 
 ### ADR-020 — Testes unitários com dublês em memória
 - **Contexto:** testes que dependem do banco na nuvem seriam lentos e instáveis.
 - **Decisão:** xUnit sobre Domain e Application (back-end) e sobre presenters e serviços (Desktop), com repositórios e gateways falsos escritos à mão.
 - **Alternativas rejeitadas:** testes de integração contra o Azure SQL; bibliotecas de mock.
 - **Consequências:** suíte rápida e independente da rede. Integração ponta a ponta é verificada manualmente (PB10).
+
+### ADR-021 — Medalha de conclusão por curso ligada por chave estrangeira
+- **Contexto:** a carga de demonstração passou a ter 15 cursos, cada um com sua medalha. A regra antiga procurava "C#" ou "Banco de Dados" no nome do curso concluído: cada curso novo exigiria mudar código, e renomear um curso desligaria a medalha sem aviso.
+- **Decisão:** coluna `ID_Curso` (anulável) em `Medalha`, com chave estrangeira para `Curso`. `RegrasMedalhas` recebe os ids dos cursos concluídos e o mapa curso → medalha, e concede a medalha de cada curso concluído. Em `ProvaService`, a avaliação de medalhas passou para depois da conclusão do curso, como já era em `ProgressoService`.
+- **Alternativas rejeitadas:** manter a busca por trecho do nome (não escala); tabela associativa `Medalha_Curso` (nenhum caso pede uma medalha para vários cursos); concessão manual pelo tutor (o aluno que concluísse o curso ficaria sem a medalha até alguém lembrar de conceder).
+- **Consequências:** criar um curso com medalha passa a ser dado, e não código. É uma alteração aditiva no esquema (coluna anulável), coerente com a ADR-005. O editor de medalhas do Desktop ainda não escolhe o curso: o vínculo é feito pelo script.
 
 ---
 
