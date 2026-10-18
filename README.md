@@ -12,6 +12,7 @@ Em desenvolvimento
 | :--- | :--- |
 | [`Docs/README.md`](Docs/README.md) | Requisitos detalhados, regras de negócio e registro de decisões de arquitetura (ADR) |
 | [`SQL/README.md`](SQL/README.md) | Dicionário de dados e instruções para criar o banco |
+| [`Diagramas/Diagrama_de_Rede.md`](Diagramas/Diagrama_de_Rede.md) | Diagramas de rede (CPM) do projeto e de cada requisito, com caminho crítico e folgas |
 | `Diagramas/DiagramasUML.asta` | Casos de uso, classes (BCE), sequência, MER e DER |
 | `Docs/Sprint Planning.docx` | Planejamento detalhado de cada sprint |
 
