@@ -226,7 +226,7 @@ flowchart LR
 | **I** | Login Mobile (SecureStore) | E | 6 | 22 | 28 | 22 | 28 | **0** |
 | **J** | Teste de integração do requisito | F, G, H, I | 4 | 28 | 32 | 28 | 32 | **0** |
 
-**Caminho crítico:** A → C → D → E → G → J | A → C → D → E → I → J = 2 + 8 + 8 + 4 + 6 + 4 = **32 horas**.
+**Caminho crítico:** A → C → D → E → G → J e A → C → D → E → I → J = 2 + 8 + 8 + 4 + 6 + 4 = **32 horas**.
 
 ---
 
@@ -500,7 +500,7 @@ flowchart LR
 | **G** | Tela Mobile de certificados (copiar e compartilhar) | D | 3 | 11 | 14 | 11 | 14 | **0** |
 | **H** | Teste de integração do requisito | E, F, G | 2 | 14 | 16 | 14 | 16 | **0** |
 
-**Caminho crítico:** A → B → C → D → F → H | A → B → C → D → G → H = 2 + 3 + 4 + 2 + 3 + 2 = **16 horas**.
+**Caminho crítico:** A → B → C → D → F → H e A → B → C → D → G → H = 2 + 3 + 4 + 2 + 3 + 2 = **16 horas**.
 
 ---
 
@@ -562,7 +562,7 @@ flowchart LR
 | **I** | Telas Mobile de conquistas e concessão | E | 4 | 18 | 22 | 18 | 22 | **0** |
 | **J** | Teste de integração do requisito | F, G, H, I | 2 | 22 | 24 | 22 | 24 | **0** |
 
-**Caminho crítico:** A → B → D → E → H → J | A → B → D → E → I → J | A → C → D → E → H → J | A → C → D → E → I → J = 3 + 4 + 8 + 3 + 4 + 2 = **24 horas**.
+**Caminho crítico:** A → B → D → E → H → J e A → B → D → E → I → J e A → C → D → E → H → J e A → C → D → E → I → J = 3 + 4 + 8 + 3 + 4 + 2 = **24 horas**.
 
 ---
 
@@ -655,7 +655,7 @@ flowchart LR
 | **E** | Tela Mobile de dúvidas do tutor | B | 4 | 9 | 13 | 9 | 13 | **0** |
 | **F** | Teste de integração do requisito | C, D, E | 3 | 13 | 16 | 13 | 16 | **0** |
 
-**Caminho crítico:** A → B → D → F | A → B → E → F = 7 + 2 + 4 + 3 = **16 horas**.
+**Caminho crítico:** A → B → D → F e A → B → E → F = 7 + 2 + 4 + 3 = **16 horas**.
 
 ---
 
@@ -757,15 +757,15 @@ flowchart LR
 | Requisito | Nome | Caminho crítico | Duração (horas) | Duração na rede geral (dias) |
 | :---: | :--- | :--- | :---: | :---: |
 | RF01 | Gerir usuários | A → B → C → D → G → H | 24 | 3 |
-| RF02 | Autenticar acesso | A → C → D → E → G → J | A → C → D → E → I → J | 32 | 4 |
+| RF02 | Autenticar acesso | A → C → D → E → G → J<br>A → C → D → E → I → J | 32 | 4 |
 | RF03 | Gerir cursos | A → B → C → D → G → H | 40 | 5 |
 | RF04 | Moderar publicações | A → C → D → G → I | 24 | 3 |
 | RF05 | Monitorar progresso | A → B → C → D → G → H | 24 | 3 |
 | RF06 | Avaliar conhecimento | A → B → C → D → G → I | 32 | 4 |
-| RF07 | Emitir certificados | A → B → C → D → F → H | A → B → C → D → G → H | 16 | 2 |
-| RF08 | Atribuir medalhas | A → B → D → E → H → J | A → B → D → E → I → J | A → C → D → E → H → J | A → C → D → E → I → J | 24 | 3 |
+| RF07 | Emitir certificados | A → B → C → D → F → H<br>A → B → C → D → G → H | 16 | 2 |
+| RF08 | Atribuir medalhas | A → B → D → E → H → J<br>A → B → D → E → I → J<br>A → C → D → E → H → J<br>A → C → D → E → I → J | 24 | 3 |
 | RF09 | Protocolar chamados | A → B → C → E → F | 16 | 2 |
-| RF10 | Interagir no suporte | A → B → D → F | A → B → E → F | 16 | 2 |
+| RF10 | Interagir no suporte | A → B → D → F<br>A → B → E → F | 16 | 2 |
 | RF11 | Auditar ações | A → B → D → E → F | 16 | 2 |
 | RF12 | Extrair relatórios | A → C → E → F | 16 | 2 |
 

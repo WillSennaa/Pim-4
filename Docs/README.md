@@ -197,18 +197,9 @@ Legenda de situação: ✅ atendido · 🟡 atendido parcialmente (com justifica
 
 | ID | Categoria | Requisito | Como é atendido |
 | :--- | :--- | :--- | :--- |
-| **RNF01** | Segurança | Senhas armazenadas com hash. | BCrypt com fator de trabalho 11 e sal embutido; a senha em texto nunca é gravada nem registrada em log. |
-| **RNF02** | Integridade | Não excluir cursos com estudantes matriculados. | Não existe exclusão de curso nem de usuário. "Publicado" é estado final; contas são desativadas. |
-| **RNF03** | Usabilidade | Interface responsiva em computador e celular. | Web mobile-first com menu lateral em telas largas; Mobile adapta de 1 a 3 colunas e troca as abas por menu lateral a partir de 768 de largura. |
-| RNF04 | Segurança | Autenticação e autorização em toda rota protegida. | JWT HMAC-SHA256 validando emissor, audiência, validade e assinatura; `[Authorize(Roles = ...)]` por controller; o id do usuário vem do token, nunca da URL ou do corpo. |
-| RNF05 | Segurança | Proteger dados sensíveis da avaliação e da infraestrutura. | Gabarito fora dos DTOs do estudante; consultas parametrizadas (EF Core); segredos fora do repositório; stack trace só em desenvolvimento. |
-| RNF06 | Segurança | Comunicação cifrada. | HTTPS em todos os clientes; conexão com o banco com `Encrypt=True`. |
-| RNF07 | Disponibilidade | A solução deve estar acessível pela internet. | API no Azure App Service e banco no Azure SQL Database, região Brazil South. |
-| RNF08 | Resiliência | Tolerar a pausa automática do banco serverless. | `EnableRetryOnFailure` (até 5 tentativas) na API; timeouts de 45 s (Mobile) e 60 s (Desktop). |
-| RNF09 | Interoperabilidade | Um único contrato para todos os clientes. | API REST com JSON, documentada no Swagger; Web, Desktop e Mobile consomem as mesmas rotas. |
-| RNF10 | Manutenibilidade | Código organizado em camadas e testável. | Domain, Application, Infrastructure e API separados; 89 casos de teste xUnit no back-end e 146 no Desktop, sem dependência de banco. |
-| RNF11 | Rastreabilidade | Ações críticas auditadas. | Trigger de status de usuário e log de avaliação de cursos (RF11). |
-| RNF12 | Tratamento de erros | Respostas de erro padronizadas. | Middleware converte exceções em JSON com status HTTP adequado e identificador para o suporte. |
+| RNF01 | Segurança | Senhas armazenadas com hash. | BCrypt com fator de trabalho 11 e sal embutido; a senha em texto nunca é gravada nem registrada em log. |
+| RNF02 | Integridade | Não excluir cursos com estudantes matriculados. | Não existe exclusão de curso nem de usuário. "Publicado" é estado final; contas são desativadas. |
+| RNF03 | Usabilidade | Interface responsiva em computador e celular. | Web mobile-first com menu lateral em telas largas; Mobile adapta de 1 a 3 colunas e troca as abas por menu lateral a partir de 768 de largura. |
 
 ---
 
