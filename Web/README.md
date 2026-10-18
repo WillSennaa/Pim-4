@@ -1,120 +1,141 @@
-# Tech Quest — Plataforma de Aprendizagem (versão 2)
+# Web — Tech Quest (PIM IV)
 
-Site do PIM III — UNIP ADS. **Versão atualizada** com:
-- Todas as páginas do estudante agora são **responsivas desktop** (sidebar lateral aparece automaticamente)
-- **2 cursos** disponíveis: Fundamentos de C# e Banco de Dados/Modelagem
-- **2 provas distintas** (uma de C#, outra com as questões de OOP/RUP/Brainstorming/etc)
-- **Sistema completo de Certificados** (listagem, detalhe, impressão em PDF)
-- **Central de Ajuda + FAQ** alimentado pelo JSON
-- **Página de Suporte** com formulário de chamado
-- **Termos de Uso** e **Política de Privacidade** (LGPD)
-- Todos os botões e links agora levam a páginas funcionais
+Aplicação Web da plataforma, com acesso para os **três perfis** (Estudante, Tutor e Administrador). É o site do PIM III (HTML5, CSS3 e JavaScript puro, sem framework) com os dados simulados em JSON substituídos por chamadas à **API REST publicada no Azure**.
+
+| Item | Valor |
+| :--- | :--- |
+| Tecnologias | HTML5, CSS3 (BEM + variáveis CSS), JavaScript puro |
+| Páginas | 49 arquivos HTML (`index.html` + `pages/`) |
+| Dados | API REST (`BackEnd`), via `fetch` na camada `js/api.js` |
+| Autenticação | Token JWT guardado no `sessionStorage` |
+| Responsividade | Mobile-first, com menu lateral em telas largas |
 
 ---
 
-## Como rodar
-
-Abra o terminal **dentro da pasta `techquest`** e execute:
+## Estrutura
 
 ```
+Web/
+├── index.html                Página inicial (landing page)
+├── css/
+│   └── style.css             Todo o visual da aplicação
+├── js/
+│   ├── api.js                Cliente da API: URL, token, sessão expirada e erros (PIM IV)
+│   └── app.js                Lógica das páginas: login, menus, cursos, prova, painéis
+├── pages/
+│   ├── login.html, cadastro.html
+│   ├── conta/                Perfil comum aos papéis
+│   ├── estudante/  (28)      Home, catálogo, curso, aula, prova, resultado, conquistas,
+│   │                         certificados, histórico, minhas provas, suporte, ajuda...
+│   ├── tutor/      (7)       Painel, alunos, detalhe do aluno, dúvidas, cursos,
+│   │                         criar e editar curso
+│   └── admin/      (10)      Painel, aprovações, cursos, detalhe do curso, usuários,
+│                             criar usuário, chamados, relatórios, configurações
+├── data/                     mock.json: apenas apresentação (ícones, cores e FAQ)
+├── docs/                     Guia de estudo de HTML/CSS/JS
+├── injetar-api-js.ps1        Insere o <script src="api.js"> em todas as páginas
+├── reparar-codificacao.ps1   Corrige páginas com acentuação corrompida (UTF-8 duplo)
+└── _backup_html_20260924_110850/   Cópia das páginas antes da injeção do api.js
+```
+
+---
+
+## Como executar
+
+A Web roda localmente e consome a API que já está no Azure. Não é preciso rodar o back-end.
+
+**Opção 1 — Python**
+
+```bash
+cd Web
 python -m http.server 8080
 ```
 
-Acesse no navegador: **http://localhost:8080**
+Acesse `http://localhost:8080`.
 
-Para parar: `Ctrl + C` no terminal.
+**Opção 2 — VS Code**
+
+Abra a pasta `Web` e use a extensão **Live Server** (porta 5500 ou 5501).
+
+> As portas 8080, 5500 e 5501 de `localhost` e `127.0.0.1` estão liberadas no CORS da API. Outra porta ou abrir o arquivo direto (`file://`) faz as requisições serem bloqueadas pelo navegador.
+
+### Contas de demonstração
+
+| Papel | E-mail | Senha |
+| :--- | :--- | :--- |
+| Estudante | `felipe123@gmail.com` | `aluno123@` |
+| Tutor | `tutor123@gmail.com` | `tutor123@` |
+| Administrador | `admin123@gmail.com` | `admin123@` |
 
 ---
 
-## Estrutura completa (33 páginas HTML)
+## Integração com a API (`js/api.js`)
 
-```
-techquest/
-├── index.html                    Landing page
-├── css/style.css                 Todo o visual
-├── js/app.js                     Lógica (login, quiz, modais, sidebar)
-├── data/
-│   ├── mock.json                 Personas, cursos, certificados, FAQ
-│   └── questoes.json             Banco de questões das 2 provas
-└── pages/
-    ├── login.html                Login
-    ├── cadastro.html             Cadastro
-    │
-    ├── estudante/  (25 páginas)
-    │   ├── home.html
-    │   ├── cursos.html           ← NOVA (lista de todos os cursos)
-    │   ├── curso.html            Curso de C#
-    │   ├── curso-bd.html         ← NOVA (curso de Banco de Dados)
-    │   ├── aula.html             Aula de C#
-    │   ├── aula-bd.html          ← NOVA (aula de BD/RUP/OOP)
-    │   ├── prova.html            Prova de C# (10 questões)
-    │   ├── prova-bd.html         ← NOVA (prova das suas 5 questões + complementares)
-    │   ├── resultado-aprovado.html
-    │   ├── resultado-aprovado-bd.html  ← NOVA
-    │   ├── resultado-reprovado.html
-    │   ├── conquistas.html
-    │   ├── certificados.html     ← NOVA (listagem de certificados)
-    │   ├── certificado-detalhe.html  ← NOVA (visualizar/baixar)
-    │   ├── perfil.html
-    │   ├── editar-perfil.html
-    │   ├── alterar-email.html
-    │   ├── alterar-senha.html
-    │   ├── historico.html
-    │   ├── notificacoes.html
-    │   ├── configuracoes.html
-    │   ├── ajuda.html            ← NOVA (FAQ + Central de Ajuda)
-    │   ├── suporte.html          ← NOVA (formulário de chamado)
-    │   ├── termos.html           ← NOVA (Termos de Uso)
-    │   └── privacidade.html      ← NOVA (Política LGPD)
-    │
-    ├── tutor/      (3 páginas)
-    │   ├── home.html             Dashboard do tutor
-    │   ├── alunos.html
-    │   └── duvidas.html
-    │
-    └── admin/      (2 páginas)
-        ├── home.html             Dashboard admin
-        └── usuarios.html
+Nenhuma página faz `fetch` diretamente. Toda chamada passa por `API.request`, que:
+
+1. monta a URL a partir do endereço da API;
+2. envia o token no cabeçalho `Authorization: Bearer`;
+3. trata a sessão expirada (resposta 401 leva de volta ao login);
+4. padroniza as mensagens de erro para as telas.
+
+### Trocar entre a API na nuvem e a API local
+
+O padrão é a API do Azure (`AMBIENTE_ATIVO = 'nuvem'`).
+
+- **Permanente:** em `js/api.js`, troque `AMBIENTE_ATIVO` para `'local'`.
+- **Temporário, sem editar arquivo:** no console do navegador,
+
+```js
+localStorage.setItem('tq_api_base', 'https://localhost:7160')   // usa a API local
+localStorage.removeItem('tq_api_base')                          // volta para o Azure
 ```
 
----
+### Sessão
 
-## Roteiro de demonstração
+O token fica no `sessionStorage`: some quando a aba é fechada. Isso evita que a próxima pessoa use a conta de quem saiu sem clicar em "Sair", o caso típico do laboratório da faculdade.
 
-1. **Landing** → mostre a proposta visual
-2. **Login** (qualquer e-mail/senha entra)
-3. **Home do Felipe** → mostra os 2 cursos em andamento, conquistas, atalho de certificados
-4. **Cursos** → 2 cursos listados, ambos clicáveis
-5. **Fundamentos de C#** → escolha o módulo 3 (Arrays e Listas), entre na aula, faça a prova
-6. **Banco de Dados** → escolha o módulo 3 (Análise de Sistemas), entre na aula, faça a prova
-   (esta prova usa as 5 questões do JSON original + 3 complementares de BD/SQL)
-7. **Certificados** → mostre o certificado já emitido de C# (clique em "Ver" e use "Baixar PDF")
-8. **Central de Ajuda + Suporte + Termos + Privacidade** → mostre que todos os botões funcionam
-9. **Trocar Persona (botão flutuante)** → vai para Tutor (Ana) ou Admin (Carlos)
+O papel do usuário vem do token emitido pela API. Esconder menus por perfil no JavaScript é só organização da interface: quem bloqueia o acesso é a API, que recusa com 403 uma rota de outro papel.
 
 ---
 
-## Como alterar conteúdo facilmente
+## Funcionalidades por perfil
 
-| O que mudar | Arquivo |
-|---|---|
-| Nome, e-mail, dados do Felipe/Ana/Carlos | `data/mock.json` (seção `personas`) |
-| Cursos disponíveis, módulos | `data/mock.json` (seção `cursos`) |
-| Questões das provas | `data/questoes.json` |
-| Certificados (emitidos/disponíveis) | `data/mock.json` (seção `certificados`) |
-| FAQ (perguntas frequentes) | `data/mock.json` (seção `faq`) |
-| Cores, fontes, espaçamentos | `css/style.css` (no topo, dentro de `:root`) |
-| Texto de uma página específica | HTML daquela página |
+| Perfil | O que faz na Web |
+| :--- | :--- |
+| **Estudante** | Cadastro, catálogo com busca, matrícula, aulas com progresso, prova corrigida no servidor, resultado questão a questão, XP e nível, conquistas, certificados (imprimir/PDF e código de validação), histórico, minhas provas, suporte e notificações |
+| **Tutor** | Painel, criação e edição de cursos, aulas, prova e questões, submissão para aprovação, dúvidas dos alunos, acompanhamento dos alunos |
+| **Administrador** | Painel de indicadores, fila de aprovações com revisão do curso completo, cursos, usuários (criar, ativar e desativar), chamados técnicos, relatórios e configurações |
+| **Todos** | Login, edição de perfil, troca de senha e de e-mail |
 
 ---
 
-## Justificativas técnicas para a apresentação
+## Scripts auxiliares (PowerShell)
 
-- **HTML5 + CSS3 + JavaScript puro (vanilla)**: sem frameworks, refletindo o que foi ensinado este semestre.
-- **Arquitetura mobile-first responsiva**: o CSS prioriza o celular e expande pra desktop via `@media queries`.
-- **Variáveis CSS (`:root`)**: cores e espaçamentos centralizados.
-- **Sidebar injetada via JavaScript**: a sidebar do estudante é adicionada automaticamente pelo `app.js` em todas as páginas, evitando duplicação de código (princípio DRY).
-- **Dados em JSON**: desacopla dados de interface, simulando uma API real.
-- **Fetch API + Promise.all**: carrega múltiplos arquivos JSON em paralelo.
-- **LocalStorage e SessionStorage**: persistência leve de preferências (persona escolhida) e estado temporário (resultado da prova).
-- **Window.print() + CSS @media print**: certificado é impresso em PDF direto pelo navegador.
+| Script | Uso |
+| :--- | :--- |
+| `injetar-api-js.ps1` | Adiciona o `api.js` antes do `app.js` em todas as páginas, respeitando a profundidade das pastas. Pode rodar mais de uma vez: páginas que já têm o script são ignoradas. |
+| `reparar-codificacao.ps1` | Corrige páginas gravadas com codificação dupla (acentos aparecendo como "Ã©"). Só altera arquivos realmente corrompidos. |
+
+Execute na pasta `Web`: `.\injetar-api-js.ps1`.
+
+---
+
+## Decisões principais
+
+As justificativas completas estão em [`Docs/README.md`](../Docs/README.md#6-registro-de-decisões-de-arquitetura-adr).
+
+- **Manter o front-end do PIM III** em vez de reescrever em framework (ADR-015).
+- **Camada única `api.js`:** a troca da API local para o Azure mudou uma linha e nenhuma página.
+- **Token no `sessionStorage`**, e não no `localStorage` (ADR-015).
+- **CORS com origens locais liberadas** também em produção (ADR-014).
+
+---
+
+## Problemas comuns
+
+| Sintoma | Causa provável | Solução |
+| :--- | :--- | :--- |
+| Erro de CORS no console | Página aberta como `file://` ou em porta não liberada | Usar `http://localhost:8080` ou o Live Server |
+| Login demora muito na primeira vez | Banco serverless saindo da pausa | Aguardar alguns segundos e tentar de novo |
+| Volta para o login sozinho | Token expirado (8 horas) ou aba fechada | Entrar de novo |
+| Acentos estranhos em uma página | Arquivo salvo com codificação errada | Rodar `reparar-codificacao.ps1` |
