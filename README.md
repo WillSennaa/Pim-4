@@ -24,7 +24,7 @@ A solução tem um banco e uma API publicados no Azure, consumidos por três apl
 flowchart LR
     W["Web<br/>HTML, CSS e JS<br/>Todos Usuários"]
     D["Desktop<br/>C# WinForms<br/>Administrador"]
-    M["Mobile<br/>React Native (APK)<br/>Estudante e Tutor"]
+    M["Mobile<br/>React Native<br/>Estudante/Tutor"]
     subgraph Azure["Microsoft Azure · Brazil South"]
         A["API REST<br/>ASP.NET Core 8<br/>App Service"]
         B[("Azure SQL Database<br/>TechQuestDB")]
