@@ -22,7 +22,7 @@ A solução tem um banco e uma API publicados no Azure, consumidos por três apl
 
 ```mermaid
 flowchart LR
-    W["Web<br/>HTML, CSS e JS<br/>Estudante, Tutor e Admin"]
+    W["Web<br/>HTML, CSS e JS<br/>Todos Usuários"]
     D["Desktop<br/>C# WinForms<br/>Administrador"]
     M["Mobile<br/>React Native (APK)<br/>Estudante e Tutor"]
     subgraph Azure["Microsoft Azure · Brazil South"]
